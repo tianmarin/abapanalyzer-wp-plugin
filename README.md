@@ -16,3 +16,14 @@ Some of the possible scenarios we would like to solve are:
 * Propose homogeneous parameters values.
 * Group parameters by kind and scenarios.
 * Execute a sappfpar-kind analysis and check bad assigned values for simple parameters.
+
+
+
+To develop this plugins the wordpress basic profiles has been modified:
+
+wp.config.php
+define('WP_DEBUG', true);
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
+define( 'SCRIPT_DEBUG', true );
+define( 'SAVEQUERIES', true );
