@@ -7,7 +7,7 @@ defined('ABSPATH') or die("No script kiddies please!");
 *
 * @author Cristian Marin
 */
-function abap_security($capability="read_posts"){
+function aa_security($capability="read_posts"){
 	if ( !is_super_admin() ) :
 		if(current_user_can($capability) == false):?>
 			<div class="error settings-error" id="setting-error-settings_updated">
@@ -25,7 +25,7 @@ function abap_security($capability="read_posts"){
 *
 * @author Cristian Marin
 */
-function abap_good_msg($text){
+function aa_good_msg($text){
 	echo '<div id="message" class="updated">';
 	echo '	<p><strong>'.$text.'</strong></p>';
 	echo '</div>';
@@ -36,7 +36,7 @@ function abap_good_msg($text){
 *
 * @author Cristian Marin
 */
-function abap_bad_msg($text){
+function aa_bad_msg($text){
 	echo '<div class="error settings-error" id="setting-error-settings_updated">';
 	echo '	<p><strong>'.$text.'</strong></p>';
 	echo '</div>';
@@ -49,7 +49,7 @@ function abap_bad_msg($text){
 *
 * @author Cristian Marin
 */
-function abap_class_menu_main(
+function aa_class_menu_main(
 								$title="Listado",
 								$menu_slug=null,
 								$add_new="Agregar nuevo",
@@ -58,7 +58,7 @@ function abap_class_menu_main(
 								$contents=null,
 								$filters=null){
 	global $wpdb;
-	global $abap_vars;
+	global $aa_vars;
 	global $ITA_CUSTOMER;
 	?>	
 	<h2>
@@ -123,8 +123,8 @@ function abap_class_menu_main(
 								echo "ERROR";
 						endswitch;
 					endforeach;
-					wp_register_script('abap_formfilter',plugins_url( 'js/formfilter.js' , __FILE__),array( 'jquery' ));
-					wp_enqueue_script( 'abap_formfilter');
+					wp_register_script('aa_formfilter',plugins_url( 'js/formfilter.js' , __FILE__),array( 'jquery' ));
+					wp_enqueue_script( 'aa_formfilter');
 				}else{
 					foreach ($titles as $key => $title):
 						echo ($key==0)?'':'<th>'.$title.'</th>';
@@ -149,7 +149,7 @@ function abap_class_menu_main(
 		<?php 
 		if(sizeof($contents) == 0):?>
 			<tr class="no-items">
-				<td colspan="<?php echo count($titles)-1;?>"><?php _e('No se ha encontrado información','abap');?></td>
+				<td colspan="<?php echo count($titles)-1;?>"><?php _e('No se ha encontrado información','aa');?></td>
 			</tr>
 		<?php 
 		else:
@@ -167,7 +167,7 @@ function abap_class_menu_main(
 								echo '<div class="row-actions">';
 									echo '<span class="edit">';
 										echo '<a href="?page='.$menu_slug.'&action=edit&item='.$id.'&actioncode='.wp_create_nonce($id."edit").'">';
-											echo 'Edabapr';
+											echo 'Edaar';
 										echo '</a>';
 									echo '</span>';
 								echo '</div>';
@@ -194,7 +194,7 @@ function abap_class_menu_main(
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_class_form(
+function aa_class_form(
 								$type=null,				//add,update
 								$title="Titulo",
 								$menu_slug=null,
@@ -204,9 +204,9 @@ function abap_class_form(
 		global $wpdb;
 		switch($type){
 			case "add":		$submit="Crear item";	break;
-			case "update":	$submit="Edabapr item";	break;
+			case "update":	$submit="Edaar item";	break;
 			default:
-				abap_bad_msg("Error interno al identificar el Tipo de Formulario");
+				aa_bad_msg("Error interno al identificar el Tipo de Formulario");
 				wp_die();
 		}
 		echo '<h3>'.$title.'</h3>';
@@ -367,7 +367,7 @@ function check_form_values( $postvs=null, $db_fields=null){
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_add_new_class_row( $tbl_name=null, $postvs=null, $db_fields=null, $name="item",$silent="false"){
+function aa_add_new_class_row( $tbl_name=null, $postvs=null, $db_fields=null, $name="item",$silent="false"){
 	global $wpdb;
 	if(check_form_values($postvs, $db_fields)){
 		$insertArray = array();
@@ -391,14 +391,14 @@ function abap_add_new_class_row( $tbl_name=null, $postvs=null, $db_fields=null, 
 			}
 		endforeach;
 		if ( $wpdb->insert( $tbl_name, $insertArray ) ){
-			$silent?:abap_good_msg("El nuevo ".$name." ha sido guardado.");
+			$silent?:aa_good_msg("El nuevo ".$name." ha sido guardado.");
 			return $wpdb->insert_id;
 		}else{
-			abap_bad_msg("Hubo un error al agregar el nuevo ".$name."; intenta nuevamente. :)");
+			aa_bad_msg("Hubo un error al agregar el nuevo ".$name."; intenta nuevamente. :)");
 		}
 	
 	}else{
-		abap_bad_msg("No has ingresado los datos correctos para un nuevo ".$name."; intenta nuevamente. :)");
+		aa_bad_msg("No has ingresado los datos correctos para un nuevo ".$name."; intenta nuevamente. :)");
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -408,7 +408,7 @@ function abap_add_new_class_row( $tbl_name=null, $postvs=null, $db_fields=null, 
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_edit_class_row( $tbl_name=null, $postvs=null, $db_fields=null, $name="item" ){
+function aa_edit_class_row( $tbl_name=null, $postvs=null, $db_fields=null, $name="item" ){
 	global $wpdb;
 	
 	$editArray		= array();
@@ -443,15 +443,15 @@ function abap_edit_class_row( $tbl_name=null, $postvs=null, $db_fields=null, $na
 		}
 		$result = $wpdb->update($tbl_name,$editArray,$whereArray);
 		if( $result === false ){
-			abap_bad_msg("Hubo un error al edabapr el ".$name."; intenta nuevamente. :)");
+			aa_bad_msg("Hubo un error al edaar el ".$name."; intenta nuevamente. :)");
 		}elseif ( $result == 0){
-			abap_good_msg("Los valores son iguales. ".$name." no modificado.");
+			aa_good_msg("Los valores son iguales. ".$name." no modificado.");
 		}else{
-			abap_good_msg($name." edabapdo exitosamente.");
+			aa_good_msg($name." edaado exitosamente.");
 		}
 	}else{
 		var_dump($postvs);
-		abap_bad_msg("No has ingresado los datos correctos para edabapr el ".$name."; intenta nuevamente. :)");
+		aa_bad_msg("No has ingresado los datos correctos para edaar el ".$name."; intenta nuevamente. :)");
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -461,7 +461,7 @@ function abap_edit_class_row( $tbl_name=null, $postvs=null, $db_fields=null, $na
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_bulk_delete( $tbl_name,$postvs,$name ){
+function aa_bulk_delete( $tbl_name,$postvs,$name ){
 	global $wpdb;
 	if( isset( $postvs["delete"] ) ):
 		$count = sizeof( $postvs["delete"] );
@@ -469,12 +469,12 @@ function abap_bulk_delete( $tbl_name,$postvs,$name ){
 		if( preg_match( "/^([0-9, ])*$/", $items ) ):
 			$sql = "DELETE FROM ".$tbl_name." WHERE `id` IN (".esc_sql($items).")";
 			$wpdb->get_results($sql);
-			abap_good_msg($count.' '.$name.' han sido eliminados.');
+			aa_good_msg($count.' '.$name.' han sido eliminados.');
 		else:
-			abap_bad_msg("No se pudo borrar los ".$name.", por favor pruebe nuevamente.");
+			aa_bad_msg("No se pudo borrar los ".$name.", por favor pruebe nuevamente.");
 		endif;
 	else:
-		abap_bad_msg("¡¿Estás mal de la cabeza?! Nada seleccionado!. Vuelve y selecciona elementos antes de hacer click nuevamente!");
+		aa_bad_msg("¡¿Estás mal de la cabeza?! Nada seleccionado!. Vuelve y selecciona elementos antes de hacer click nuevamente!");
 	endif;
 }
 
@@ -492,19 +492,19 @@ function abap_bulk_delete( $tbl_name,$postvs,$name ){
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-function abap_get_all($tables=null){
+function aa_get_all($tables=null){
 		global $wpdb;
 /*	foreach($tables as $key => $table):
 		$tables[$key]['tcode']='t'.str_pad($key, 3, "0", STR_PAD_LEFT); #000
 	endforeach;
 */
-	$SQLL=abap_get_all_select($tables,sizeof($tables)-1);
-	$SQLL.=" FROM ".abap_get_all_from($tables,sizeof($tables)-1);
-	if(($SQL_WHERE=abap_get_all_where($tables,sizeof($tables)-1))!=null){
+	$SQLL=aa_get_all_select($tables,sizeof($tables)-1);
+	$SQLL.=" FROM ".aa_get_all_from($tables,sizeof($tables)-1);
+	if(($SQL_WHERE=aa_get_all_where($tables,sizeof($tables)-1))!=null){
 		$SQLL.=" WHERE ".implode(" AND ",$SQL_WHERE);
 	}
-	$SQLL.=" ORDER BY ".abap_get_all_order($tables,sizeof($tables)-1);
-	if(($SQL_GROUP=abap_get_all_group($tables,sizeof($tables)-1))!=null){
+	$SQLL.=" ORDER BY ".aa_get_all_order($tables,sizeof($tables)-1);
+	if(($SQL_GROUP=aa_get_all_group($tables,sizeof($tables)-1))!=null){
 		echo " GROUP BY ".implode(" AND ",$SQL_GROUP);
 	}
 	
@@ -517,7 +517,7 @@ function abap_get_all($tables=null){
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_get_all_select($tables=null,$num=0){
+function aa_get_all_select($tables=null,$num=0){
 	$sel_str=array();
 	foreach($tables[$num]['fields'] as $key => $field){
 		$sel_str[$key] =$tables[$num]['tcode'].".".$field[0]." as ".$field[1];
@@ -526,7 +526,7 @@ function abap_get_all_select($tables=null,$num=0){
 	if($num<=0){
 		return "SELECT " .$output;
 	}else{
-		return abap_get_all_select($tables,$num-1).",".$output;
+		return aa_get_all_select($tables,$num-1).",".$output;
 	}
 }
 /**
@@ -535,7 +535,7 @@ function abap_get_all_select($tables=null,$num=0){
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_get_all_from($tables=null,$num=0){
+function aa_get_all_from($tables=null,$num=0){
 	$sel_str=array();
 	foreach($tables[$num]['fields'] as $key => $field){
 		$sel_str[$key] =$tables[$num]['tcode'].".".$field[0]." as ".($field[1]!=null)?$field[1]:$field[0];
@@ -545,7 +545,7 @@ function abap_get_all_from($tables=null,$num=0){
 		return $tables[$num]['tname']." ".$tables[$num]['tcode'];
 	}else{
 		$output ="(";
-			$output.=abap_get_all_from($tables,$num-1);
+			$output.=aa_get_all_from($tables,$num-1);
 				$output.=" LEFT JOIN ".$tables[$num]['tname']." ".$tables[$num]['tcode'];
 					$output.=" ON ";
 						$output.=$tables[$num]['tjoin']['tcode'].".".$tables[$num]['tjoin']['tfield'];
@@ -562,7 +562,7 @@ function abap_get_all_from($tables=null,$num=0){
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_get_all_where($tables=null,$num=0){
+function aa_get_all_where($tables=null,$num=0){
 	$whe_str=array();
 	foreach($tables[$num]['fields'] as $key => $field){	
 		if($field[3]!=null && $field[3]!='' && $field[3]!=0){
@@ -579,7 +579,7 @@ function abap_get_all_where($tables=null,$num=0){
 	if($num<=0){
 		return $whe_str;
 	}else{
-		if(is_array($next=abap_get_all_where($tables,$num-1))):
+		if(is_array($next=aa_get_all_where($tables,$num-1))):
 			foreach($next as $entradas):
 				array_push($whe_str,$entradas);
 			endforeach;
@@ -594,7 +594,7 @@ function abap_get_all_where($tables=null,$num=0){
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_get_all_order($tables=null,$num=0){
+function aa_get_all_order($tables=null,$num=0){
 	$sel_str=array();
 	foreach($tables[$num]['fields'] as $key => $field){
 		$sel_str[$key] =($field[1]!=null)?$field[1]:$field[0];
@@ -603,7 +603,7 @@ function abap_get_all_order($tables=null,$num=0){
 	if($num<=0){
 		return $output;
 	}else{
-		return $output.",".abap_get_all_order($tables,$num-1);
+		return $output.",".aa_get_all_order($tables,$num-1);
 	}
 }
 /**
@@ -612,7 +612,7 @@ function abap_get_all_order($tables=null,$num=0){
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_get_all_group($tables=null,$num=0){
+function aa_get_all_group($tables=null,$num=0){
 	$grp_str=array();
 	foreach($tables[$num]['fields'] as $key => $field){	
 		if($field[4]!=null && $field[4]!='' && $field[4]!=0){
@@ -622,7 +622,7 @@ function abap_get_all_group($tables=null,$num=0){
 	if($num<=0){
 		return $whe_grp;
 	}else{
-		if(is_array($next=abap_get_all_order($tables,$num-1))):
+		if(is_array($next=aa_get_all_order($tables,$num-1))):
 			foreach($next as $entradas):
 				array_push($whe_grp,$entradas);
 			endforeach;
@@ -637,7 +637,7 @@ function abap_get_all_group($tables=null,$num=0){
 * @since 1.0
 * @author Cristian Marin
 */
-function abap_post_to_get($variable=null){
+function aa_post_to_get($variable=null){
 	if(isset($_POST[$plugin_post][$variable])){
 		$_GET[$variable]=$_POST[$plugin_post][$variable];
 	}
@@ -647,11 +647,11 @@ function abap_post_to_get($variable=null){
 * Change CSS for LESS into wp_enqueue_style
 * http://stackoverflow.com/questions/8082236/wp-enqueue-style-and-rel-other-than-stylesheet
 */
-function abap_plugin_style_loader_tag_function($tag){
+function aa_plugin_style_loader_tag_function($tag){
   //do stuff here to find and replace the rel attribute    
   return preg_replace("/='stylesheet' id='less-css'/", "='stylesheet/less' id='less-css'", $tag);
 }
-add_filter('style_loader_tag', 'abap_plugin_style_loader_tag_function');
+add_filter('style_loader_tag', 'aa_plugin_style_loader_tag_function');
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 /*
 * Log own debug statements

@@ -1,112 +1,148 @@
-.ui-datepicker{
-	display: block;
-	width: 280px;
+.ui-datepicker,
+.ui-datepicker-multi{
+	padding-top: 10px;
+	height: 100%;
+//	width: 100% !important;
+//	display:flex !important;
+//	flex-direction: row;
+//	flex-wrap: nowrap;
+//	justify-content: space-around;
+//	align-items: flex-start;
+	color: white;
 //	background-color: rgba(0,0,0,.01);
-	.ui-datepicker-header{
-		display: block;
-//		width: 100%;
-		height:40px;
-		box-sizing: border-box;
-		padding: 10px;
-		background-color: #4A545B;
-		color: white;
-		display:flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		justify-content: space-between;
-		align-items: stretch;		
-		.ui-datepicker-prev{
-			order:1;
-			span{
-				color: white;
-				&:hover{
-					cursor: pointer;
-					margin-top: 0 !important;
-					text-decoration: none !important;
-				}
-			}
-		}
-		.ui-datepicker-title{
-			order:2;
-		}
-		.ui-datepicker-next{
-			order:3;
-			span{
-				color: white;
-				&:hover{
-					cursor: pointer;
-					margin-top: 0 !important;
-					text-decoration: none !important;
-				}
-			}
-			&.ui-datepicker-next-hover{
-				
-			}
-		}
+	.ui-datepicker-row-break{
+		display: none;
 	}
-	table.ui-datepicker-calendar{
-		display: block;
-		width: 100%;
-		text-align: center;
-		border-collapse: collapse;
-		thead{
+	.ui-datepicker-group{
+		.make-xs-column(12);
+		.make-sm-column(6);
+//		display: inline-block;
+//		width: 210px;
+		.ui-datepicker-header{
+			position: relative;
 			display: block;
 			width: 100%;
-			background-color: #4A545B;
-			color:white;
-			tr{
-				th{
-					text-align: center;
-					width: 40px;
-					height: 40px;
-					vertical-align: middle;
-					&.ui-datepicker-week-end{
-						color: red;
+//			height:20px;
+			font-size: 14px;
+			box-sizing: border-box;
+//			color: white;
+			text-align: center;
+			font-weight: lighter;
+//			display:flex;
+//			flex-direction: row;
+//			flex-wrap: nowrap;
+//			justify-content: space-between;
+//			align-items: stretch;		
+			.ui-datepicker-prev{
+				display: block;
+				width: 20px;
+				position: absolute;
+//				order:1;
+				left: 10px;
+				span{
+					color: white;
+					&:hover{
+						cursor: pointer;
+						margin-top: 0 !important;
+						text-decoration: none !important;
 					}
 				}
 			}
-		}
-		tbody{
-			tr{
-				border-bottom:thin solid rgba(0,0,0,.1);
-				td{
-					text-align: center;
-					width: 40px;
-					height: 40px;
-					vertical-align: middle;
-//					.rounded(4px);
-					font-weight: bold;
-					&.ui-datepicker-other-month{
-						color: rgba(0,0,0,.3);
-					}
-					&.ui-datepicker-current-day{
-						color:black;
-					}
-					&.ui-datepicker-week-end{
-						//color:red !important;
-					}
-					&.ui-datepicker-today{
-						border: thin red solid;
-					}
-					&.ui-state-active{
-						border: thin black solid;
+			.ui-datepicker-title{
+//				order:2;
+			}
+			.ui-datepicker-next{
+				display: block;
+				width: 20px;
+				position: absolute;
+				right: 10px;
+//				order:3;
+				span{
+					color: white;
+					&:hover{
 						cursor: pointer;
-					}
-					&.aa_sdfmon{
-						background-color: #227AC1;
-						color: white;
-					}
-					a:link,
-					a:visited,
-					a:active{
-						font-weight:bold;
-						color: rgba(0,0,0,.6);
-
-					}
-					a:hover{
 						margin-top: 0 !important;
 						text-decoration: none !important;
+					}
+				}
+				&.ui-datepicker-next-hover{
 					
+				}
+			}
+		}
+		table.ui-datepicker-calendar{
+//			display: block;
+//			width: 100%;
+			text-align: center;
+			border-collapse: collapse;
+			margin-left:auto; 
+			margin-right:auto;
+			thead{
+//				display: block;
+	//			width: 100%;
+	//			background-color: #4A545B;
+//				color:white;
+				tr{
+					th{
+						text-align: center;
+						width: 30px;
+						height: 30px;
+						vertical-align: middle;
+						font-weight: lighter;
+						&.ui-datepicker-week-end{
+	//						color: red;
+						}
+					}
+				}
+			}
+			tbody{
+				tr{
+//					border-bottom:thin solid rgba(0,0,0,.05);
+					td{
+						font-weight:lighter;
+						color: white;
+						font-size: 12px;
+						text-align: center;
+						width: 30px;
+						height: 30px;
+						vertical-align: middle;
+						&.ui-datepicker-other-month{
+							color: rgba(0,0,0,.5);
+							font-weight:normal;
+						}
+						&.ui-datepicker-current-day{
+							color:white;
+						}
+						&.ui-datepicker-week-end{
+							//color:red !important;
+						}
+						&.ui-datepicker-today{
+							border: thin rgba(255,255,255,0.5) solid;
+							background-color: rgba(255,255,255,.25);
+						}
+						&.ui-state-active{
+							border: thin black solid;
+							cursor: pointer;
+						}
+						&.aa_sdfmon,
+						&.aa-used-date{
+							span{
+								border-bottom: thin solid white;
+							}
+						}
+						a:link,
+						a:visited,
+						a:active{
+							font-weight:lighter;
+							color: white;
+							font-size: 12px;
+	
+						}
+						a:hover{
+							margin-top: 0 !important;
+							text-decoration: none !important;
+						
+						}
 					}
 				}
 			}
