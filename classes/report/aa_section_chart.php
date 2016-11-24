@@ -68,7 +68,7 @@ public function get_charts($section_id=null){
 	if($section_id == null){
 		return false;
 	}
-	$sql="SELECT chart_id FROM ".$this->tbl_name.' WHERE section_id="'.$section_id.'" ORDER BY disp_order DESC';
+	$sql="SELECT chart_id FROM ".$this->tbl_name.' WHERE section_id="'.$section_id.'" ORDER BY disp_order ASC';
 	foreach( self::get_sql($sql) as $key => $val){
 		array_push($chart_list, $val['chart_id']);
 	}

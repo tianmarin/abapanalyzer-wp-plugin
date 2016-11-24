@@ -68,7 +68,7 @@ public function get_sections($report_type_id=null){
 	if($report_type_id == null){
 		return false;
 	}
-	$sql="SELECT section_id FROM ".$this->tbl_name.' WHERE report_type_id="'.$report_type_id.'" ORDER BY disp_order DESC';
+	$sql="SELECT section_id FROM ".$this->tbl_name.' WHERE report_type_id="'.$report_type_id.'" ORDER BY disp_order ASC';
 	foreach( self::get_sql($sql) as $key => $val){
 		array_push($section_list, $val['section_id']);
 	}

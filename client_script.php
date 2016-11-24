@@ -27,7 +27,7 @@ function abap_client_handle_shortcode($atts){
 		'jquery-confirm',
 		plugins_url( 'js/jquery-confirm/js/jquery-confirm.js' , __FILE__),
 		array('jquery','jquery-ui-core','jquery-ui-datepicker','jquery-ui-progressbar'),
-		'1.0'
+		'3.0.1'
 	);
 //	wp_enqueue_script('jquery-confirm');
 	//-----------------------------------------------------
@@ -48,12 +48,19 @@ function abap_client_handle_shortcode($atts){
 //	wp_enqueue_script('amcharts-serial');
 	//-----------------------------------------------------
 	wp_register_script(
+		'amcharts-responsive',
+		plugins_url( 'js/amcharts/plugins/responsive/responsive.min.js' , __FILE__),
+		array('amcharts'),
+		'3.2'
+	);
+//	wp_enqueue_script('amcharts-responsive');
+	//-----------------------------------------------------
+	wp_register_script(
 		'scrollex',
 		plugins_url( 'js/jquery.scrollex-master/jquery.scrollex.min.js' , __FILE__),
 		array('jquery'),
 		'2'
 	);
-//	wp_enqueue_script('scrollex');
 	//-----------------------------------------------------
 	wp_register_script(
 		'scrolly',
@@ -61,7 +68,6 @@ function abap_client_handle_shortcode($atts){
 		array('jquery'),
 		'1'
 	);
-//	wp_enqueue_script('scrollex');
 	//-----------------------------------------------------
 	wp_register_script(
 		'bootstrap',
@@ -69,27 +75,11 @@ function abap_client_handle_shortcode($atts){
 		array('jquery'),
 		'1'
 	);
-//	wp_enqueue_script('scrollex');
-	//-----------------------------------------------------
-	wp_register_script(
-		'file-saver',
-		plugins_url( 'js/word/FileSaver.js' , __FILE__),
-		array('jquery'),
-		'1'
-	);
-	//-----------------------------------------------------
-	wp_register_script(
-		'word',
-		plugins_url( 'js/word/jquery.wordexport.js' , __FILE__),
-		array('jquery','file-saver'),
-		'1'
-	);
-//	wp_enqueue_script('scrollex');
 	//-----------------------------------------------------
 	wp_register_script(
 		'abap_frontend',
-		plugins_url( 'js/client/aa_client_script.js' , __FILE__),
-		array('jquery-confirm','amcharts-serial','jquery-ui-accordion','jquery-ui-sortable','scrollex','scrolly','bootstrap','word'),
+		plugins_url( 'js/client/aa_client_script-min.js' , __FILE__),
+		array('jquery-confirm','amcharts-serial','amcharts-responsive','jquery-ui-accordion','jquery-ui-sortable','scrollex','scrolly','bootstrap'),
 		'1.0'
 	);
 	wp_enqueue_script('abap_frontend');

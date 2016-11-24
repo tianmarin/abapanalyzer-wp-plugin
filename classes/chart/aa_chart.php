@@ -36,10 +36,11 @@ public function __construct(){
 	//Sentencia SQL de creación (y ajuste) de la tabla de la clase
 	$this->crt_tbl_sql	=	"CREATE TABLE ".$this->tbl_name." (
 								id tinyint(1) unsigned not null auto_increment,
-								title varchar(20) not null,
+								title varchar(40) not null,
 								stack_id tinyint(1) unsigned not null,
 								legend bool null,
 								summary_table bool null,
+								group_by_instance bool null,
 								time_group_id tinyint(1) unsigned not null,
 								UNIQUE KEY id (id)
 							) $charset_collate;";
@@ -95,9 +96,9 @@ public function __construct(){
 		'title' => array(
 			'type'			=>'text',
 			'required'		=>true,
-			'maxchar'		=>20,
+			'maxchar'		=>40,
 			'desc'			=>'T&iacute;tulo',
-			'form-help'		=>'El t&iacute;tulo será desplegado en el gráfico despues del SID.<br/>Tamaño m&aacute;ximo: 20 caracteres.',
+			'form-help'		=>'El t&iacute;tulo será desplegado en el gráfico despues del SID.<br/>Tamaño m&aacute;ximo: 40 caracteres.',
 			'in_wp_table'	=>true,
 			'wp_table_lead'	=>true,
 		),
@@ -127,6 +128,16 @@ public function __construct(){
 			'required'		=>true,
 			'desc'			=>'Tabla de resumen',
 			'form-help'		=>'Mostrar tabla de resumen despu&eacute;s del gr&aacute;fico.',
+			'in_form'		=>true,
+			'sp_form'		=>true,
+			'in_wp_table'	=>true,
+			'sp_wp_table'	=>true,
+		),
+		'group_by_instance' => array(
+			'type'			=>'bool',
+			'required'		=>true,
+			'desc'			=>'Agrupar por instancia',
+			'form-help'		=>'Agrupar la informaci&oacute;n por instancias.',
 			'in_form'		=>true,
 			'sp_form'		=>true,
 			'in_wp_table'	=>true,
@@ -195,6 +206,12 @@ protected function sp_wp_table_summary_table($val){
     }
     return'<i class="fa fa-square-o fa-fw" aria-hidden="true"></i>';
 }
+protected function sp_wp_table_group_by_instance($val){
+    if($val){
+        return'<i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i>';
+    }
+    return'<i class="fa fa-square-o fa-fw" aria-hidden="true"></i>';
+}
 protected function sp_wp_table_graph($value=null,$id=null){
 	global $CHART_GRAPH;
 	$graphs=$CHART_GRAPH->get_graphs($id);
@@ -214,18 +231,28 @@ protected function chart_graph(){
 public function fe_build_chart(){
 	$response=array();
 	$chart_id=$_POST['chart_id'];
+	$report_id=$_POST['report_id'];
 	if(NULL != $chart_id){
 		$chart=self::get_single($chart_id);
+		
+		global $REPORT;
+		$report=$REPORT->get_single($report_id);
+		
 		global $CHART_GRAPH;
 		$graphs_id=$CHART_GRAPH->get_graphs($chart_id);
 		
 		global $CHART_STACK;
 		$stack = $CHART_STACK->get_single($chart['stack_id']);
 		$chart['stackable']=$stack['code'];
+
+		global $TIME_GROUP;
+		$time_group = $TIME_GROUP->get_single($chart['time_group_id']);
+		$chart['timeGroup']=$time_group['code'];
 		
 		$chart['graphs']=array();
 		$data=array();
-		self::write_log($chart_id);
+//		self::write_log($chart_id);
+		set_time_limit(600);
 		foreach($graphs_id as $graph_id){
 			/*
 			por cada gráfico obtengo
@@ -261,32 +288,80 @@ public function fe_build_chart(){
 			$graph['valueField']='valueField_'.$graph_id;
 
 			global $SDFMON;
+			
 			$sql="SELECT
 					time.date as date,
+					time.time as time,
 					".strtoupper($function['code'])."(time.sum) as ".$function['code']."
 				FROM (
 					SELECT
 						SUM(".$graph['asset'].") as sum,
-						date as date
+						date as date,
+						time as time
 					FROM $SDFMON->tbl_name
-					WHERE system_id=1
-					GROUP BY date,time
-				) AS time
-				GROUP BY time.date";
+					WHERE system_id=".$report['system_id']." ";
+			if($report['start_date'] != null && $report['start_date'] != '0000-00-00'){
+				$sql.=" AND date > '".$report['start_date']."' ";
+			}
+			if($report['end_date'] != null && $report['end_date'] != '0000-00-00'){
+				$sql.=" AND date < '".$report['end_date']."' ";
+			}
+			$sql.="
+					GROUP BY date,time";
+			if($chart['group_by_instance']){
+				$sql.=",servername";
+			}
+			$sql.="
+				) AS time";
+			switch($time_group['code']){
+				case "hourly":
+					$sql.=" GROUP BY HOUR(time.time)";
+					break;
+				case "daily":
+					$sql.=" GROUP BY time.date";
+					break;
+				case "weekly":
+					$sql.=" GROUP BY YEARWEEK(time.date)";
+					break;
+				case "monthly":
+					$sql.=" GROUP BY MONTH(time.date)";
+					break;
+				case "quarter":
+					$sql.=" GROUP BY QUARTER(time.date)";
+					break;
+			}
+			self::write_log($sql);
 
 			$sdfmon=self::get_sql($sql);
 			foreach($sdfmon as $sdfentry){
-				$key = array_search($sdfentry['date'], array_column($data, 'date'),TRUE);
+				switch($time_group['code']){
+					case "hourly":
+						$key = array_search($sdfentry['time'], array_column($data, 'time'),TRUE);
+						break;
+					default:
+						$key = array_search($sdfentry['date'], array_column($data, 'date'),TRUE);
+				}
+				
 				if($key !== FALSE){
 					$data[$key][$graph['valueField']]=round($sdfentry[$function['code']]);
 				}else{
-					array_push($data,
-						array(
-							"date"					=>	$sdfentry['date'],
-							$graph['valueField']	=>	round($sdfentry[$function['code']]),
-							
-						)
-					);			
+					switch($time_group['code']){
+						case "hourly":
+							array_push($data,
+								array(
+									"time"					=>	$sdfentry['time'],
+									$graph['valueField']	=>	round($sdfentry[$function['code']]),
+								)
+							);
+							break;
+						default:
+							array_push($data,
+								array(
+									"date"					=>	$sdfentry['date'],
+									$graph['valueField']	=>	round($sdfentry[$function['code']]),
+								)
+							);
+					}
 				}
 			}
 			$chart['graphs']['graph_'.$graph_id]=$graph;
@@ -296,6 +371,7 @@ public function fe_build_chart(){
 	}else{
 		$response['error']=1;
 	}
+//	self::write_log($response);
 	$response['status']=$chart_id;
 	echo json_encode($response);
 	die();		

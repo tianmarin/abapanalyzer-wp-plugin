@@ -593,7 +593,7 @@ function get_sql($sql , $output_style = 'ARRAY_A' ){
 * @since 1.0
 * @author Cristian Marin
 */
-function show_form(
+protected function show_form(
 					$type=null,				//add,update
 					$item=null,				//id a editar
 					$menu_slug=null,
@@ -634,8 +634,7 @@ function show_form(
 	$output.='<input type="hidden" name="'.$this->plugin_post.'[action]" value="'.$type.'" />';
 	$output.=wp_nonce_field( $type, $this->plugin_post."[actioncode]");
 	if(isset($item)){
-	$output.='<input type="hidden" name="'.$this->plugin_post.'[id]" value="'.$item.'" />';
-		
+		$output.='<input type="hidden" name="'.$this->plugin_post.'[id]" value="'.$item.'" />';
 	}
 	
 //	wp_create_nonce($element['id']."edit")

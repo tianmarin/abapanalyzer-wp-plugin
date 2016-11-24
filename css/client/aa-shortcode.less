@@ -1,8 +1,8 @@
 @import "../LESS-Dynamic-Stylesheet-master/dss.less";
 @import "../animate.less-master/less/animate.less";
+@import "../bootstrap-master/less/bootstrap.less";
 @import "../../js/jquery-confirm/css/jquery-confirm.less";
 @import "../font-awesome/less/font-awesome.less";
-@import "../bootstrap-master/less/bootstrap.less";
 @import "jquery-datepicker.less";
 
 html{
@@ -11,7 +11,8 @@ html{
 body{
 	min-height: 100%;
 	.gradient-direction(#7CD1B4, #0C386A, 45); 
-	.transition(all, 2s, ease, 0s);
+//	background-color: #0C386A;
+	.transition(background-color, 2s, ease, 0s);
 	&.on-system{
 		.gradient-direction(#FFF, #FFF, 45); 
 		background-color: #FFF;
@@ -91,8 +92,11 @@ body{
 				.text-justify;
 			}
 			#chartdiv{
-				background-color: rgba(0,0,0,.1);
+			//	background-color: rgba(0,0,0,.1);
 				height:300px;
+				a[href="http://www.amcharts.com/javascript-charts/"]{
+					display: none !important;
+				}
 			}
 			.features{
 				list-style: none;
@@ -203,8 +207,15 @@ body{
 	}
 }
 body > section{
-	.container-fluid;
-	background-color: #FFF;
+//	.container-fluid;
+	.container;
+	& > *{
+		background-color: #FFF;
+	}
+//	header{
+//		background-color: transparent;
+//		color: #FFF;
+//	}
 	min-height: 100%;
 	.transition (all, .2s, ease, 0s);
 	nav{
@@ -227,38 +238,12 @@ body > section{
 	}
 }
 #system-list{
-	ul{
-		list-style: none;
+	article > ul{
 		margin: 0;
 		padding: 0;
-		li{
-			.make-xs-column(12);
-			.make-sm-column(6);
-			.make-md-column(4);
-			.make-lg-column(3);
-			.list-group-item;
-			.transition (all, .5s, ease, 1s);
-			.animated;
-			.flipInX;
-			h4{
-				.list-group-item-heading;
-				.text-uppercase;
-				.text-center;
-			}
-			p{
-				.list-group-item-text;
-			}
-			
-			header{
-				h2{
-				}
-			}
-			a{
-				.btn;
-				.text-center;
-				.btn-block;
-				.btn-primary;
-			}
+		& > li{
+			list-style: none;
+			min-height: 250px;
 		}
 	}
 	
@@ -326,7 +311,7 @@ body > section{
 			.text-justify;
 		}
 	}	
-	section{
+	article{
 		.aa-report-chart-legend{
 			.make-xs-column(12);
 		}
@@ -334,12 +319,25 @@ body > section{
 			.make-xs-column(12);
 			min-height: 300px;
 			margin: 30px auto;
+			padding: 0;
 			a[href="http://www.amcharts.com/javascript-charts/"]{
 				display: none !important;
 			}
 			&.loading{
 				background-color: rgba(0,0,0,.1);
 				border: thin solid rgba(0,0,0,.5);
+				position:relative;
+				&:after{
+					color: rgba(0,0,0,.25);
+					font-family: FontAwesome;
+					content: "\f110";
+					display: block;
+					text-align: center;
+					font-size: 60px;
+					line-height: 300px;
+					//.fa-spin;
+					.fa-pulse;
+				}
 			}
 		}
 	}

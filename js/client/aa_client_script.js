@@ -9,6 +9,22 @@ jQuery(document).ready(function($){
 //var aaUrl		=aaServerData.aaUrl;
 var ajaxUrl		=aaServerData.ajaxUrl;
 //------------------------------------------------------------------------------
+/*
+* aaUploadSdfmonFile
+*
+* This function evaluates the selected file and uploads it using the $SDFMON PHP
+* class.
+* While Uploading and waiting for the final JSON %$SDFMON response, it shows the
+* percentage of the file upload process and notifies the user, the state of the
+* backend processing.
+*
+* Once the file has been processed by the backend, the SDFMON Calendar is
+* reloaded to prevent the user uploading a single date data twice.
+*
+* Further implementations might show a percentage of the file processing.
+*
+* @author Cristian Marin
+*/
 window.aaUploadSdfmonFile=function(event){
 	event.preventDefault();
 	window.console.log(this);
@@ -24,8 +40,8 @@ window.aaUploadSdfmonFile=function(event){
 	}
 	window.console.log('Archivo a evaluar: '+file.name+' '+file.type+' '+file.size);
 	if(file.type !== 'text/plain'){
-		$.alert("Recuerda que debes cargar archivos exportados sin formato");
-		return false;
+		$.alert("Recuerda que debes cargar archivos exportados sin formato","Error");
+		return this;
 	}
 	var parts = $(this).data('file-date').split('/');
 	var inputYear	=parts[0];
@@ -71,36 +87,192 @@ window.aaUploadSdfmonFile=function(event){
 			xhr.upload.addEventListener("load", function(evt){
 				if (evt.lengthComputable) {
 					statusMsg.html(processing+" "+inputDay+'/'+inputMonth+'/'+inputYear+' Procesando la informaci&oacute;n cargada');
+					setTimeout(function(){
+						$('#sdfmon-setup .sdfmon-setup-calendar').aaActivateSdfmonCalendar();
+					}, 900);
 				}
 			}, false);
 			//Download progress
+			//If this is removed, the process is dead
 			xhr.addEventListener("progress", function(evt){
 				if (evt.lengthComputable) {
-					var percentComplete = Math.round(evt.loaded / evt.total * 100);
-					window.console.log("Respuesta descargada: "+percentComplete+'%');
+					window.console.log("Respuesta descargada: "+Math.round(evt.loaded / evt.total * 100)+'%');
+				}else{
+					window.console.log("Respuesta descargada: "+Math.round(evt.loaded / evt.total * 100)+'%');					
 				}
 			}, false);
 			return xhr;
 		},
    		success: function(response){
-//			window.console.log(JSON.stringify(response));
+			window.console.log(JSON.stringify(response));
 			if(response.status === 'ok'){
 				statusMsg.html(finished+" "+inputDay+'/'+inputMonth+'/'+inputYear+' &iexcl;Informaci&oacute;n cargada exitosamente!').delay(5000).fadeOut(1000);
 				window.console.log('OK: Carga de '+file.name);
-				$('#sdfmon-setup').aaActivateSdfmonCalendar();
+				$('#sdfmon-setup .sdfmon-setup-calendar').aaActivateSdfmonCalendar();
 			}else{
 				window.console.log('ERROR: Carga de '+file.name+'('+response.error+')');
 			}
 		},
-		error: function(jqXHR, textStatus, errorThrown){
-			window.console.log("ERROR: ");
-			window.console.log(jqXHR);
-			window.console.log(textStatus+" - "+errorThrown);
-			$.alert("Error. Contacte a su Adminsitrador.");
-		}
+		error: aaAjaxError,
 	});		
 };
-
+/*
+* aaCreateNewSystem
+*
+* 
+*
+* @author Cristian Marin
+*/
+function aaCreateNewSystem(){
+	var jc = $.confirm({
+		buttons:{
+			create: {
+				text: 'Crear Sistema',
+				btnClass: 'btn-blue',
+				action: function(){
+					jc.$content.find('form').submit(function(event){
+						$(this).aaSubmitSystemForm(event,jc);
+					}).trigger("submit");
+					return false;
+				}
+			},			
+			cancel: {
+				text: 'Cancelar',
+				btnClass: 'btn-default',
+				action: function(){}
+			},			
+		},
+		closeIcon: true,
+		columnClass: 'large',
+		content:function(){
+			var self = this;
+			var data = new FormData();
+			data.append('action', 'fe_system_show_form');
+			return $.ajax({
+				url: ajaxUrl,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				beforeSend: function () {
+				},
+				success: function(response){
+					window.console.log(JSON.stringify(response));
+					if(undefined === response.error){
+						self.setTitle(response.title);
+						self.setContent(response.form);
+					}else{
+						self.setTitle("Error");
+						self.setContent(response.message);
+						self.buttons.create.addClass('hidden');
+					}
+				},
+				error: aaAjaxError,
+			});
+		},
+		type: 'blue',
+	});
+}
+function aaAjaxError(jqXHR, textStatus, errorThrown){
+	window.console.log("ERROR: ");
+	window.console.log(jqXHR);
+	window.console.log(textStatus+" - "+errorThrown);
+	$.alert("Error. Contacte a su Adminsitrador.");
+}
+function aaEditSystem(id){
+	var systemId = id;
+	var jc = $.confirm({
+		buttons:{
+			create: {
+				text: 'Editar Sistema',
+				btnClass: 'btn-orange',
+				action: function(){
+					jc.$content.find('form').submit(function(event){
+						$(this).aaSubmitSystemForm(event,jc);
+					}).trigger("submit");
+					return false;
+				}
+			},			
+			cancel: {
+				text: 'Cancelar',
+				btnClass: 'btn-default',
+				action: function(){}
+			},			
+		},
+		closeIcon: true,
+		columnClass: 'large',
+		content:function(){
+			var self = this;
+			var data = new FormData();
+			data.append('action', 'fe_system_show_form');
+			data.append('form_type', 'edit');
+			data.append('item', systemId);
+			return $.ajax({
+				url: ajaxUrl,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				beforeSend: function () {
+				},
+				success: function(response){
+					window.console.log(JSON.stringify(response));
+					if(undefined === response.error){
+						self.setTitle(response.title);
+						self.setContent(response.form);
+					}else{
+						self.setTitle("Error");
+						self.setContent(response.message);
+						self.buttons.create.addClass('hidden');
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					window.console.log("ERROR: ");
+					window.console.log(jqXHR);
+					window.console.log(textStatus+" - "+errorThrown);
+					self.setContent("Error. Contacte a su Adminsitrador.");
+				}
+			});
+		},
+		type: 'orange',
+	});
+}
+/*
+* aaGenerateChartData
+*
+* This function generates the random data for the #intro chart, in order to
+* display contextual date information for the user.
+*
+* @author Cristian Marin
+*/
+function aaGenerateChartData(){
+	var chartData = [];
+	// current date
+	var firstDate = new Date();
+	// now set 500 minutes back
+	firstDate.setDate(firstDate.getDate() - 1);
+	// and generate 30 data/days items
+	for (var i = 0; i < 30; i++) {
+		var newDate = new Date(firstDate);
+		// each time we add one minute
+		newDate.setDate(newDate.getDay() + i);
+		// some random number for MAX
+		var max = Math.round( Math.cos( i/2 ) * 5 + Math.random() * 5 + 30);
+		// some random number for AVG
+		var avg = Math.round(Math.random() * 5 + 5 );
+		// add data item to the array
+		chartData.push({
+			date: newDate,
+			max: max,
+			avg: avg,
+		});
+	}
+	return chartData;
+}
 /*
 * EXTEND FUNCTIONS
 *
@@ -182,6 +354,9 @@ aaNavbarActiveSection: function () {
 	// Scrollex.
 	$section.scrollex({
 		mode: 'middle',
+//		top: $('#intro-nav').height(),
+//		bottom: '50vh',
+		//delay:100,
 		enter: function() {
 			$this.parent().addClass('active');
 		},
@@ -209,10 +384,17 @@ aaLoadContent: function(){
 		return this;
 	}
 	var href = $(this).selector;
+//	$.find($(this).selector).scrolly({
+//		speed: 1000,
+//	});
 	switch(href){
 		case '#system-list':
 			$(this).ajaxSystemList();
 			$('body').addClass('on-system');
+			break;
+		case '#new-system':
+			$('body').addClass('on-system');
+			$(this).aaContinueLoadContent();
 			break;
 		case '#system-info':
 			$(this).ajaxSystemInfo();
@@ -230,9 +412,13 @@ aaLoadContent: function(){
 			$('body').addClass('on-system');
 			$(this).ajaxReportPreview();
 			break;
+		case '#system-collab':
+			$('body').addClass('on-system');
+			$(this).aaContinueLoadContent();
+			break;
 		default:
-		$(this).aaContinueLoadContent();
 		$('body').removeClass('on-system');
+		$(this).aaContinueLoadContent();
 	}
 	return this;
 },
@@ -246,28 +432,33 @@ aaTurnOff: function(){
 },
 aaContinueLoadContent: function(){
 	//The switch
-	var href = $(this).selector;
+	var href = $(this);
 	var active = $('body > .active');
+	var activeRef = '#'+active.attr('id');
+	window.console.log( activeRef+' -> '+href.selector);
 	window.console.log("activos :"+active.length);
+	if( href.selector === activeRef ){
+		return this;
+	}
 	if( active.length < 1){
-		window.console.log("no hay activos");
+		window.console.log("No active Section");
 		$(this).aaTurnOn();
 		return this;
 	}
 	var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-	active.addClass('animated fadeOutLeft').one(animationEnd, function() {
-		window.console.log("si hay activos");
-		window.console.log($(this));
+	active.addClass('animated fadeOutLeft');
+	active.one(animationEnd, function() {
+		window.console.log("Switch active Section");
 		$(this).aaTurnOff().removeClass('animated fadeOutLeft');
-//		window.console.log(href);
-		$(href).aaTurnOn().aaAnimateCss('fadeInRight');
+		window.console.log($(this).attr('id')+" es el activo");
+		window.console.log(href.attr('id')+" es el nuevo");
+		href.aaTurnOn().aaAnimateCss('fadeInRight');
 	});
 	return this;
 },
 ajaxSystemList: function(){
 	var section=$(this);
 	var data = new FormData();
-	window.console.log(ajaxUrl);
 	data.append('action', 'fe_system_list');
 	$.ajax({
 		url: ajaxUrl,
@@ -281,27 +472,22 @@ ajaxSystemList: function(){
 		},
    		success: function(response){
 //			window.console.log(JSON.stringify(response));
+			$('#system-list ul.list-group').html('');
 			if(response.elementCount>0){
-				$('#system-list ul.list-group').html('');
 				$.each(response.data,function(i,val){
-					var element=$('<li></li>')
-					.append( $('<h4>'	+val.sid		+'</h4>') )
-					.append( $('<p>'	+val.shortName	+'</p>') )
-					.append( $('<p>'	+val.owner		+'</p>') )
-					.append( $('<a href="#system-info/'+val.id+'">Ver Sistema</a>') );
-//					$('#system-list ul.list-group').append(element).hide().fadeIn();
-					$('#system-list ul.list-group').append(element);
+					var systemText = $( val );
+					systemText.find('a[data-function="system-edit"]').click(function(event){
+						event.preventDefault();
+						aaEditSystem($(this).data('system-id'));
+					});
+					$('#system-list ul.list-group').append(systemText);
 				});
-				section.aaContinueLoadContent();
 			}
+			section.aaContinueLoadContent();
 		},
-		error: function(jqXHR, textStatus, errorThrown){
-			window.console.log("ERROR: ");
-			window.console.log(jqXHR);
-			window.console.log(textStatus+" - "+errorThrown);
-			$.alert("Error. Contacte a su Adminsitrador.");
-		}
-	});	
+		error: aaAjaxError,
+	});
+	return this;
 },
 ajaxSystemInfo: function(){
 	var section=$(this);
@@ -325,61 +511,17 @@ ajaxSystemInfo: function(){
 //			window.console.log(JSON.stringify(response));
 			$('#system-info').html('');
 			if(response.status === 'ok'){
-				var header=$('<header></header>')
-				.append( $('<h1>'	+response.system.sid		+'</h1>') )
-				.append( $('<p>'	+response.system.shortName	+'</p>') );
-				header.append($(response.system.collab));
-				$('#system-info').append(header);
-				var section1=$('<section></section>');
-				section1.addClass("data-suppliers");
-				$.each(response.dataSuppliers,function(i,v){
-					var dataSupplier=$('<div></div>');
-					var dataSupplierHeader=$('<div></div>').addClass('panel-heading');
-					var dataSupplierBody=$('<div></div>').addClass('panel-body');
-					dataSupplierHeader.append( $('<h4>'+v.title+'</h4>') );
-					if(undefined !== v.editLink){
-						dataSupplierBody.append( $('<a href="'+v.editLink+'">'+v.editText+'</a>') );
-					}
-					dataSupplier.append(dataSupplierHeader);
-					dataSupplier.append(dataSupplierBody);
-					section1.append(dataSupplier);
-				});
-				$('#system-info').append(section1);
-				var section2=$('<section></section>');
-				section2.addClass("reports");
-				$.each(response.reports,function(i,v){
-					var report=$('<div></div>');
-					var reportHeader=$('<div></div>').addClass('list-group-item-heading');
-					var reportBody=$('<div></div>').addClass('list-group-item-text');
-					reportHeader.append( $('<h4>'+v.shortName+'</h4>') );
-					if(undefined !== v.editLink){
-						reportBody.append( $('<a href="'+v.editLink+'">'+v.editText+'</a>') );
-					}
-					if(undefined !== v.viewLink){
-						reportBody.append( $('<a href="'+v.viewLink+'">'+v.viewText+'</a>') );
-					}
-					report.append(reportHeader);
-					report.append(reportBody);
-					section2.append(report);
-				});
-				$('#system-info').append(section2);
+				$('#system-info').append(response.systemInfo);
 				section.aaContinueLoadContent();
 			}
 		},
-		error: function(jqXHR, textStatus, errorThrown){
-			window.console.log("ERROR: ");
-			window.console.log(jqXHR);
-			window.console.log(textStatus+" - "+errorThrown);
-			$.alert("Error. Contacte a su Adminsitrador.");
-		}
-	});	
+		error: aaAjaxError,
+	});
+	return this;
 },
 ajaxSdfmonSetup: function(){
 	var calendar=$('#sdfmon-setup .sdfmon-setup-calendar');
-	var sdfmonFileInput=$('<input type="file" id="aa-sdfmon-file"/>').change(window.aaUploadSdfmonFile);
-
 	calendar.html('');
-	calendar.append(sdfmonFileInput);
 	calendar.aaActivateSdfmonCalendar();
 	$(this).aaContinueLoadContent();
 	return this;
@@ -394,8 +536,6 @@ ajaxSdfmonSetup: function(){
 aaActivateSdfmonCalendar:function(){
 	var container=$(this);
 	container.aaSdfmonGetDates();
-
-
 	return this;
 },
 /*
@@ -446,18 +586,14 @@ aaSdfmonGetDates:function(){
 				$.alert(response.userMessage);
 			}
 		},
-		error: function(jqXHR, textStatus, errorThrown){
-			window.console.log("ERROR: ");
-			window.console.log(jqXHR);
-			window.console.log(textStatus+" - "+errorThrown);
-			$.alert("Error. Contacte a su Adminsitrador.");
-		}
+		error: aaAjaxError,
 	});	
 	return this;
 },
 aaBuildSdfmonCalendar:function(usedDates,lastDay){
 	var container=$(this);
-	container.datepicker('destroy').datepicker({
+	container.datepicker('destroy');
+	container.datepicker({
 		inline: true,
 		defaultDate:lastDay,
 		beforeShowDay:function(date) {
@@ -478,13 +614,22 @@ aaBuildSdfmonCalendar:function(usedDates,lastDay){
 		dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
 		onSelect: function(date){
 			window.console.log(date);
-			$('#aa-sdfmon-file').data('file-date',date);
-			window.console.log($('#aa-sdfmon-file').data('file-date'));
-			$('#aa-sdfmon-file').click();
+			container.append(
+				$('<input type="file">')
+				.data('file-date',date)
+				.change(window.aaUploadSdfmonFile)
+				.click()
+				);
+
+//			$('#aa-sdfmon-file').data('file-date',date);
+//			window.console.log($('#aa-sdfmon-file').data('file-date'));
+//			$('#aa-sdfmon-file').click();
 			
 			//abap_sdfmon_calendar_click(date);
 		},
-    }).datepicker('refresh');
+	});
+	container.datepicker('refresh');
+	return this;
 },
 /*
 * ajaxReportPreview
@@ -515,7 +660,7 @@ ajaxReportPreview: function(){
 //			window.console.log(JSON.stringify(response));
 			if(response.error === undefined){
 				$.each(response.sections,function(i,aaSection){
-					var reportSection=$('<section></section>');
+					var reportSection=$('<article></article>');
 					
 					var sectionHeader=$('<header></header>')
 					.append( $('<h2></h2>').append(aaSection.title) );
@@ -533,46 +678,26 @@ ajaxReportPreview: function(){
 						reportSection.append(chart);
 						reportSection.append(legend);
 					});
-
-
 					var sectionOutro=$('<div></div>')
 					.append( $('<p></p>').append(aaSection.outro) );
 					reportSection.append(sectionOutro);
-					
 					report.append(reportSection);
-//					window.console.log(report);
 				});
-/*				var section1=$('<section></section>');
-				section1.addClass("data-suppliers");
-				$.each(response.dataSuppliers,function(i,v){
-					var dataSupplier=$('<div></div>');
-					var dataSupplierHeader=$('<div></div>').addClass('panel-heading');
-					var dataSupplierBody=$('<div></div>').addClass('panel-body');
-					dataSupplierHeader.append( $('<h4>'+v.title+'</h4>') );
-					if(undefined !== v.editLink){
-						dataSupplierBody.append( $('<a href="'+v.editLink+'">'+v.editText+'</a>') );
-					}
-					dataSupplier.append(dataSupplierHeader);
-					dataSupplier.append(dataSupplierBody);
-					section1.append(dataSupplier);
-				});
-*/				
 			}
 			report.aaContinueLoadContent();
 		},
-		error: function(jqXHR, textStatus, errorThrown){
-			window.console.log("ERROR: ");
-			window.console.log(jqXHR);
-			window.console.log(textStatus+" - "+errorThrown);
-			$.alert("Error. Contacte a su Adminsitrador.");
-		}
-	});		
+		error: aaAjaxError,
+	});
+	return this;
 },
 aaBuildChart: function(chartId){
 	var chartContainer=$(this);
 	var data = new FormData();
 	data.append('action'	,'fe_build_chart');
 	data.append('chart_id'	,chartId);
+	var href=window.location.hash.split('/');
+	var reportId=href[1];
+	data.append('report_id', reportId);
 	$.ajax({
 		url: ajaxUrl,
 		type: 'POST',
@@ -588,13 +713,19 @@ aaBuildChart: function(chartId){
 	   		if(undefined === response.error){
 				var chart						=new AmCharts.AmSerialChart();
 				//chart.addClassNames			=true;
-				chart.balloonDateFormat			="YYYY-MM-DD";
+				//chart.balloonDateFormat			="YYYY-MM-DD";
 				//chart.bezierX					=12;
 				//chart.bezierY					=12;
+//				chart.autoMargins				=false;
 				chart.borderAlpha				='0';
-				chart.categoryField				="date";
 				chart.classNamePrefix			='aa-adjust';
-				chart.dataDateFormat			="YYYY-MM-DD";
+				if(response.chart.timeGroup === "hourly"){
+					chart.categoryField				="time";
+					chart.dataDateFormat			="JJ:NN:SS";					
+				}else{
+					chart.categoryField				="date";
+					chart.dataDateFormat			="YYYY-MM-DD";					
+				}
 				chart.dataProvider				=response.chart.data;
 				chart.decimalSeparator			='.';
 				chart.marginTop					=0;
@@ -691,10 +822,24 @@ aaBuildChart: function(chartId){
 				//CHART CURSOR
 				var cursor						=new AmCharts.ChartCursor();
 			//	cursor.categoryBalloonAlpha		="0.5";
+				if(response.chart.timeGroup === "hourly"){
+					cursor.categoryBalloonDateFormat="JJ:NN";
+				}
 				chart.addChartCursor(cursor);
 
 
 				// CATEGORY AXIS
+				var categoryAxis				=chart.categoryAxis;
+			//	categoryAxis.boldPeriodBeginning=false;
+			//	categoryAxis.equalSpacing		=true;
+			//	categoryAxis.dashLength=5;
+				if(response.chart.timeGroup === "hourly"){
+					categoryAxis.minPeriod			="hh";
+					categoryAxis.markPeriodChange	=false;
+					
+				}
+				categoryAxis.parseDates			=true;
+
 			//	chart.categoryAxis.parseDates	=true;  
 			//	chart.categoryAxis.equalSpacing	=true;
 
@@ -705,19 +850,73 @@ aaBuildChart: function(chartId){
 				chart.addValueAxis(valueAxis);
 
 				chart.validateData();
+				chart.invalidateSize();
 //				window.console.log(chart);
 				chart.write(chartContainer.attr('id'));
 				chartContainer.removeClass('loading').aaAnimateAndStopCss('fadeIn');
 	   		}
 		},
-		error: function(jqXHR, textStatus, errorThrown){
-			window.console.log("ERROR: ");
-			window.console.log(jqXHR);
-			window.console.log(textStatus+" - "+errorThrown);
-			$.alert("Error. Contacte a su Adminsitrador.");
-		}
+		error: aaAjaxError,
 	});		
 	return this;
+},
+aaSubmitSystemForm: function(event,jcElement){
+	var jc = jcElement;
+	event.preventDefault();
+	var valid = true;
+	//validation
+	$(this).find("input[type!='hidden']").each(function(){
+		if( $(this).val().length < 1  ){
+			valid=false;
+			$(this).parent().addClass('has-error');
+		}else{
+			$(this).parent().removeClass('has-error');
+		}
+	});
+	$(this).find("select").each(function(){
+		if( $(this).val() < 1  ){
+			valid=false;
+			$(this).parent().addClass('has-error');
+		}else{
+			$(this).parent().removeClass('has-error');
+		}
+	});
+	if(valid === true){
+		var data = new FormData();
+		//Por cada input o select append
+		data.append('action', 'fe_create_system');
+		$(this).find("input, select").each(function(){
+			data.append($(this).attr('name'),$(this).val());
+		});
+		$.ajax({
+			url: ajaxUrl,
+			type: 'POST',
+			data: data,
+			cache: false,
+			dataType: 'json',
+			processData: false,
+			contentType: false,
+			beforeSend: function () {
+			},
+			success: function(response){
+				jc.close();
+//				window.console.log(JSON.stringify(response));
+				if(undefined === response.error){
+					$('#system-list').ajaxSystemList();
+					$.alert(response.message);
+				}else{
+					$.alert(response.message);
+				}
+			},
+		error: aaAjaxError,
+		});
+		window.console.log("Validado");
+		return true;
+	}else{
+		window.console.log("No Validado");
+		return false;
+	}
+	return true;
 },
 
 });
@@ -782,6 +981,78 @@ if( window.location.hash === '' ){
 }else{
 	$(window).trigger( "hashchange" ); // user refreshed the browser, fire the appropriate function
 }
+$('#new-system-button').click(function(event){
+	event.preventDefault();
+	aaCreateNewSystem();
+});
+
+
+
+
+/*
+* New System Form Submit
+*
+* This event executes the following steps:
+* 1. Form validation for NewSystem creation
+* 2. AJAX Create System
+* If SID and shortname already exists, ask user to confirm.
+* 3. Open #system-list | #system_collab
+* @author Cristian Marin
+*/
+//$('#new-system form').submit(function(event){
+var chartData = aaGenerateChartData();
+
+AmCharts.makeChart("chartdiv", {
+	"type": "serial",
+	"dataProvider": chartData,
+	"valueAxes": [{
+		//"position": "left",
+		//"title": "Utilizaci&oacute;n de WorkProcess"
+	}],
+	"graphs": [{
+		"id": "g1",
+		"bullet": "round",
+		"bulletSize": 3,
+		"filColors":['#63A0D7','#FFF'],
+		"fillAlphas": 0.1,
+		"lineColor": "#63A0D7",
+		"title": "Max. Active DIA WPs",
+		"type": "smoothedLine",
+		"valueField": "max"
+		},{
+		"id": "g2",
+		"bullet": "round",
+		"bulletSize": 3,
+		"filColors":['#E38844','#FFF'],
+		"fillAlphas": 0.1,
+		"lineColor": "#E38844",
+		"title": "Avg. Active DIA WPs",
+		"type": "smoothedLine",
+		"valueField": "avg"
+		},		
+    ],
+	"titles": [
+		{
+			"text": "ERP | Utilizacion de WorkProcess DIA",
+			"size": 15
+		}
+	],
+	"legend": {
+		"align": 'center',
+		"fontSize": 10,
+		"markerSize":5,
+	},
+	"chartCursor": {
+//		"categoryBalloonDateFormat": "JJ:NN, DD MMMM",
+//		"cursorPosition": "mouse"
+	},
+	"categoryField": "date",
+	"categoryAxis": {
+//		"minPeriod": "dd",
+		"parseDates": true
+	},
+});
+
 /*
 $("body").delegate("a", "click", function(event){
 	if( $(this).data('changescreen') !== undefined ){

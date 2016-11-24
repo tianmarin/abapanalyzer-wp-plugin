@@ -41,28 +41,28 @@ public function __construct(){
 								date date not null,
 								time time not null,
 								servername varchar(50) not null,
-								act_wps smallint(5) unsigned not null,
-								dia_wps smallint(5) unsigned not null,
-								rfc_wps smallint(5) unsigned not null,
-								cpu_usr smallint(5) unsigned not null,
-								cpu_sys smallint(5) unsigned not null,
-								cpu_idle smallint(5) unsigned not null,
-								cpu_ava smallint(5) unsigned null,
-								page_in smallint(5) unsigned not null,
-								page_out smallint(5) unsigned not null,
-								free_mem int(10) unsigned not null,
-								em_alloc int(10) unsigned not null,
-								em_attach int(10) unsigned not null,
-								em_global int(10) unsigned not null,
-								heap int(10) unsigned not null,
-								priv_mode smallint(5) unsigned not null,
-								page_mem int(10) unsigned not null,
+								act_wps smallint(5) unsigned null,
+								dia_wps smallint(5) unsigned null,
+								rfc_wps smallint(5) unsigned null,
+								cpu_usr float unsigned null,
+								cpu_sys float unsigned null,
+								cpu_idle float unsigned null,
+								cpu_ava float unsigned null,
+								page_in smallint(5) unsigned null,
+								page_out smallint(5) unsigned null,
+								free_mem int(10) unsigned null,
+								em_alloc int(10) unsigned null,
+								em_attach int(10) unsigned null,
+								em_global int(10) unsigned null,
+								heap int(10) unsigned null,
+								priv_mode smallint(5) unsigned null,
+								page_mem int(10) unsigned null,
 								roll_mem int(10) unsigned null,
-								queue_dia smallint(5) unsigned not null,
-								queue_upd smallint(5) unsigned not null,
-								queue_enq smallint(5) unsigned not null,
-								logins smallint(5) unsigned not null,
-								sessions smallint(5) unsigned not null,
+								queue_dia smallint(5) unsigned null,
+								queue_upd smallint(5) unsigned null,
+								queue_enq smallint(5) unsigned null,
+								logins smallint(5) unsigned null,
+								sessions smallint(5) unsigned null,
 								UNIQUE KEY id (id)
 							) $charset_collate;";
 	$this->db_fields	= array(
@@ -326,9 +326,9 @@ public function fe_sdfmon_get_dates(){
 }
 public function fe_sdfmon_file_upload(){
 	$response=array();
-	$response=array();
 	$c=0;
-
+	set_time_limit(600);
+	$time=$servername=$act_wps=$dia_wps=$rfc_wps=$cpu_usr=$cpu_sys=$cpu_idle=$cpu_ava=$page_in=$page_out=$free_mem=$em_alloc=$em_attach=$em_global=$heap=$priv_mode=$page_mem=$roll_mem=$queue_dia=$queue_upd=$queue_enq=$logins=$sessions=NULL;
 	$date=$_POST['year']."/".$_POST['month']."/".$_POST['day'];
 	$system_id=intval($_POST['system_id']);
 	if($system_id != 0){
@@ -338,46 +338,206 @@ public function fe_sdfmon_file_upload(){
 			if($line[0] == "|"){
 				$line=str_replace(' ','',$line);
 				$info=explode("|",$line);
-				if( count($info) > 20){
+				if( !isset($definition) ){
+//					self::write_log($line);
+					if( count($info) > 10){
+						if(!is_numeric($info[3])){
+							for($i=0;$i<count($info);$i++){
+								$valid_percentage=90;
+								//Time
+								$text=array("Time","Fecha");
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$time=$i;
+									$definition=TRUE;
+								}
+								//Instance
+								$text="ASInstance";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$servername=$i;
+									$definition=TRUE;
+								}
+								//act_wps
+								$text="Act.WPs";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$act_wps=$i;
+									$definition=TRUE;
+								}
+								//dia_wps
+								$text="Dia.WPs";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$dia_wps=$i;
+									$definition=TRUE;
+								}
+								//rfc_wps
+								$text="RFCWPs";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$rfc_wps=$i;
+									$definition=TRUE;
+								}
+								//cpu_usr
+								$text="CPUUsr";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$cpu_usr=$i;
+									$definition=TRUE;
+								}
+								//cpu_sys
+								$text="CPUSys";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$cpu_sys=$i;
+									$definition=TRUE;
+								}
+								//cpu_idle
+								$text="CPUIdle";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$cpu_idle=$i;
+									$definition=TRUE;
+								}
+								//cpu_ava
+								$text="Ava.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$cpu_ava=$i;
+									$definition=TRUE;
+								}
+								//page_in
+								$text="Pagingin";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$page_in=$i;
+									$definition=TRUE;
+								}
+								//page_out
+								$text="Pagingout";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$page_out=$i;
+									$definition=TRUE;
+								}
+								//free_mem
+								$text="FreeMem.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$free_mem=$i;
+									$definition=TRUE;
+								}
+								//em_alloc
+								$text="EMalloc.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$em_alloc=$i;
+									$definition=TRUE;
+								}
+								//em_attach
+								$text="EMattach.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$em_attach=$i;
+									$definition=TRUE;
+								}
+								//em_global
+								$text="Emglobal";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$em_global=$i;
+									$definition=TRUE;
+								}
+								//heap
+								$text="HeapMemor";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$heap=$i;
+									$definition=TRUE;
+								}
+								//priv_mode
+								$text="Pri.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$priv_mode=$i;
+									$definition=TRUE;
+								}
+								//page_mem
+								$text="PagingMem";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$page_mem=$i;
+									$definition=TRUE;
+								}
+								//roll_mem
+								$text="RollMem";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$roll_mem=$i;
+									$definition=TRUE;
+								}
+								//queue_dia
+								$text="Dia.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$queue_dia=$i;
+									$definition=TRUE;
+								}
+								//queue_upd
+								$text="Upd.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$queue_upd=$i;
+									$definition=TRUE;
+								}
+								//queue_enq
+								$text="Enq.";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$queue_enq=$i;
+									$definition=TRUE;
+								}
+								//logins
+								$text="Logins";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$logins=$i;
+									$definition=TRUE;
+								}
+								//sessions
+								$text="Sessions";
+								if(self::check_similarity($text,$info[$i]) >= $valid_percentage){
+									$sessions=$i;
+									$definition=TRUE;
+								}
+					}
+						}else{
+							//aun no hay definición
+						}
+					}else{
+						//menos de 10 lineas
+					}
+				}else{
 					unset($postvs);	
 					$postvs=array(
 						'id'				=>'',
 						'system_id'			=>	$system_id,
 						'date'				=>	$date,
-						'time'				=>	$info[1],
-						'servername'		=>	$info[2],
-						'act_wps'			=>	$info[3],
-						'dia_wps'			=>	$info[4],
-						'rfc_wps'			=>	$info[5],
-						'cpu_usr'			=>	$info[6],
-						'cpu_sys'			=>	$info[7],
-						'cpu_idle'			=>	$info[8],
-						'cpu_ava'			=>	$info[9],
-						'page_in'			=>	$info[10],
-						'page_out'			=>	$info[11],
-						'free_mem'			=>	$info[12],
-						'em_alloc'			=>	$info[13],
-						'em_attach'			=>	$info[14],
-						'em_global'			=>	$info[15],
-						'heap'				=>	$info[16],
-						'priv_mode'			=>	$info[17],
-						'page_mem'			=>	$info[18],
-						'roll_mem'			=>	$info[19],
-						'queue_dia'			=>	$info[20],
-						'queue_upd'			=>	$info[21],
-						'queue_enq'			=>	$info[22],
-						'logins'			=>	$info[23],
-						'sessions'			=>	$info[24],
+						'time'				=>	( $time == NULL )			? NULL : preg_replace( '/[^0-9:]/', '', $info[$time] ),
+						'servername'		=>	( $servername == NULL )		? NULL : $info[$servername],
+						'act_wps'			=>	( $act_wps == NULL )		? NULL : $info[$act_wps],
+						'dia_wps'			=>	( $dia_wps == NULL )		? NULL : $info[$dia_wps],
+						'rfc_wps'			=>	( $rfc_wps == NULL )		? NULL : $info[$rfc_wps],
+						'cpu_usr'			=>	( $cpu_usr == NULL )		? NULL : $info[$cpu_usr],
+						'cpu_sys'			=>	( $cpu_sys == NULL )		? NULL : $info[$cpu_sys],
+						'cpu_idle'			=>	( $cpu_idle == NULL )		? NULL : $info[$cpu_idle],
+						'cpu_ava'			=>	( $cpu_ava == NULL )		? NULL : $info[$cpu_ava],
+						'page_in'			=>	( $page_in == NULL )		? NULL : $info[$page_in],
+						'page_out'			=>	( $page_out == NULL )		? NULL : $info[$page_out],
+						'free_mem'			=>	( $free_mem == NULL )		? NULL : $info[$free_mem],
+						'em_alloc'			=>	( $em_alloc == NULL )		? NULL : $info[$em_alloc],
+						'em_attach'			=>	( $em_attach == NULL )		? NULL : $info[$em_attach],
+						'em_global'			=>	( $em_global == NULL )		? NULL : $info[$em_global],
+						'heap'				=>	( $heap == NULL )			? NULL : $info[$heap],
+						'priv_mode'			=>	( $priv_mode == NULL )		? NULL : $info[$priv_mode],
+						'page_mem'			=>	( $page_mem == NULL )		? NULL : $info[$page_mem],
+						'roll_mem'			=>	( $roll_mem == NULL )		? NULL : $info[$roll_mem],
+						'queue_dia'			=>	( $queue_dia == NULL )		? NULL : $info[$queue_dia],
+						'queue_upd'			=>	( $queue_upd == NULL )		? NULL : $info[$queue_upd],
+						'queue_enq'			=>	( $queue_enq == NULL )		? NULL : $info[$queue_enq],
+						'logins'			=>	( $logins == NULL )			? NULL : $info[$logins],
+						'sessions'			=>	( $sessions == NULL )		? NULL : $info[$sessions],
 					);
-					if(is_numeric($postvs['sessions'])){
+					if($postvs['time'] != NULL && $postvs['servername'] != NULL ){
 						$postvs['filename']=$filename;
-						$response['message2']=$postvs;
 						$response['message']=$this->update_class_row('add',$postvs);
 						$c++;
+					}else{
+						
 					}
 				}
+			}else{
+				//omitir linea
 			}
-		}
+		}//end While
 		$response['status'] = 'ok';
 		$response['filename'] = $filename;
 		$response['date'] = $date;
@@ -387,6 +547,24 @@ public function fe_sdfmon_file_upload(){
 	}
 	echo json_encode($response);
 	die();	
+}
+protected function check_similarity($first,$second){
+	switch(gettype($first)){
+		case 'array':
+			$max_per_round=0;
+			foreach($first as $first_string){
+				similar_text($first_string, $second,$simil);
+				if($simil >= $max_per_round){
+					$max_per_round=$simil;
+				}
+			return $max_per_round;
+			}
+			break;
+		default:
+			similar_text($first, $second,$simil);
+//			self::write_log($first.' - '.$second.' = '.$simil);
+	}
+	return $simil;
 }
 //END OF CLASS	
 }

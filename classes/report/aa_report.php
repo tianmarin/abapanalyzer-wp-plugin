@@ -296,6 +296,7 @@ public function fe_preview_report(){
 		}
 		$response['sections']['section_'.$section_id]=$section;
 	}
+//	self::write_log($response);
 	echo json_encode($response);
 	die();	
 

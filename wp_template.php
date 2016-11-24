@@ -112,7 +112,7 @@
 					<ul class="nav navbar-nav">
 						<li name="intro-intro"><a href="#intro-intro">Introducci&oacute;n <span class="sr-only">(current)</span></a></li>
 						<li name="intro-sdfmon"><a href="#intro-sdfmon">Snapshot Monitoring</a></li>
-						<li name="intro-osmon"><a href="#intro-osmon">OS Monitoring</a></li>
+						<li name="intro-start"><a href="#intro-start">Comenzar</a></li>
 					</ul>
 				</div>
 			</nav>	
@@ -143,22 +143,17 @@
 					<li class="col-xs-max col-sm-4">
 						<i class="style2 fa fa-copy fa-5x fa-fw"></i>
 						<h3>Memoria</h3>
-						<p>No tengo buena memoria.</p>
+						<p>Utilización de los diferentes segmentos de memoria SAP.</p>
 					</li>
 					<li class="col-xs-max col-sm-4">
-						<i class="style3 fa fa-diamond fa-5x fa-fw"></i>
-						<h3>Dolor nullam</h3>
-						<p>Sed lorem amet ipsum dolor et amet nullam consequat a feugiat consequat tempus veroeros sed consequat.</p>
+						<i class="style3 fa fa-clock-o fa-5x fa-fw"></i>
+						<h3>Tiempo Real</h3>
+						<p>Granularidad basada en muestras cada 30 segundos del sistema.</p>
 					</li>
 				</ul>
 				<div class="more text-center clearfix">
-					<button class="text-center btn btn-default">Aprender m&aacute;s</button>
+					<a href="#sdfmon-instructions" class="text-center btn btn-default">Aprender m&aacute;s</a>
 				</div>
-			</section>
-			<section id="intro-osmon" class="">
-				<h2>OS Monitoring <small>(st07n | os06)</small></h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum massa massa, vitae mollis dolor sodales at. Donec sapien sapien, congue eget metus id, ornare blandit justo. Aenean volutpat placerat aliquet. Etiam commodo lacus in velit accumsan, sed ornare ipsum tincidunt. Proin purus orci, molestie non bibendum eget, sollicitudin a nisi. Etiam sed sem urna. Curabitur consequat porttitor vestibulum. Suspendisse varius eu elit sed bibendum.</p>
-				<p>Etiam cursus sagittis tincidunt. Donec suscipit pharetra est. Mauris fringilla tortor ac nibh imperdiet porta. Nunc sit amet dolor egestas, elementum nibh in, posuere enim. Vestibulum lectus justo, suscipit sed placerat vitae, malesuada nec nunc. Praesent imperdiet ante nisi, eu iaculis ante dignissim sit amet. Integer sed euismod eros. Vivamus fringilla, diam at eleifend laoreet, augue mauris consequat massa, ac rutrum elit sem a felis.</p>
 			</section>
 			<section id="intro-start" class="">
 				<h2>Comienza a usar <strong>ABAP</strong>Analyzer</small></h2>
@@ -176,12 +171,12 @@
 				<addres>
 					<p>Sigue el canal de Yammer dentro de <a href="http://noviscorp.com" target="_blank">Noviscorp.com</a> para obtener casos de uso, seguimiento a mejoras y/o reportar problemas.</p>
 				</addres>
-				<a href="https://www.yammer.com/noviscorp.com/#/threads/inGroup?type=in_group&feedId=8032595&view=all" target="_blank" class="btn"><i class="fa fa-share-alt "></i> Yammer Channel</a>
+				<a href="https://www.yammer.com/noviscorp.com/#/threads/inGroup?type=in_group&feedId=9860930&view=all" target="_blank" class="btn"><i class="fa fa-share-alt "></i> BETA Yammer Channel</a>
 			</section>
 			<section class="col-md-6">
 				<h3><strong>ABAP</strong>Analyzer</h3>
 				<address>
-					<strong>ABAP</strong>Analyzer es un proyecto creado por <a href="https://github.com/tianmarin">@cmarin</a> y distribuido bajo licencia <a href="https://html5up.net/license">Creative Commons Attribution</a><br>
+					<strong>ABAP</strong>Analyzer es un proyecto creado por <a href="https://github.com/tianmarin" target="_blank">@cmarin</a> y distribuido bajo licencia <a href="https://html5up.net/license">Creative Commons Attribution</a><br>
 				</address>
 			</section>
 			<p class="text-center ">
@@ -192,10 +187,75 @@
 		</div>		
 	</div>
 	<section id="sdfmon-setup" class="hidden">
-		<a href="#">Volver</a>
+		<a href="#system-list">Volver</a>
 		<div class="sdfmon-setup-calendar"></div>
 		<div class="sdfmon-setup-status">
 			<div></div>
+		</div>
+	</section>
+	<section id="sdfmon-instructions" class="hidden">
+		<header class="container">
+			<h1 class="text-center animated fadeInUp"><strong>ABAP</strong>Analyzer</h1>
+			<p class="text-center lead animated fadeInLeft">Una nueva herramienta de an&aacute;lisis y revisión de sistemas SAP NW AS ABAP.</p>
+		</header>
+		<div class="container">
+			<section class="">
+				<h2 class="">Snapshot Monitoring <small>(/sdf/mon)</small></h2>
+				<p>El Snapshot Monitoring permite almacenar diferentes indicadores de performance mediante muestras específicas (snapshots) en los sistemas ABAP.Es posible almacenar unformación de CPU, memoria, procesos, SQL, enqueues de aplicaciones, etc. También, se puede especificar la frecuencia y lsa ventanas de tiempo en el cual las muestras (snapshots) pueden ser tomadas. Basado en esos <em>snapshots</em> uno puede realizar an&aacute;lisis de de performance de programas, aplicaciones y sistemas para identificar &aacute;reas de oportunidad en diferentes configuraciones.</p>
+				<p>La información que actualmente se almacena en el sistema <strong>ABAP</strong>ANALYZER es:</p>
+				<ul>
+					<li><code>Number of Active Work Processes</code></li>
+					<li><code>Number of Active Dialog Work Processes</code></li>
+					<li><code>Number of available WPs for RFC</code></li>
+					<li><code>CPU Utilization (User)</code></li>
+					<li><code>CPU Utilization (System)</code></li>
+					<li><code>CPU Utilization (Idle)</code></li>
+					<li><code>Available CPUs</code></li>
+					<li><code>Paging In (kB/s)</code></li>
+					<li><code>Paging Out (kB/s)</code></li>
+					<li><code>Free Memory in KB</code></li>
+					<li><code>Allocated Extended Memory in MB</code></li>
+					<li><code>Attached Extended Memory in MB</code></li>
+					<li><code>Ext. Mem. global</code></li>
+					<li><code>Heap Memory in MB</code></li>
+					<li><code>Priv Modes</code></li>
+					<li><code>Paging Memory (KB)</code></li>
+					<li><code>Roll Memory (KB)</code></li>
+					<li><code>Dialog Queue Length</code></li>
+					<li><code>Update Queue Length</code></li>
+					<li><code>Enqueue Queue Length</code></li>
+					<li><code>Number of logins</code></li>
+					<li><code>Number of Sessions</code></li>
+				</ul>
+			</section>
+			<section>
+				<h3>1.- Pasos para configurar la recolecci&oacute;n de informaci&oacute;n</h3>
+				<ol>
+					<li>Ejecutar la transacci&oacute;n/reporte <code>/SDF/MON</code> (la transacci&oacute;n y el reporte tienen el mismo nombre).</li>
+					<li>Seleccionar el bot&oacute;n <code>Schedule New Monitoring</code></li>
+					<li>Seleccionar el bot&oacute;n <code>Schedule Daily Monitoring</code></li>
+					<li>Los siguientes valores deben estar configurados:<br><img class="center-block" src="<?php echo plugins_url( 'img/instructions/sdfmon-instructions-001.png', __FILE__ );?>" alt=""/></li>
+				</ol>
+			</section>
+			<section>
+				<h3>2.- Como obtener las capturas de informaci&oacute;n</h3>
+				<ol>
+					<li>Ejecutar la transacción/reporte <code>/SDF/MON</code> (la transacci&oacute;n y el reporte tienen el mismo nombre).</li>
+					<li>Seguir el men&uacute; <code>Program -> Execute</code> (esto es solo para listar los análisis almacenados en el sistema).</li>
+					<li>Seleccionar el d&iacute;a que se desea obtener (se debe exportar cada an&aacute;lisis por d&iacute;a).</li>
+					<li>Seleccionar el bot&oacute;n <code>Local File...</code>.</li>
+					<li>Es importante guardar el archivo de salida con un identificador de fecha (para que no te confundas) y el formato debe ser <code>unconverted</code></li>
+				</ol>
+			</section>
+			<section>
+				<h3>3.- Como cargar la información a <strong>ABAP</strong>Analyzer</h3>
+				<ol>
+					<li>Con mucho cuidado</li>
+				</ol>
+			</section>
+			<section>
+				<p>Por ahora no es mucha información, lo sé. Pero eventualmente podremos poner un video que explique como hacerlo.</p>
+			</section>
 		</div>
 	</section>
 	<section id="os-setup" class="hidden">
@@ -209,199 +269,29 @@
 			<h1 class="text-center">Sistemas</h1>
 		</header>
 		<article>
+			<div class="btn-group btn-group-justified" role="group" aria-label="...">
+				<a href="#new-system" class="btn btn-primary" id="new-system-button"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Sistema</a>
+			</div>
+			<br/>
+		</article>
+		<article>
 			<ul class="list-group">
 			</ul>
 		</article>
+	</section>
+	<section id="new-system" class="hidden">
+		<nav>
+			<a href="#system-list" class="aaBackButton"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+		</nav>
+		<?php
+			global $SYSTEM;
+			echo $SYSTEM->fe_system_show_form('add');
+		?>
 	</section>
 	<section id="system-info" class="hidden">
 		<nav>
 			<a href="#system-list" class="aaBackButton"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
 		</nav>
-<!--		<header class="col-xs-max col-sm-max col-md-4 col-lg-4">
-			<h1 class="text-uppercase">{{system.sid}}</h1>
-			<p class="lead">{{analysis.shortname}}</p>
-			<h2>{{Colaboradores}}</h2>
-			<p>{{system.owner}}</p>
-			<h3>{{system.collaborators}}</h3>
-			<ul>
-				{{#each this}}
-				<li><p>{{system.collab}}</p></li>
-				{{/each}}
-			</ul>
-			<h3>{{system.instances}}</h3>
-			<ul>
-				 {{#each this}}
-				<li><p>{{system.instance.name}}</p></li>
-				{{/each}}
-			</ul>
-			<button class="btn btn-default">Editar</button>
-			<button class="btn btn-danger">Eliminar</button>
-		</header>
-		<section  class="col-xs-max col-sm-6 col-md-4 col-lg-4">
-			<h2>{{system.datasources}}</h2>
-			<div class="panel panel-default">
-				<div class="panel-heading">{{SDFMON}}</div>
-				<div class="panel-body">{{sdfmon calendar}}</div>
-				<div class="panel-body">{{sdfmon.oading.status}}</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">{{Tune Summary}}</div>
-				<div class="panel-body">{{tune calendar}}</div>
-				<div class="panel-body">{{tune.oading.status}}</div>
-			</div>
-		</section>
-		<section  class="col-xs-max col-sm-6 col-md-4 col-lg-4">
-			<h2> {{system.reports}} </h2>
-			<button class="btn btn-default">+</button>
-			{{#each this}}
-			<h3> {{report.type}} </h3>
-			<ul class="list-group">
-				{{#each this}}
-				<li class="list-group-item">
-					<h3 class="list-group-item-heading">{{report.shorttitle}}</h3>
-					<div class="list-group-item-text">
-						<p>{{report.startdate}}</p>
-						<p>{{report.enddate}}</p>
-					</div>
-				</li>
-				{{/each}}
-			</ul>
-			{{/each}}
-		</section>
-		-->
-	</section>
-	<section id="edit-system" class="hidden">
-		<h1>Editar Sistema <small>(solo owner)</small></h1>
-		<form class="form-horizontal">
-			<h2>Detalles del Sistema</h2>
-			<div class="form-group">
-				<label for="system-sid" class="col-sm-2 control-label">Identificador de Sistema</label>
-				<div class="col-sm-10">
-					<p class="form-control-static">SID</p>
-					<p class="help-block">El identificador del sistema es utilizado en los gráficos y validado contra archivos de configuración. Si necesita modificar este valor contacte al administrador del sistema.</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="system-shortname" class="col-sm-2 control-label">Nombre Corto</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="system-shortname" placeholder="Nombre Corto">
-					<p class="help-block">El nombre corto permite identificar el sistema con una personalización diferente al SID. Por ejemplo, para sistemas CLON.</p>
-				</div>
-			</div>
-			<h2>Colaboradores del sistema</h2>
-			<div class="form-group">
-				<label for="system-collab" class="col-sm-2 control-label">Permisos del Sistema</label>
-				<div class="col-sm-10">
-					<select class="form-control" id="system-collab">
-						<option>Solo yo</option>
-						<option>Algunos</option>
-						<option>Todos</option>
-					</select>
-					<p class="help-block">Esto aplica exclusivamente para la modificaci&oacute;n de informaci&oacute;n t&eacute;cnica. La modificaci&oacute;n de las propiedades del sistema s&acute;olo pueden ser modificadas por el due&ntilde;o.</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Usuarios colaboradores</label>
-				<div class="col-sm-10">
-					<div class="panel panel-default">
-						<div class="panel-heading">Usuarios colaboradores</div>
-						<div class="list-group">
-							<a href="#" class="list-group-item list-group-item-success">Usuarios colaboradores <span class="badge bg-danger">+</span></a>
-							<a href="#" class="list-group-item" data-system-collab-id="9">Cristian Marín<span class="badge bg-danger">&times;</span></a>
-						</div>								
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-default">Cancelar</button>
-					<button type="submit" class="btn btn-success">Guardar</button>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-danger">Eliminar</button>
-				</div>
-			</div>
-		</form>			
-	
-	</section>
-	<section id="edit-report" class="hidden">
-		<header class="col-xs-max col-sm-4 col-md-4 col-lg-4">
-			<h1 class="text-uppercase">{{report.name}}</h1>
-			<p class="lead">{{report.system.sid}}</p>
-			<h2>{{Colaboradores}}</h2>
-			<p>{{report.owner}}</p>
-			<h3>{{report.collaborators}}</h3>
-			<ul>
-				{{#each this}}
-				<li><p>{{report.collab}}</p></li>
-				{{/each}}
-			</ul>
-			<div class="btn-group">
-				<button type="button" class="btn btn-default">Editar</button>
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<span class="caret"></span>
-					<span class="sr-only">Opciones</span>
-				</button>
-				<ul class="dropdown-menu">
-					<li><a href="#">Editar</a></li>
-					<li><a href="#">Previsualizar</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">Eliminar</a></li>
-				</ul>
-			</div>
-			<span role="separator" class="divider"></span>
-			<button class="btn btn-default">Editar</button>
-			<button class="btn btn-danger">Eliminar</button>
-		</header>
-		<section  class="col-xs-max col-sm-8 col-md-8 col-lg-8">
-			<h2>{{report}}</h2>
-			<div class="panel panel-default">
-				<div class="panel-heading">{{Fechas}}</div>
-				<div class="panel-body">
-					<div class="media">
-						<div class="media-body">
-							<p>{{report.startdate}}</p>
-							<p>{{report.enddate}}</p>
-						</div>
-						<div class="media-right media-top">
-							<span class="media-object">{{chart}}</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">Tabla de Contenidos</div>
-				<div class="panel-body">
-					<ol>
-						<li>Section 1
-							<ol>
-								<li>Section 1.1</li>
-								<li>Section 1.2</li>
-								<li>Section 1.3
-									<ol>
-										<li>Section 1.3.1</li>
-										<li>Section 1.3.2</li>
-									</ol>
-								</li>
-							</ol>
-						</li>
-						<li>Section 2</li>
-						<li>Section 3
-							<ol>
-								<li>Section 3.1</li>
-								<li>Section 3.2</li>
-							</ol>
-						</li>
-						<li>Section 4</li>
-						<li>Section 5</li>
-						<li>Section 6</li>
-					</ol>
-				</div>
-			</div>
-		</section>
-	
 	</section>
 	<section id="load-sdfmon" class="hidden">
 		<nav>
@@ -417,99 +307,7 @@
 		</article>
 		<!-- Cada gráfico llama a una función ajax independiente y asíncrona -->
 	</section>
-	<section id="edit-report" class="hidden">
-		<h1>Editar Reporte <small>(solo owner)</small></h1>
-		<form class="form-horizontal">
-			<h2>Detalles del Reporte</h2>
-			<div class="form-group">
-				<label for="report-shortname" class="col-sm-2 control-label">Nombre Corto</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="report-shortname" placeholder="Nombre Corto">
-					<p class="help-block">El nombre corto permite identificar el reporte de modo sencillo y &aacute;gil.</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="report-startdate" class="col-sm-2 control-label">Período de Análisis</label>
-				<div class="col-sm-10">
-					<div class="col-sm-6">
-						<input type="date" class="form-control" id="report-startdate" placeholder="Fecha Inicio">
-					</div>
-					<div class="col-sm-6">
-						<input type="date" class="form-control" id="report-enddate" placeholder="Fecha Final">
-					</div>						
-					<p class="help-block">El reporte puede ser acotado a las fechas indicadas. Considerando que un sistema puede tener un alto volumen de informaci&oacuten, este campo <mark>obligatorio</mark>, permite definir las fechas de an&aacute;lisis.</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="report-threshold" class="col-sm-2 control-label">Umbral de recomendaciones</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<input type="number" class="form-control" id="report-threshold" placeholder="Umbral" min="50" max="100">
-						<span class="input-group-addon" id="basic-addon2">%</span>
-					</div>
-					<p class="help-block">Las recomendaciones de este reporte, consideran reservar un porcentaje m&aacute;ximo de la utilizaci&oacute;n de los recursos. Regularmente, se recomienda un 75%-80%.</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="report-threshold" class="col-sm-2 control-label">Instancias SAP</label>
-				<div class="col-sm-10">
-					<div class="list-group">
-						{{#each this}}
-						<input type="checkbox" id="inst001" checked class="aa-check-button">
-						<label for="inst001" class="list-group-item btn-default">{{hostname_SID_XX}}<span class="pull-right"></span></label>
-						{{/each}}
-					</div>
-					<p class="help-block">Las instancias que no est&eacute;n seleccionadas ser&aacute;n exclu&iacute;das del an&aacute;lisis.</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="report-threshold" class="col-sm-2 control-label">Permitir nuevas instancias</label>
-				<div class="col-sm-10">
-					<div class="list-group">
-						<input type="checkbox" id="report-additional-instances" checked class="aa-check-button">
-						<label for="report-additional-instances" class="list-group-item btn-default">Permitir que los reportes recomienden la instalación de nuevas instancias SAP.<span class="pull-right"></span></label>
-					</div>
-					<p class="help-block">Si el volumen de transacciones en el sistema lo requeire, es posible que el ajuste de parámetros recomiende instancias SAP demasiado grandes.</p>
-				</div>
-			</div>
-			<h2>Colaboradores del reporte</h2>
-			<div class="form-group">
-				<label for="system-collab" class="col-sm-2 control-label">Permisos del Reporte</label>
-				<div class="col-sm-10">
-					<select class="form-control" id="system-collab">
-						<option>Solo yo</option>
-						<option>Algunos</option>
-						<option>Todos</option>
-					</select>
-					<p class="help-block">Esto aplica exclusivamente para la modificaci&oacute;n de informaci&oacute;n t&eacute;cnica. La modificaci&oacute;n de las propiedades del sistema s&acute;olo pueden ser modificadas por el due&ntilde;o.</p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-2 control-label">Usuarios colaboradores</label>
-				<div class="col-sm-10">
-					<div class="panel panel-default">
-						<div class="panel-heading">Usuarios colaboradores</div>
-						<div class="list-group">
-							<a href="#" class="list-group-item list-group-item-success">Usuarios colaboradores <span class="badge bg-danger">+</span></a>
-							<a href="#" class="list-group-item" data-report-collab-id="9">Cristian Marín<span class="badge bg-danger">&times;</span></a>
-						</div>								
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-default">Cancelar</button>
-					<button type="submit" class="btn btn-success">Guardar</button>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-danger">Eliminar</button>
-				</div>
-			</div>
-		</form>			
-	
-	</section>
+	<section id="system-collab" class="hidden">Modificar colaboradores</section>
     <?php wp_footer(); ?>
 </body>
 </html>
