@@ -1,0 +1,592 @@
+@import "../LESS-Dynamic-Stylesheet-master/dss.less";
+@import "../animate.less-master/less/animate.less";
+@import "../bootstrap-master/less/bootstrap.less";
+@import "../../js/jquery-confirm/css/jquery-confirm.less";
+@import "../font-awesome/less/font-awesome.less";
+@import "jquery-datepicker.less";
+
+html{
+	min-height: 100%;
+}
+body{
+	position: relative;
+	min-height: 100%;
+	.gradient-direction(#7CD1B4, #0C386A, 45); 
+//	background-color: #0C386A;
+	.transition(background-color, 2s, ease, 0s);
+	&.on-system{
+		.gradient-direction(#FFF, #FFF, 45); 
+		background-color: #FFF;
+	}
+//	.gradient-direction(#0C386A, #7CD1B4, 0); 
+}
+
+#aa-loading{
+	position:absolute;
+	top:10px;
+	left:10px;
+	width:50px;
+	height:50px;
+	z-index: 999;
+	&.aa-fe-loading{
+		position: absolute;
+		padding: inherit;
+		&:before {
+			z-index: 556;
+			position: absolute;
+			top: 0%;
+			left: 50%;
+			display: block;
+			line-height: 2rem;
+			font-size: 2rem;
+	//		margin-top: 2.5rem;
+			font-family: 'FontAwesome';
+			content: "\f021";
+			.animate (fa-spin, 1s, linear, 0, infinite, normal);
+	//		-webkit-animation: fa-spin 1s infinite linear;
+			animation: fa-spin 1s infinite linear;
+			text-align: center;
+			color: rgba(0,0,0,.4);
+		}
+		&:after {
+			content: "";
+			z-index: 555;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			display: block;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, .0);
+			.rounded (3px);
+		}
+	}
+}
+#intro{
+	#intro-header{
+		color: rgba(255, 255, 255, .9);
+		padding: 7em 5em 4em 5em ;
+		position: relative;
+		h1{
+			font-weight: 300;
+			strong{
+				font-weight: 500;
+			}
+		}
+		.logo{
+			@delay:1s;
+			-moz-animation-delay: @delay;
+			-webkit-animation-delay: @delay;
+			animation-delay: @delay;
+		}
+		#intro-skip{
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			a:link,
+			a:active,
+			a:visited{
+				color: #FFF;
+			}
+		}
+	}
+	#intro-header-space{
+		height: 50px;
+		.navbar{
+			margin-bottom: 0;
+			.rounded (0);
+		}
+	}
+	#intro-main{
+		background-color: #FFF;
+		color: #636363;
+		.rounded (3px);
+		section{
+			margin-top: 30px;
+			padding-bottom: 50px;
+			border-bottom: solid thin rgba(0,0,0,.1);
+			&.inactive{
+				background-color: #CCC;
+			}
+			h2{
+				font-weight: 300;
+				.text-center;
+				padding: 30px;
+				color: rgba(0,0,0,.5);
+				strong{
+					font-weight: 500;
+				}
+				small{
+					font-weight: 200;
+					color: rgba(0,0,0,.25);
+				}
+				&:after{
+					content: '';
+					.gradient-direction(#63A0D7, #E38844, 90); 
+					width: 50%;
+					display: block;
+					margin: 20px auto;
+					height: 3px;
+					.rounded (10px);
+				}
+			}
+			lead{
+				.text-justify;
+			}
+			#chartdiv{
+			//	background-color: rgba(0,0,0,.1);
+				height:300px;
+				a[href="http://www.amcharts.com/javascript-charts/"]{
+					display: none !important;
+				}
+			}
+			.features{
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				.text-center;
+				h3{
+					font-weight: lighter;
+				}
+				.style1{
+					color:#E38844;
+				}
+				.style2{
+					color:#63A0D7;
+				}
+				.style3{
+					color:#0C386A;
+				}
+			}
+			.more{
+				margin: 30px auto;
+			}
+		}
+	}
+	#intro-footer{
+		color:#FFF;
+		margin-bottom: 200px;
+		a:link,
+		a:active,
+		a:visited{
+			color: #FFF;
+		}
+		h3{
+			font-weight: 300;
+			.text-center;
+			strong{
+				font-weight: 500;
+			}
+		}
+	}
+}
+@bgDefault		: fade(#FFF,100%);
+@bgHighlight	: fade(#0C386A,10%);
+@colDefault		: rgba(0,0,0,.6);
+@colHighlight	: fade(#0C386A,80%);
+.navbar-default {
+	.transition (@property: all, @duration: 1s, @timing: ease-out, @delay: 0.5s);
+	background-color: @bgDefault;
+	border-color: @bgHighlight;
+	.navbar-brand {
+		color: @colDefault;
+		&:hover, &:focus { 
+			color: @colHighlight;
+		}
+	}
+	.navbar-text {
+		color: @colDefault;
+	}
+	.navbar-nav {
+		& > li {
+			& > a {
+				color: @colDefault;
+				&:hover,
+				&:focus{
+					color: @colHighlight;
+				}
+			}
+		}
+		& > .active {
+			& > a,
+			& > a:hover,
+			& > a:focus{
+				color: @colHighlight;
+				background-color: @bgHighlight;
+			}
+		}
+		& > .open {
+			& > a,
+			& > a:hover,
+			& > a:focus{
+				color: @colHighlight;
+				background-color: @bgHighlight;
+			}
+		}
+	}
+	.navbar-toggle {
+		border-color: @bgHighlight;
+		&:hover,
+		&:focus{
+			background-color: @bgHighlight;
+		}
+		.icon-bar {
+			background-color: @colDefault;
+		}
+	}
+	.navbar-collapse,
+	.navbar-form {
+		border-color: @colDefault;
+		&.in{
+			background-color: @bgDefault;
+		}
+	}
+	.navbar-link {
+		color: @colDefault;
+		&:hover{
+			color: @colHighlight;
+		}
+	}
+}
+body > section{
+//	.container-fluid;
+	.container;
+	& > *{
+		background-color: #FFF;
+	}
+//	header{
+//		background-color: transparent;
+//		color: #FFF;
+//	}
+	min-height: 100%;
+	.transition (all, .2s, ease, 0s);
+	nav{
+		margin-top: 10px;
+		.aaBackButton{
+			display: block;
+			width: 40px;
+			height: 40px;
+			line-height: 40px;
+			color: rgba(0,122,255,.5);
+			border: rgba(0,122,255,.5) thin solid;
+			.rounded (50px);
+			.text-center;
+			font-size: 18px;
+			&:hover{
+				color: rgba(0,122,255,.7);
+				border: rgba(0,122,255,.7) thin solid;
+			}
+		}
+	}
+}
+
+#system-list{
+	article > ul{
+		margin: 0;
+		padding: 0;
+		& > li{
+			list-style: none;
+			min-height: 250px;
+		}
+	}
+	
+}
+#system-info{
+	.data-suppliers{
+		& > div{
+			.panel;
+			.panel-default;
+			div{
+				h4{
+					.panel-title;
+				}
+				a{
+					.btn;
+					.btn-primary;
+				}
+			}
+		}
+	}
+	.reports{
+		.list-group;
+		& > div{
+			.list-group-item;
+			div{
+				a{
+					.btn;
+					.btn-primary;
+				}
+			}
+		}
+	}
+}
+#sdfmon-setup{
+	.sdfmon-setup-calendar{
+		.row;
+		background-color: #BE4340;
+		input[type="file"] {
+			.hidden;
+		}
+	}
+	.sdfmon-setup-status{
+		height: 300px;
+		.make-xs-column(12);
+	}
+}
+
+/*
+* Report Preview
+*
+* The most important section of all, and the main purpose of this WP Plugin
+*/
+@media print{
+	*.aa-report-chart{
+		height: 180px !important;
+	}
+}
+#report-preview{
+	.container;
+//	border:black thin solid;
+	article{
+//		.row;
+		header{
+			h1,h2,h3,h4,h5,h6{
+				color:rgb(191,67,65);
+				font-weight: 300;
+			}
+		}
+		p{
+			.text-justify;
+		}
+	}	
+	article{
+		.aa-report-chart-legend{
+			.make-xs-column(12);
+		}
+		.aa-report-chart{
+			.make-xs-column(12);
+			height: 300px;
+			margin: 30px auto 15px;
+			padding: 0;
+			a[href="http://www.amcharts.com/javascript-charts/"]{
+				display: none !important;
+			}
+			&.loading{
+				background-color: rgba(0,0,0,.1);
+				border: thin solid rgba(0,0,0,.5);
+				position:relative;
+				&:after{
+					color: rgba(0,0,0,.25);
+					font-family: FontAwesome;
+					content: "\f110";
+					display: block;
+					text-align: center;
+					font-size: 60px;
+					line-height: 300px;
+					//.fa-spin;
+					.fa-pulse;
+				}
+			}
+		}
+	}
+}
+#system-collab{
+	.aa-add-user-table{
+		a{
+			.list-group-item;
+			&:hover{
+				.list-group-item-success;
+			}
+		}
+	}
+	.aa-current-system-users{
+		& > a{
+			.list-group-item;
+			&:hover{
+				.list-group-item-warning;
+			}
+		}
+	}
+}
+/*
+#aa-container{
+	@sidebar-width:250px;
+	min-height: 100%;
+	background-color: #FFF;
+	.transition (all, .5s, ease, 0s);
+	height: 100%;
+	#aa-sidebar{
+		display: block;
+		background-color: rgba(50,50,50,1);
+		z-index: 1000;
+		position: fixed;
+		left: @sidebar-width;
+		width: 0;
+		height: 100%;
+		margin-left: (@sidebar-width)*(-1);
+		overflow-y: auto;
+		.transition (all, .5s, ease, 0s);
+			color: rgba(255,255,255,1);
+		h3{
+			.text-center;
+		}
+	}
+	@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+		.toggled;
+	}
+	@media (min-width: @screen-lg-min) {
+		.toggled;
+		}
+	&.toggled{
+		padding-left: @sidebar-width;
+		#aa-sidebar{
+			width: @sidebar-width;
+		}
+	}
+	section{
+	}
+	#aa-system-list{
+		h1{
+			font-weight: 300;
+		}
+		article{
+			ul{
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				li{
+					.make-xs-column(12);
+					.make-sm-column(6);
+					.make-md-column(4);
+					.make-lg-column(3);
+					.list-group-item;
+					h4{
+						.list-group-item-heading;
+						.text-uppercase;
+						.text-center;
+					}
+					p{
+						.list-group-item-text;
+					}
+					
+					header{
+						h2{
+						}
+					}
+					button{
+						.btn;
+						.text-center;
+						.btn-block;
+						.btn-primary;
+					}
+				}
+			}
+		}
+	}
+}
+/*
+#aa-container{
+//	min-height: 100%;
+//	height: 100%;
+//	.box-shadow ("inset 5px 5px 20px rgba(0,0,0,.25)");
+	position: relative;
+	*{
+//		box-sizing: content-box;
+	}
+	#aa-ajax-loading{
+		position:absolute;
+		top:10px;
+		right:10px;
+		width:50px;
+		height:50px;
+		z-index: 991;
+	}
+}
+
+#aa-splash{
+	.gradient-direction (#7CD1B4, #0C386A, 180);
+	position: relative;
+	min-height: 100%;
+	height: 100%;
+	@media (max-width: @screen-xs-max){
+//		min-height: 200px;
+	}
+	@media (min-width: @screen-sm-min){
+//		min-height: 300px;
+		
+	}
+	@media (min-width: @screen-md-min) and (max-width: @screen-md-max){
+//		max-height: 500px;
+	}
+	@media (min-width: @screen-lg-min){
+//		max-height: 500px;
+	}
+	.aa-splash-bg{
+		background:url('../../img/bg/splash-screen-bg.png');
+		background-size: cover;
+		display:flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: stretch;
+		min-height: 100%;
+		height: 100%;
+		#aa-splash-skip{
+			display: block;
+			position: absolute;
+			font-size: 16px;
+			width: 60px;
+			text-align: right;
+			font-weight: lighter;
+			color: white;
+			text-shadow:2px 2px 4px rgba(0,0,0,.5);
+			letter-spacing: 2px;
+			top:10px;
+			right:10px;
+			z-index: 999;
+			.transition (all, .3s, cubic-bezier(.4,-0.9,.9,1.6), 0s);
+			&:hover{
+				cursor: pointer;
+			text-shadow:0px 0px 6px rgba(0,0,0,.9);
+			}
+		}
+		.aa-splash-content{
+			.aa-splash-icon{
+				width: 100%;
+				min-height: 200px;
+				background: no-repeat center center url('../../img/aa_logo.svg');			
+			}
+			.aa-splash-title{
+				min-height: 100px;
+				text-align: center;
+				font-size: 32px;
+				color: rgba(255,255,255,.9);
+				.thin{
+					font-weight: lighter;
+				}
+				.thick{
+					font-weight: normal;
+				}
+			}
+			
+		}
+	}
+}
+input[type='checkbox'].aa-check-button{
+	.hidden;
+	& + label{
+		cursor: pointer;
+		span{
+			font-family: 'FontAwesome';
+		}
+	}
+	&:checked + label{
+		.btn-success;
+		span{
+			&:after{
+				content:"\f00c";
+			}
+		}
+	}
+}
+*/

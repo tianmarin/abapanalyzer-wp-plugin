@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+</head>
+<body>
+<h1 id="niftyscrolleventsforjquery">Nifty scroll events for jQuery</h1>
+
+<p>Adds slick new scroll events to jQuery (like <code>enter</code> and <code>leave</code>) so you can drop scrolling effects like a boss. Requires jQuery 1.11+.</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>Load up <code>jquery.scrollex.min.js</code> (after jQuery):</p>
+
+<pre><code class="html">&lt;script src=&quot;http://code.jquery.com/jquery-1.11.2.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.scrollex.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p>Then call <code>scrollex()</code> on a selector with a <strong>configuration object</strong>, which is where you&#8217;ll associate handlers with the events you want to use and set various Scrollex options (see <strong>Configuration Reference</strong> below). For example, this uses the <code>enter</code> and <code>leave</code> events to change the background color of <code>#foobar</code> to green when we scroll within its boundaries (its <em>contact area</em>), then back again when we scroll out of it:</p>
+
+<pre><code class="js">$(function() {
+  $('#foobar').scrollex({
+    enter: function() {
+
+      // Set #foobar's background color to green when we scroll into it.
+        $(this).css('background-color', 'green');
+
+    },
+    leave: function() {
+
+      // Reset #foobar's background color when we scroll out of it.
+        $(this).css('background-color', '');
+
+    }
+  });
+});
+</code></pre>
+
+<h2 id="events">Events</h2>
+
+<p>Scrollex supports the following events:</p>
+
+<h3 id="enter"><code>enter</code></h3>
+
+<p>Triggered when the viewport enters an element&#8217;s contact area. Behavior can be tweaked using the <code>mode</code>, <code>top</code>, and <code>bottom</code> options (see next section).</p>
+
+<h3 id="leave"><code>leave</code></h3>
+
+<p>Triggered when the viewport leaves an element&#8217;s contact area. Behavior can be tweaked using the <code>mode</code>, <code>top</code>, and <code>bottom</code> options (see next section).</p>
+
+<h3 id="initialize"><code>initialize</code></h3>
+
+<p>Triggered as soon as <code>scrollex()</code> is called on an element.</p>
+
+<h3 id="terminate"><code>terminate</code></h3>
+
+<p>Triggered as soon as <code>unscrollex()</code> is called on an element, which is used to gracefully undo a previous <code>scrollex()</code> call.</p>
+
+<h3 id="scroll"><code>scroll</code></h3>
+
+<p>Triggered as the viewport scrolls through an element. The handler associated with this event is called with a normalized value representing how far the viewport has scrolled through the element (between <code>0</code> and <code>1</code>, although values outside this range are possible if the viewport is above or below the element). For example:</p>
+
+<pre><code class="js">$(function() {
+  $('#foobar').scrollex({
+    scroll: function(progress) {
+
+      // Progressively increase #foobar's opacity as we scroll through it.
+        $(this).css('opacity', Math.max(0, Math.min(1, progress)));
+
+    }
+  });
+});
+</code></pre>
+
+<h2 id="modetopandbottom"><code>mode</code>, <code>top</code>, and <code>bottom</code></h2>
+
+<p>Events that depend on the viewport&#8217;s position relative to an element&#8217;s contact area (currently just <code>enter</code> and <code>leave</code>) can be further tweaked using the <code>mode</code>, <code>top</code>, and <code>bottom</code> options.</p>
+
+<h3 id="mode"><code>mode</code></h3>
+
+<p>This determines the rules Scrollex uses to figure out when the viewport is considered &#8220;inside&#8221; or &#8220;outside&#8221; an element&#8217;s contact area. Can be any of the following:</p>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Value</th>
+	<th style="text-align:left;">Behavior</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;"><code>default</code></td>
+	<td style="text-align:left;">Element&#8217;s contact area must fall within the viewport.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>top</code></td>
+	<td style="text-align:left;">Top viewport edge must fall within the element&#8217;s contact area.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>bottom</code></td>
+	<td style="text-align:left;">Bottom viewport edge must fall within the element&#8217;s contact area.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>middle</code></td>
+	<td style="text-align:left;">Midpoint between top/bottom viewport edges must fall within the element&#8217;s contact area.</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="topandbottom"><code>top</code> and <code>bottom</code></h3>
+
+<p>These let you &#8220;pad&#8221; the edges of an element&#8217;s contact area using either a pixel value (<code>150</code>) a percentage of that element&#8217;s height (<code>25%</code>), or a percentage of the viewport&#8217;s height (<code>20vh</code>). Positive values work inward and shrink the contact area, while negative values work outward and expand the contact area. For example, this expands the contact area of <code>#foobar</code> by 20% of its height in both directions, resulting in <code>enter</code> triggering a bit earlier and <code>leave</code> a bit later:</p>
+
+<pre><code class="js">$(function() {
+  $('#foobar').scrollex({
+    top: '-20%',
+    bottom: '-20%',
+    enter: function() {
+      $(this).css('background-color', 'green');
+
+    },
+    leave: function() {
+      $(this).css('background-color', '');
+    }
+  });
+});
+</code></pre>
+
+<h2 id="configurationreference">Configuration Reference</h2>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Name</th>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Default</th>
+	<th style="text-align:left;">Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;"><code>enter</code></td>
+	<td style="text-align:left;"><code>function</code></td>
+	<td style="text-align:left;"><code>null</code></td>
+	<td style="text-align:left;"><strong>Enter</strong> event.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>leave</code></td>
+	<td style="text-align:left;"><code>function</code></td>
+	<td style="text-align:left;"><code>null</code></td>
+	<td style="text-align:left;"><strong>Leave</strong> event.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>initialize</code></td>
+	<td style="text-align:left;"><code>function</code></td>
+	<td style="text-align:left;"><code>null</code></td>
+	<td style="text-align:left;"><strong>Initialize</strong> event.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>terminate</code></td>
+	<td style="text-align:left;"><code>function</code></td>
+	<td style="text-align:left;"><code>null</code></td>
+	<td style="text-align:left;"><strong>Terminate</strong> event.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>scroll</code></td>
+	<td style="text-align:left;"><code>function</code></td>
+	<td style="text-align:left;"><code>null</code></td>
+	<td style="text-align:left;"><strong>Scroll</strong> event.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>mode</code></td>
+	<td style="text-align:left;"><code>string</code></td>
+	<td style="text-align:left;"><code>default</code></td>
+	<td style="text-align:left;">Mode (<code>default</code>, <code>top</code>, <code>bottom</code>, or <code>middle</code>).</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>top</code></td>
+	<td style="text-align:left;"><code>integer</code>, <code>string</code></td>
+	<td style="text-align:left;"><code>0</code></td>
+	<td style="text-align:left;">Top padding (in pixels, <code>%</code>, <code>vh</code>).</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>bottom</code></td>
+	<td style="text-align:left;"><code>integer</code>, <code>string</code></td>
+	<td style="text-align:left;"><code>0</code></td>
+	<td style="text-align:left;">Bottom padding (in pixels, <code>%</code>, or <code>vh</code>).</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>delay</code></td>
+	<td style="text-align:left;"><code>integer</code></td>
+	<td style="text-align:left;"><code>0</code></td>
+	<td style="text-align:left;">Delay (in ms) between position checks.</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="license">License</h2>
+
+<p>Scrollex is released under the MIT license, so go nuts.</p>
+
+<p>Copyright © @ajlkn</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &#8220;Software&#8221;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED &#8220;AS IS&#8221;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+</body>
+</html>

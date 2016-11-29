@@ -1,0 +1,88 @@
+/* Import of MIXINS & Fonts*/
+@import "../LESS-Dynamic-Stylesheet-master/dss.less";
+//@import "../bootstrap-master/less/bootstrap.less";
+@import "../animate.less-master/less/animate.less";
+@import "../font-awesome/less/font-awesome.less";
+
+/* Colors
+---------------------------------------------------------------------------------------------------- */
+/* Fonts
+---------------------------------------------------------------------------------------------------- */
+H2{
+	color:blue;
+}
+.bootstrap-wrapper {
+	@import '../bootstrap-master/less/bootstrap.less';
+	input[type='checkbox'].aa-admin-check{
+		display: none;
+		& + label{
+			.btn;
+			.btn-block;
+			.btn-default;
+			position: relative;
+			&:after{
+				position: absolute;
+				content: '';
+				display: block;
+				width: 20px;
+				height: 20px;
+				.rounded (20px);
+				background-color: #EDF1F1;
+				left: 5px;
+				top:7px;
+				.box-shadow("1px 1px 1px rgba(0,0,0,.5)");
+				.transition(all 300ms cubic-bezier(0.645, 0.045, 0.355, 1.000));
+				font-family: 'FontAwesome';
+				font-size: 1em * .8;
+				line-height: 1em * 1.5;
+				text-align: center;
+				content:"\f00d";
+				border: thin solid rgba(0,0,0,.3);
+				color:red;
+			}//after
+			&:before{
+				position: absolute;
+				content: '' !important;
+				display: block;
+				width: 40px;
+				height: 15px;
+				.rounded(20px);
+				background-color: desaturate(#EDF1F1,30%);
+				left: 5px;
+				top:10px;
+				.box-shadow("inset 1px 1px 1px rgba(0,0,0,.25)");
+				.transition(all 300ms cubic-bezier(0.645, 0.045, 0.355, 1.000));				
+				border: thin solid rgba(0,0,0,.3);
+			}//before
+		}//& + label
+		&:checked ~ span{
+		}
+		&:checked + label{
+			.btn-success;
+			&:before{
+	//			background-color: desaturate(#83D43C,30%);
+	//			.btn-success;
+			}
+			&:after{
+	//			background-color: darken(#83D43C,20%);
+				border: thin solid rgba(0,0,0,.3) !important;
+				left:25px;
+				content:"\f00c" !important;
+				color: white;
+				.btn-success;
+			}
+		}
+	}
+	.aa-sortable{
+		.placeholder{
+			.list-group-item;
+			min-height: 60px;
+			background-color: rgba(190,67,64,.5);
+		//	margin: 10px !important;
+			.rounded (5px);
+			.animated;
+			.pulse;
+		}
+	}
+}
+
