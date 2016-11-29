@@ -50,6 +50,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 1,
 				'code'			=> 'line',
 				'short_name'	=> 'Lineas',
 			) 
@@ -57,6 +58,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 2,
 				'code'			=> 'column',
 				'short_name'	=> 'Columnas',
 			) 
@@ -64,6 +66,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 3,
 				'code'			=> 'step',
 				'short_name'	=> 'step',
 			) 
@@ -71,6 +74,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 4,
 				'code'			=> 'smoothedLine',
 				'short_name'	=> 'smoothedLine',
 			) 

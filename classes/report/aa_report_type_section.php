@@ -56,6 +56,7 @@ function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action( 'wp_ajax_aa_get_report_type_sections',		array( $this , 'aa_get_report_type_sections'		));
 	add_action( 'wp_ajax_aa_remove_report_type_sections',	array( $this , 'aa_remove_report_type_sections'		));
 	add_action( 'wp_ajax_aa_add_report_type_sections',		array( $this , 'aa_add_report_type_sections'		));
@@ -241,6 +242,53 @@ public function special_form($id=null){
 	return $output;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 1,
+				'section_id'			=> 1,
+				'disp_order'			=> 1,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 1,
+				'section_id'			=> 3,
+				'disp_order'			=> 3,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 1,
+				'section_id'			=> 4,
+				'disp_order'			=> 4,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 2,
+				'section_id'			=> 1,
+				'disp_order'			=> 1,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 2,
+				'section_id'			=> 3,
+				'disp_order'			=> 2,
+			) 
+		);
+	}
+}
+
 //END OF CLASS	
 }
 

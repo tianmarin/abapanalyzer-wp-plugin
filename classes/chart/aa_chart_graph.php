@@ -56,6 +56,7 @@ function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action( 'wp_ajax_aa_get_chart_graphs',		array( $this , 'aa_get_chart_graphs'		));
 	add_action( 'wp_ajax_aa_remove_chart_graphs',	array( $this , 'aa_remove_chart_graphs'		));
 	add_action( 'wp_ajax_aa_add_chart_graphs',		array( $this , 'aa_add_chart_graphs'		));
@@ -348,6 +349,299 @@ public function special_form($id=null){
 	return $output;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 1,
+				'graph_id'		=> 1,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 1,
+				'graph_id'		=> 2,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 2,
+				'graph_id'		=> 3,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 2,
+				'graph_id'		=> 4,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 3,
+				'graph_id'		=> 5,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 3,
+				'graph_id'		=> 6,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 4,
+				'graph_id'		=> 7,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 4,
+				'graph_id'		=> 8,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 5,
+				'graph_id'		=> 9,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 5,
+				'graph_id'		=> 10,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 6,
+				'graph_id'		=> 11,
+				'disp_order'	=> 3,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 6,
+				'graph_id'		=> 12,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 7,
+				'graph_id'		=> 13,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 7,
+				'graph_id'		=> 14,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 8,
+				'graph_id'		=> 15,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 8,
+				'graph_id'		=> 16,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 9,
+				'graph_id'		=> 17,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 9,
+				'graph_id'		=> 18,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 10,
+				'graph_id'		=> 19,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 10,
+				'graph_id'		=> 20,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 11,
+				'graph_id'		=> 21,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 11,
+				'graph_id'		=> 22,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 12,
+				'graph_id'		=> 23,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 12,
+				'graph_id'		=> 24,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 12,
+				'graph_id'		=> 25,
+				'disp_order'	=> 3,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 13,
+				'graph_id'		=> 1,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 13,
+				'graph_id'		=> 2,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 14,
+				'graph_id'		=> 3,
+				'disp_order'	=> 4,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 14,
+				'graph_id'		=> 4,
+				'disp_order'	=> 3,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 15,
+				'graph_id'		=> 11,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 15,
+				'graph_id'		=> 12,
+				'disp_order'	=> 1,
+			) 
+		);
+
+	}
+}
+
+
+
+
+
+
+
+
 //END OF CLASS	
 }
 

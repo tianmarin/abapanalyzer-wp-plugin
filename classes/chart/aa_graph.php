@@ -160,6 +160,7 @@ public function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_asset_id($id){
@@ -228,6 +229,362 @@ protected function sp_form_graph_color_id(){
 	}
 	return $response;
 }
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 1,
+				'short_name'		=> 'MAX ACT WPS',
+				'name'				=> 'Max. Active WPs',
+				'asset_id'			=> 1,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 2,
+				'short_name'		=> 'AVG ACT WPs',
+				'name'				=> 'Avg. Active WPs',
+				'asset_id'			=> 1,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 3,
+				'short_name'		=> 'MAX DIA ACT WPs',
+				'name'				=> 'Max. Active DIA WPs',
+				'asset_id'			=> 2,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 4,
+				'short_name'		=> 'AVG DIA ACT WPs',
+				'name'				=> 'Avg. Active DIA WPs',
+				'asset_id'			=> 2,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 5,
+				'short_name'		=> 'AVG RFC WPs',
+				'name'				=> 'Avg. Available RFC WPs',
+				'asset_id'			=> 3,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 6,
+				'short_name'		=> 'MIN RFC WPs',
+				'name'				=> 'Min. Available RFC WPs',
+				'asset_id'			=> 3,
+				'graph_function_id'	=> 1,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 3,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 7,
+				'short_name'		=> 'MAX DIA QUEUE',
+				'name'				=> 'Max. Queue DIA Lenght',
+				'asset_id'			=> 18,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 8,
+				'short_name'		=> 'AVG DIA QUEUE',
+				'name'				=> 'Avg. Queue DIA Lenght',
+				'asset_id'			=> 18,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 9,
+				'short_name'		=> 'MAX UPD QUEUE',
+				'name'				=> 'Max. Queue UPD Lenght',
+				'asset_id'			=> 19,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 10,
+				'short_name'		=> 'AVG UPD QUEUE',
+				'name'				=> 'Avg. Queue UPD Lenght',
+				'asset_id'			=> 19,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 11,
+				'short_name'		=> 'MAX SESSIONS',
+				'name'				=> 'Max. Sessions',
+				'asset_id'			=> 22,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 12,
+				'short_name'		=> 'AVG SESSIONS',
+				'name'				=> 'Avg. Sessions',
+				'asset_id'			=> 22,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 13,
+				'short_name'		=> 'MAX EM',
+				'name'				=> 'Max. EM Usage',
+				'asset_id'			=> 12,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 14,
+				'short_name'		=> 'AVG EM',
+				'name'				=> 'Avg. EM Usage',
+				'asset_id'			=> 12,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 15,
+				'short_name'		=> 'MAX HEAP',
+				'name'				=> 'Max. Heap Memory Usage',
+				'asset_id'			=> 14,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 16,
+				'short_name'		=> 'AVG HEAP',
+				'name'				=> 'Avg. Heap Memory Usage',
+				'asset_id'			=> 14,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 17,
+				'short_name'		=> 'MAX PAGE MEM',
+				'name'				=> 'Max. Page Memory Usage',
+				'asset_id'			=> 16,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 18,
+				'short_name'		=> 'AVG PAGE MEM',
+				'name'				=> 'Avg. Page Memory Usage',
+				'asset_id'			=> 16,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 19,
+				'short_name'		=> 'MAX ROLL MEM',
+				'name'				=> 'Max. Roll Memory Usage',
+				'asset_id'			=> 17,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 20,
+				'short_name'		=> 'AVG ROLL MEM',
+				'name'				=> 'Avg. Roll Memory Usage',
+				'asset_id'			=> 17,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 21,
+				'short_name'		=> 'MAX ENQ QUEUE',
+				'name'				=> 'Max. Enqueue Queue',
+				'asset_id'			=> 20,
+				'graph_function_id'	=> 2,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 22,
+				'short_name'		=> 'AVG ENQ QUEUE',
+				'name'				=> 'Avg. Enqueue Queue',
+				'asset_id'			=> 20,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 4,
+				'graph_color_id'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 23,
+				'short_name'		=> 'User CPU',
+				'name'				=> 'CPU USuario',
+				'asset_id'			=> 4,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 1,
+				'graph_color_id'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 24,
+				'short_name'		=> 'System CPU',
+				'name'				=> 'CPU Sistema',
+				'asset_id'			=> 5,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 1,
+				'graph_color_id'	=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 25,
+				'short_name'		=> 'Idle CPU',
+				'name'				=> 'CPU Idle',
+				'asset_id'			=> 6,
+				'graph_function_id'	=> 3,
+				'graph_type_id'		=> 1,
+				'graph_color_id'	=> 4,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 26,
+				'short_name'		=> 'Sumatoria sesiones',
+				'name'				=> 'Sumatoria sesiones',
+				'asset_id'			=> 22,
+				'graph_function_id'	=> 1,
+				'graph_type_id'		=> 2,
+				'graph_color_id'	=> 4,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'				=> 27,
+				'short_name'		=> 'P95 Active WPs',
+				'name'				=> 'P95 Active WPs',
+				'asset_id'			=> 1,
+				'graph_function_id'	=> 5,
+				'graph_type_id'		=> 1,
+				'graph_color_id'	=> 1,
+			) 
+		);
+	}
+}
+
+
 //END OF CLASS	
 }
 

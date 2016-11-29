@@ -28,7 +28,7 @@ public function __construct(){
 	//Tabla de la clase
 	$this->tbl_name		= $wpdb->prefix.$aa_vars[$this->class_name.'_tbl_name'];
 	//Versión de DB (para registro y actualización automática)
-	$this->db_version	= '1.0';
+	$this->db_version	= '0.9';
 	//Reglas actuales de caracteres a nivel de DB.
 	//Dado que esto sólo se usa en la cración de la tabla
 	//no se guarda como variable de clase.
@@ -165,6 +165,7 @@ public function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action('admin_menu'							,array( $this , "register_submenu_page"		));
 	add_action( 'wp_ajax_fe_build_chart'			,array( $this , 'fe_build_chart'			));
 }
@@ -391,6 +392,192 @@ public function fe_build_chart(){
 	$response['status']=$chart_id;
 	echo json_encode($response);
 	die();		
+}
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 1,
+				'title'					=> 'WPs Activos por día',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 2,
+				'title'					=> 'WPs de Dialogo Activos por día',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 3,
+				'title'					=> 'DAY RFC AVAL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 4,
+				'title'					=> 'DAY DIA QUEUE',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 5,
+				'title'					=> 'DAY UPD QUEUE',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 6,
+				'title'					=> 'DAY SESSIONS',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 7,
+				'title'					=> 'DAY EM UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 8,
+				'title'					=> 'DAY HEAP UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 9,
+				'title'					=> 'DAY PAGE UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 10,
+				'title'					=> 'DAY ROLL UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 11,
+				'title'					=> 'DAY ENQ QUEUE',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 12,
+				'title'					=> 'DAY CPU UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 13,
+				'title'					=> 'WPs Activos por hora',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 14,
+				'title'					=> 'HOUR DIA ACT WPs',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 15,
+				'title'					=> 'Sesiones Activas por hora',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+	}
 }
 
 //END OF CLASS	

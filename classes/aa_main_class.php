@@ -86,7 +86,7 @@ abstract class AA_CLASS{
 */
 public function db_install(){
 	$current_db_version = get_option( $this->tbl_name."_db_version");
-	if( $current_db_version == false || $current_db_version < $this->db_version ){
+	if( $current_db_version == false || $current_db_version != $this->db_version ){
 //	if( true ){
 		//Registrar y notificar 'UPGRADE' exitoso
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

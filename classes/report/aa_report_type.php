@@ -107,6 +107,7 @@ public function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_section($value=null,$id=null){
@@ -126,6 +127,27 @@ protected function report_type_section(){
 	$id=$_GET['item'];
 	return $REPORT_TYPE_SECTION->special_form($id);
 }
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 1,
+				'short_name'			=> 'Estilo 1',
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 2,
+				'short_name'			=> 'Estilo 2',
+			) 
+		);
+	}
+}
+
 //END OF CLASS	
 }
 

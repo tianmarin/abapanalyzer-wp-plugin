@@ -132,6 +132,7 @@ public function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_chart($value=null,$id=null){
@@ -151,6 +152,55 @@ protected function section_chart(){
 	$id=$_GET['item'];
 	return $SECTION_CHART->special_form($id);
 }
+//---------------------------------------------------------------------------------------------------------------------------------------------------------
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'			=> 1,
+				'short_name'	=> 'WP Util',
+				'title'			=> 'Ajuste de Workprocess',
+				'intro'			=> 'La información presentada en este capítulo, ha sido extraída del Snapshot Monitoring del sistema, con una frecuencia de 30 segundos. El procesos de análisis implica la revisión e los promedios a nivel global (todas las instancias en un mismi punto del tiempo) y los máximos de utilización de cada elemento evaluado (e..g WPs activos, WPs disponibles para RFC, etc.).',
+				'outro'			=> 'Este texto es al final',
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'			=> 2,
+				'short_name'	=> 'Memory Util',
+				'title'			=> 'Uso de Segmentos de Memoria',
+				'intro'			=> 'La información presentada en este capítulo ha sido extraída del Snapshots Monitoring del sistema, con frecuencia de 30 segundos. El proceso de análisis implica la revisión de los promedios a nivel global (todas las instancias en un mismo punto del tiempo) y los máximos de utilización de cada elemento evaluado(e.g. Extended Memory, Heap Memory, etc.).',
+				'outro'			=> 'gfd',
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'			=> 3,
+				'short_name'	=> 'Enqueue ',
+				'title'			=> 'Enqueue Process',
+				'intro'			=> 'La información presentada en este capítulo ha sido extraída del Snapshots Monitoring del sistema, con frecuencia de 30 segundos. El proceso de análisis implica la revisión de los promedios a nivel global (todas las instancias en un mismo punto del tiempo) y los máximos de utilización de cada elemento evaluado.',
+				'outro'			=> '',
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'			=> 4,
+				'short_name'	=> 'CPU',
+				'title'			=> 'CPU',
+				'intro'			=> 'CPU',
+				'outro'			=> '',
+			) 
+		);
+
+	}
+}
+
 //END OF CLASS	
 }
 
