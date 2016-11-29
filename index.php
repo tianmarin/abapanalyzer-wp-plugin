@@ -40,7 +40,7 @@ $aa_vars = array(
 	'report'				."_tbl_name"	=> 'z_aa_'		.'report',
 	'report_type'			."_tbl_name"	=> 'z_aa_'		.'report_type',
 	'report_type_section'	."_tbl_name"	=> 'z_aa_'		.'report_type_section',
-	'report_collab'			."_tbl_name"	=> 'z_aa_'		.'report_collab',
+//	'report_collab'			."_tbl_name"	=> 'z_aa_'		.'report_collab',
 	'section'				."_tbl_name"	=> 'z_aa_'		.'section',
 	'section_chart'			."_tbl_name"	=> 'z_aa_'		.'section_chart',
 	#Charts
@@ -147,7 +147,7 @@ require_once("classes/report/aa_section_chart.php");
 require_once("classes/report/aa_section.php");
 require_once("classes/report/aa_report_type_section.php");
 require_once("classes/report/aa_report_type.php");
-require_once("classes/config/aa_report_collab.php");
+//require_once("classes/config/aa_report_collab.php");
 require_once("classes/report/aa_report.php");
 require_once("classes/source/aa_sdfmon.php");
 //require_once("aa_sdfmon.php");

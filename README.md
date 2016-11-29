@@ -17,8 +17,9 @@ To turn a page into a *ABAP Analyzer Page*:
 2. Change the *Page Template* (in the *Page Attributes* section) to **ABAP Analyzer App**
 
 ## Usage
-In order to use **ABAP**Analyzer the SAP NW ABAP Sistem must be configured to collect information files. Details of this setup are explained step-to-step in the *intro* of the  *ABAP Analyzer Page*.
-Current collectors ready to use are:
+In order to use **ABAP**Analyzer the *SAP NW ABAP System* must be configured to collect information files. Details of this setup are explained step-to-step in the introduction of the  *ABAP Analyzer Page*.
+
+Current collectors ready to use, are:
 
 1. Snapshot Monitoring (/sdf/mon).
 2. More to come.

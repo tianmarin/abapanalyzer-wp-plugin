@@ -159,6 +159,7 @@ public function __construct(){
 	add_action( 'wp_ajax_search_system_users', 		array( $this , 'search_system_users'		));
 	add_action( 'wp_ajax_fe_system_list',			array( $this , 'fe_system_list'				));
 	add_action( 'wp_ajax_fe_system_info',			array( $this , 'fe_system_info'				));
+	add_action( 'wp_ajax_fe_quick_system_info',		array( $this , 'fe_quick_system_info'		));
 	add_action( 'wp_ajax_fe_system_show_form',		array( $this , 'fe_system_show_form'		));
 	add_action( 'wp_ajax_fe_create_system',			array( $this , 'fe_create_system'			));
 }
@@ -296,7 +297,7 @@ public function fe_system_info(){
 	$response['systemInfo'].="</div>";
 
 	$response['systemInfo'].='<div class="system-reports col-sm-12 col-md-4">';
-	$response['systemInfo'].='<h2>Reportes <small>(<a href="#">Crear nuevo</a>)</small></h2>';
+	$response['systemInfo'].='<h2>Reportes <small>(<a href="#" id="new-report-button" data-system-id="'.$system['id'].'">Crear nuevo</a>)</small></h2>';
 //	$response['systemInfo'].='<p class="list-group-item-text"><a href="#sdfmon-setup/'.$system['id'].'" class="btn btn-default btn-block">Crear nuevo reporte</a></p>';
 	$response['systemInfo'].='<ul class="list-group">';
 	global $REPORT;
@@ -318,22 +319,88 @@ public function fe_system_info(){
 		$response['systemInfo'].='<br/>';
 		$response['systemInfo'].='<div class="btn-group btn-group-justified" role="group" aria-label="...">';
 		if( get_current_user_id() == $report['creator_id'] ){
-			$response['systemInfo'].='<a data-function="reporrt-edit" data-report-id="'.$report_id.'" class="btn btn-warning "><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i> Modificar</a>';
+			$response['systemInfo'].='<a data-function="report-edit" data-report-id="'.$report_id.'" class="btn btn-warning "><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i> Modificar</a>';
 		}
 		$response['systemInfo'].='<a href="#report-preview/'.$report_id.'" class="btn btn-default"><i class="fa fa-binoculars fa-fw" aria-hidden="true"></i> Visualizar</a>';
 		$response['systemInfo'].='</div>';
-		$response['systemInfo'].='</li>';	
+		$response['systemInfo'].='</li>';
+	
 	}
+
 	$response['systemInfo'].='</ul>';
 	$response['systemInfo'].="</div>";
 
+
+
+	$response['system']=array();
+	$response['system']['id']=$system['id'];
+	$response['system']['sid']=$system['sid'];
+	$response['system']['shortName']=$system['short_name'];
+	$response['system']['collab']='<div class="collab"><h2>Colaboradores</h2>';
+	if($system['collab_opt_id'] == NULL || $system['collab_opt_id'] == 1){
+		$response['system']['collab'].='<p>';
+//		$response['system']['collab'].='<i class="fa fa-user-times fa-fw" aria-hidden="true"></i>';
+		$response['system']['collab'].='Este sistema no tiene colaboradores.';
+		$response['system']['collab'].='</p>';
+	}elseif($system['collab_opt_id'] == 2){
+		$response['system']['collab'].='<p>';
+//		$response['system']['collab'].='<i class="fa fa-user-times fa-fw" aria-hidden="true"></i>';
+		global $SYSTEM_COLLAB;
+		$collab=$SYSTEM_COLLAB->get_users($system['id']);
+		$response['system']['collab'].='Este sistema tiene '.sizeof($collab).' colaboradores.';
+		$response['system']['collab'].='</p>';
+		
+	}else{
+		$response['system']['collab'].='<p>';
+//		$response['system']['collab']='<i class="fa fa-users fa-fw fa-2x" aria-hidden="true"></i>';
+		$response['system']['collab'].='Este sistema permite que todos los usuarios agreguen informaci&oacute;n.';
+		$response['system']['collab'].='</p>';
+		
+	}
+	$response['system']['collab'].='</div>';
+	$response['dataSuppliers']=array();
+	$response['dataSuppliers']['sdfmon']=array();
+	$response['dataSuppliers']['sdfmon']['title']="Snapshot Monitoring";
+	$response['dataSuppliers']['sdfmon']['firstDate']="23/08/2016";
+	$response['dataSuppliers']['sdfmon']['lastDate']="12/11/2016";
+	$response['dataSuppliers']['sdfmon']['editLink']="#sdfmon-setup/".$system['id'];
+	$response['dataSuppliers']['sdfmon']['editText']="Modificar";
+	$response['status']='ok';
+	$response['reports']=array();
+	global $REPORT;
+	$report_list=$REPORT->get_reports_by_system($system['id']);
+	foreach($report_list as $report_id){
+		$report=$REPORT->get_single($report_id);
+		$response['reports']['rep_'.$report_id]=array();
+		$response['reports']['rep_'.$report_id]['id']=$report_id;
+		$response['reports']['rep_'.$report_id]['shortName']=$report['short_name'];
+		$response['reports']['rep_'.$report_id]['editLink']="#edit-report/".$report_id;
+		$response['reports']['rep_'.$report_id]['editText']="Modificar";
+		$response['reports']['rep_'.$report_id]['viewLink']="#report-preview/".$report_id;
+		$response['reports']['rep_'.$report_id]['viewText']="Visualizar";
+	}
 	echo json_encode($response);
 	die();	
 	
 }
+public function fe_quick_system_info(){
+	$response=array();
+	$system_id=$_POST['system_id'];
+	if( null == $system_id){
+		$response['error']=true;
+		$response['message']="No hay identificador de Systema";
+	}else{
+		$response['system']=self::get_single($system_id);
+		array_push($response['system']['user'], get_user_by('id',$system_id['owner_id']));
+		$response['status']='ok';
+		$response['header']='<header class="col-xs-12"><h1>'.$response['system']['sid'].'</h1><p class="lead">'.$response['system']['short_name'].'</p></header>';
+	}
+	echo json_encode($response);
+	die();		
+}
 public function fe_system_show_form(
-					$type='add',
-					$item=null
+					$type='add',			//add,update
+					$item=null				//id a editar
 ){
 	global $wpdb;
 	$form_type=isset($_POST['form_type']) && $_POST['form_type']!=NULL?$_POST['form_type']:$type;

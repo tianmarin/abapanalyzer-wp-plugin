@@ -288,31 +288,47 @@ public function fe_build_chart(){
 			$graph['valueField']='valueField_'.$graph_id;
 
 			global $SDFMON;
-			
-			$sql="SELECT
-					time.date as date,
-					time.time as time,
-					".strtoupper($function['code'])."(time.sum) as ".$function['code']."
-				FROM (
-					SELECT
-						SUM(".$graph['asset'].") as sum,
-						date as date,
-						time as time
-					FROM $SDFMON->tbl_name
-					WHERE system_id=".$report['system_id']." ";
-			if($report['start_date'] != null && $report['start_date'] != '0000-00-00'){
-				$sql.=" AND date > '".$report['start_date']."' ";
+			if( $function['code'] == 'p95' ){
+				$count="SELECT count(*) from $SDFMON->tbl_name 
+						WHERE system_id=".$report['system_id']." ";
+					if($report['start_date'] != null && $report['start_date'] != '0000-00-00'){
+						$sql.=" AND date > '".$report['start_date']."' ";
+					}
+					if($report['end_date'] != null && $report['end_date'] != '0000-00-00'){
+						$sql.=" AND date < '".$report['end_date']."' ";
+					}
+					$sql.="
+							GROUP BY date,time";
+					if($chart['group_by_instance']){
+						$sql.=",servername";
+					}
+				
+			}else{
+				$sql="SELECT
+						time.date as date,
+						time.time as time,
+						".strtoupper($function['code'])."(time.sum) as ".$function['code']."
+					FROM (
+						SELECT
+							SUM(".$graph['asset'].") as sum,
+							date as date,
+							time as time
+						FROM $SDFMON->tbl_name
+						WHERE system_id=".$report['system_id']." ";
+				if($report['start_date'] != null && $report['start_date'] != '0000-00-00'){
+					$sql.=" AND date > '".$report['start_date']."' ";
+				}
+				if($report['end_date'] != null && $report['end_date'] != '0000-00-00'){
+					$sql.=" AND date < '".$report['end_date']."' ";
+				}
+				$sql.="
+						GROUP BY date,time";
+				if($chart['group_by_instance']){
+					$sql.=",servername";
+				}
+				$sql.="
+					) AS time";
 			}
-			if($report['end_date'] != null && $report['end_date'] != '0000-00-00'){
-				$sql.=" AND date < '".$report['end_date']."' ";
-			}
-			$sql.="
-					GROUP BY date,time";
-			if($chart['group_by_instance']){
-				$sql.=",servername";
-			}
-			$sql.="
-				) AS time";
 			switch($time_group['code']){
 				case "hourly":
 					$sql.=" GROUP BY HOUR(time.time)";
@@ -330,7 +346,7 @@ public function fe_build_chart(){
 					$sql.=" GROUP BY QUARTER(time.date)";
 					break;
 			}
-			self::write_log($sql);
+//			self::write_log($sql);
 
 			$sdfmon=self::get_sql($sql);
 			foreach($sdfmon as $sdfentry){

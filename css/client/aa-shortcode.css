@@ -13461,6 +13461,7 @@ html {
   min-height: 100%;
 }
 body {
+  position: relative;
   min-height: 100%;
   background: #0c386a;
   background-image: -webkit-gradient(linear, 45deg, from(#7cd1b4), to(#0c386a));
@@ -13482,6 +13483,51 @@ body.on-system {
   background-image: -o-linear-gradient(45deg, #ffffff, #ffffff);
   background-image: linear-gradient(45deg, #ffffff, #ffffff);
   background-color: #FFF;
+}
+#aa-loading {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  z-index: 999;
+}
+#aa-loading.aa-fe-loading {
+  position: absolute;
+  padding: inherit;
+}
+#aa-loading.aa-fe-loading:before {
+  z-index: 556;
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  display: block;
+  line-height: 2rem;
+  font-size: 2rem;
+  font-family: 'FontAwesome';
+  content: "\f021";
+  -webkit-animation: fa-spin 1s linear 0 infinite normal;
+  /* Saf5, Chrome */
+  -moz-animation: fa-spin 1s linear 0s infinite normal;
+  /* FF5+ */
+  -o-animation: fa-spin 1s linear 0 infinite normal;
+  /* Opera 12+ */
+  animation: fa-spin 1s infinite linear;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.4);
+}
+#aa-loading.aa-fe-loading:after {
+  content: "";
+  z-index: 555;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 #intro #intro-header {
   color: rgba(255, 255, 255, 0.9);
@@ -14256,6 +14302,11 @@ fieldset[disabled] #system-info .reports > div div a.focus {
 *
 * The most important section of all, and the main purpose of this WP Plugin
 */
+@media print {
+  *.aa-report-chart {
+    height: 180px !important;
+  }
+}
 #report-preview {
   margin-right: auto;
   margin-left: auto;
@@ -14316,8 +14367,8 @@ fieldset[disabled] #system-info .reports > div div a.focus {
   min-height: 1px;
   padding-left: 15px;
   padding-right: 15px;
-  min-height: 300px;
-  margin: 30px auto;
+  height: 300px;
+  margin: 30px auto 15px;
   padding: 0;
 }
 #report-preview article .aa-report-chart a[href="http://www.amcharts.com/javascript-charts/"] {
@@ -14338,6 +14389,180 @@ fieldset[disabled] #system-info .reports > div div a.focus {
   line-height: 300px;
   -webkit-animation: fa-spin 1s infinite steps(8);
   animation: fa-spin 1s infinite steps(8);
+}
+#system-collab .aa-add-user-table a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+}
+#system-collab .aa-add-user-table a:first-child {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+#system-collab .aa-add-user-table a:last-child {
+  margin-bottom: 0;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+#system-collab .aa-add-user-table a.disabled,
+#system-collab .aa-add-user-table a.disabled:hover,
+#system-collab .aa-add-user-table a.disabled:focus {
+  background-color: #eeeeee;
+  color: #777777;
+  cursor: not-allowed;
+}
+#system-collab .aa-add-user-table a.disabled .list-group-item-heading,
+#system-collab .aa-add-user-table a.disabled:hover .list-group-item-heading,
+#system-collab .aa-add-user-table a.disabled:focus .list-group-item-heading {
+  color: inherit;
+}
+#system-collab .aa-add-user-table a.disabled .list-group-item-text,
+#system-collab .aa-add-user-table a.disabled:hover .list-group-item-text,
+#system-collab .aa-add-user-table a.disabled:focus .list-group-item-text {
+  color: #777777;
+}
+#system-collab .aa-add-user-table a.active,
+#system-collab .aa-add-user-table a.active:hover,
+#system-collab .aa-add-user-table a.active:focus {
+  z-index: 2;
+  color: #ffffff;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+#system-collab .aa-add-user-table a.active .list-group-item-heading,
+#system-collab .aa-add-user-table a.active:hover .list-group-item-heading,
+#system-collab .aa-add-user-table a.active:focus .list-group-item-heading,
+#system-collab .aa-add-user-table a.active .list-group-item-heading > small,
+#system-collab .aa-add-user-table a.active:hover .list-group-item-heading > small,
+#system-collab .aa-add-user-table a.active:focus .list-group-item-heading > small,
+#system-collab .aa-add-user-table a.active .list-group-item-heading > .small,
+#system-collab .aa-add-user-table a.active:hover .list-group-item-heading > .small,
+#system-collab .aa-add-user-table a.active:focus .list-group-item-heading > .small {
+  color: inherit;
+}
+#system-collab .aa-add-user-table a.active .list-group-item-text,
+#system-collab .aa-add-user-table a.active:hover .list-group-item-text,
+#system-collab .aa-add-user-table a.active:focus .list-group-item-text {
+  color: #c7ddef;
+}
+#system-collab .aa-add-user-table a:hover {
+  color: #3c763d;
+  background-color: #dff0d8;
+}
+a#system-collab .aa-add-user-table a:hover,
+button#system-collab .aa-add-user-table a:hover {
+  color: #3c763d;
+}
+a#system-collab .aa-add-user-table a:hover .list-group-item-heading,
+button#system-collab .aa-add-user-table a:hover .list-group-item-heading {
+  color: inherit;
+}
+a#system-collab .aa-add-user-table a:hover:hover,
+button#system-collab .aa-add-user-table a:hover:hover,
+a#system-collab .aa-add-user-table a:hover:focus,
+button#system-collab .aa-add-user-table a:hover:focus {
+  color: #3c763d;
+  background-color: #d0e9c6;
+}
+a#system-collab .aa-add-user-table a:hover.active,
+button#system-collab .aa-add-user-table a:hover.active,
+a#system-collab .aa-add-user-table a:hover.active:hover,
+button#system-collab .aa-add-user-table a:hover.active:hover,
+a#system-collab .aa-add-user-table a:hover.active:focus,
+button#system-collab .aa-add-user-table a:hover.active:focus {
+  color: #fff;
+  background-color: #3c763d;
+  border-color: #3c763d;
+}
+#system-collab .aa-current-system-users > a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+}
+#system-collab .aa-current-system-users > a:first-child {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+#system-collab .aa-current-system-users > a:last-child {
+  margin-bottom: 0;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+#system-collab .aa-current-system-users > a.disabled,
+#system-collab .aa-current-system-users > a.disabled:hover,
+#system-collab .aa-current-system-users > a.disabled:focus {
+  background-color: #eeeeee;
+  color: #777777;
+  cursor: not-allowed;
+}
+#system-collab .aa-current-system-users > a.disabled .list-group-item-heading,
+#system-collab .aa-current-system-users > a.disabled:hover .list-group-item-heading,
+#system-collab .aa-current-system-users > a.disabled:focus .list-group-item-heading {
+  color: inherit;
+}
+#system-collab .aa-current-system-users > a.disabled .list-group-item-text,
+#system-collab .aa-current-system-users > a.disabled:hover .list-group-item-text,
+#system-collab .aa-current-system-users > a.disabled:focus .list-group-item-text {
+  color: #777777;
+}
+#system-collab .aa-current-system-users > a.active,
+#system-collab .aa-current-system-users > a.active:hover,
+#system-collab .aa-current-system-users > a.active:focus {
+  z-index: 2;
+  color: #ffffff;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+#system-collab .aa-current-system-users > a.active .list-group-item-heading,
+#system-collab .aa-current-system-users > a.active:hover .list-group-item-heading,
+#system-collab .aa-current-system-users > a.active:focus .list-group-item-heading,
+#system-collab .aa-current-system-users > a.active .list-group-item-heading > small,
+#system-collab .aa-current-system-users > a.active:hover .list-group-item-heading > small,
+#system-collab .aa-current-system-users > a.active:focus .list-group-item-heading > small,
+#system-collab .aa-current-system-users > a.active .list-group-item-heading > .small,
+#system-collab .aa-current-system-users > a.active:hover .list-group-item-heading > .small,
+#system-collab .aa-current-system-users > a.active:focus .list-group-item-heading > .small {
+  color: inherit;
+}
+#system-collab .aa-current-system-users > a.active .list-group-item-text,
+#system-collab .aa-current-system-users > a.active:hover .list-group-item-text,
+#system-collab .aa-current-system-users > a.active:focus .list-group-item-text {
+  color: #c7ddef;
+}
+#system-collab .aa-current-system-users > a:hover {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+}
+a#system-collab .aa-current-system-users > a:hover,
+button#system-collab .aa-current-system-users > a:hover {
+  color: #8a6d3b;
+}
+a#system-collab .aa-current-system-users > a:hover .list-group-item-heading,
+button#system-collab .aa-current-system-users > a:hover .list-group-item-heading {
+  color: inherit;
+}
+a#system-collab .aa-current-system-users > a:hover:hover,
+button#system-collab .aa-current-system-users > a:hover:hover,
+a#system-collab .aa-current-system-users > a:hover:focus,
+button#system-collab .aa-current-system-users > a:hover:focus {
+  color: #8a6d3b;
+  background-color: #faf2cc;
+}
+a#system-collab .aa-current-system-users > a:hover.active,
+button#system-collab .aa-current-system-users > a:hover.active,
+a#system-collab .aa-current-system-users > a:hover.active:hover,
+button#system-collab .aa-current-system-users > a:hover.active:hover,
+a#system-collab .aa-current-system-users > a:hover.active:focus,
+button#system-collab .aa-current-system-users > a:hover.active:focus {
+  color: #fff;
+  background-color: #8a6d3b;
+  border-color: #8a6d3b;
 }
 /*
 #aa-container{

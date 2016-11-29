@@ -291,7 +291,7 @@ protected function update_class_row($action="edit", $postvs ){
 					$whereArray=array($key => intval($postvs[$key]));
 					break;
 				case 'dual_id':
-					$insertArray[$key] = $whereArray[$key] = intval($postvs[$key]);
+					$insertArray[$key] = $whereArray[$key] = $editArray[$key] = intval($postvs[$key]);
 					break;
 				case 'timestamp':
 					$insertArray[$key]=current_time( 'mysql');
@@ -341,7 +341,10 @@ protected function update_class_row($action="edit", $postvs ){
 				$response['message']=$this->name_single." editado exitosamente.";
 			}
 		}elseif($action == 'delete'){
-			$result = $wpdb->delete($this->tbl_name,$editArray,$whereArray);
+			self::write_log($this->tbl_name);
+			self::write_log($editArray);
+			self::write_log($whereArray);
+			$result = $wpdb->delete($this->tbl_name,$editArray,null);
 			if( $result === false ){
 				$response['status']='error';
 				$response['message']="Hubo un error al eliminar el ".$this->name_single."; intenta nuevamente. :)";

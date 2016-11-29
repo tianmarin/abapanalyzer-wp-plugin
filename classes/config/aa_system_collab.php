@@ -41,13 +41,19 @@ function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
-//	add_action( 'wp_ajax_add_system_collab',		array( $this , 'add_system_collab'			));
-//	add_action( 'wp_ajax_remove_system_collab',		array( $this , 'remove_system_collab'		));
-//	add_action( 'wp_ajax_get_system_collab',		array( $this , 'get_system_collab'			));
-	add_action( 'wp_ajax_aa_get_system_users',		array( $this , 'aa_get_system_users'		));
-	add_action( 'wp_ajax_aa_remove_system_users',	array( $this , 'aa_remove_system_users'		));
-	add_action( 'wp_ajax_aa_add_system_users',		array( $this , 'aa_add_system_users'		));
-	add_action( 'wp_ajax_aa_search_system_users',	array( $this , 'aa_search_system_users'		));
+//	add_action( 'wp_ajax_add_system_collab',			array( $this , 'add_system_collab'			));
+//	add_action( 'wp_ajax_remove_system_collab',			array( $this , 'remove_system_collab'		));
+//	add_action( 'wp_ajax_get_system_collab',			array( $this , 'get_system_collab'			));
+	add_action( 'wp_ajax_aa_get_system_users',			array( $this , 'aa_get_system_users'		));
+	add_action( 'wp_ajax_aa_remove_system_users',		array( $this , 'aa_remove_system_users'		));
+	add_action( 'wp_ajax_aa_add_system_users',			array( $this , 'aa_add_system_users'		));
+	add_action( 'wp_ajax_aa_search_system_users',		array( $this , 'aa_search_system_users'		));
+	add_action( 'wp_ajax_fe_system_collab_get_users',	array( $this , 'fe_system_collab_get_users'	));
+	add_action( 'wp_ajax_fe_search_system_users',		array( $this , 'fe_search_system_users'		));
+	add_action( 'wp_ajax_fe_add_system_users',			array( $this , 'fe_add_system_users'		));
+	add_action( 'wp_ajax_fe_remove_system_users',		array( $this , 'fe_remove_system_users'		));
+	
+	
 }
 /*
 used by system to display wp_table
@@ -148,6 +154,26 @@ public function aa_remove_system_users(){
 	echo json_encode($response);
 	die();
 }
+public function fe_system_collab_get_users(){
+	$response=array();
+	$system_id=$_POST['system_id'];
+	if( intval($system_id)>0 && $system_id!=null ){
+		$users=self::get_users($system_id);
+		global $SYSTEM;
+		$system=$SYSTEM->get_single($system_id);
+		$response['users']=array();
+		foreach($users as $user){
+			$response['users']['user_'.$user]='<a href="#" data-user-id="'.$user.'" data-system-id="'.$system_id.'" title="Eliminar a '.get_userdata($user)->user_email.' como colaborador del sistema: '.$system['sid'].' - '.$system['short_name'].'"><i class="fa fa-user-times fa-fw fa-pull-right"></i> '.get_userdata($user)->user_login.'</a>';
+		}
+		$response['status']='ok';
+		
+	}else{
+		$response['error']=true;
+		$response['message']="Error en la llamada a esta página.";
+	}
+	echo json_encode($response);
+	die();
+}
 public function special_form($id=null){
 	$output='';
 	$output.='<form class="form-horizontal" id="aa-ajax-wp-filter"
@@ -186,6 +212,57 @@ public function special_form($id=null){
 	$output.='</form>';
 	return $output;
 }
+public function fe_search_system_users(){
+	global $SYSTEM;
+	$system_id=$_POST['system_id'];
+	$response=array();
+	$text=$_POST['text'];
+	$current_users=self::get_users($system_id);
+	array_push($current_users,	$SYSTEM->get_single($system_id)['owner_id']);
+	$args = array(
+		'exclude'			=>$current_users,
+		'number'			=>	10,
+		'search'			=> '*'.esc_attr( $text ).'*',
+		'search_columns'	=> array( 'user_login', 'user_email'),
+	);
+	$user_query = new WP_User_Query( $args );
+	$user_list = $user_query->get_results();
+//	$response['todo']=($user_list);
+	$i=0;
+	if ( ! empty( $user_list ) ) {
+		$response['status'] = 'ok';
+		foreach ( $user_list as $user ) {
+			$response['users']['user_'.$user->ID]='<a href="#" data-user-id="'.$user->ID.'" data-system-id="'.$system_id.'" title="Agregar a '.$user->user_login.' a este sistema"><i class="fa fa-user-plus fa-fw fa-pull-right"></i> '.$user->user_email.'</a>';
+			$i++;
+		}
+		$response['elementCount']=$i;
+	} else {
+		$response['error'] = true;
+		$response['message']='<h4 class="list-group-item-heading">No hay elementos</h4>';
+	}
+	echo json_encode($response);
+	die();
+}
+public function fe_add_system_users(){
+	$insert_array=array(
+		'system_id'	=>$_POST['system_id'],
+		'user_id'	=>$_POST['user_id'],
+	);
+	$response=self::update_class_row('add',$insert_array);
+	echo json_encode($response);
+	die();
+}
+public function fe_remove_system_users(){
+	$delete_array=array(
+		'system_id'	=>$_POST['system_id'],
+		'user_id'	=>$_POST['user_id'],
+	);
+	$response=self::update_class_row('delete',$delete_array);
+	echo json_encode($response);
+	die();
+}
+
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //END OF CLASS	
 }

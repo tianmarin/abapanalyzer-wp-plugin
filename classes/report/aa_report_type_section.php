@@ -178,6 +178,7 @@ public function aa_remove_report_type_sections(){
 		'section_id'		=>$_POST['element_id'],
 		'disp_order'	=>$order->disp_order,
 	);
+	self::write_log($delete_array);
 	$response=self::update_class_row('delete',$delete_array);
 	echo json_encode($response);
 	die();

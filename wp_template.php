@@ -38,6 +38,7 @@
 		?>
 	</title>
 	<?php
+	//	echo get_bloginfo('url');
 		function aa_register_frontend_style(){
 			wp_register_style(
 				"aa_client_style",
@@ -82,6 +83,8 @@
 	<![endif]-->
 </head>
 <body class="aa-body">
+	<!-- AJAX Indicator -->
+	<div id="aa-loading"></div>
 <!-- Landing -->
 	<div id="intro" class="hidden">
 
@@ -181,13 +184,12 @@
 			</section>
 			<p class="text-center ">
 				<small>
-				&copy; <strong>ABAP</strong>Analyzer. Diseñado y programado con &lt;3 por: <a href="https://github.com/tianmarin">@cmarin</a>.
+				&copy; <strong>ABAP</strong>Analyzer. Diseñado y programado con &lt;3 por: <a href="https://github.com/tianmarin" target="_blank">@cmarin</a>.
 				</small>
 			</p>
 		</div>		
 	</div>
 	<section id="sdfmon-setup" class="hidden">
-		<a href="#system-list">Volver</a>
 		<div class="sdfmon-setup-calendar"></div>
 		<div class="sdfmon-setup-status">
 			<div></div>
@@ -259,12 +261,8 @@
 		</div>
 	</section>
 	<section id="os-setup" class="hidden">
-		<a href="#">Volver</a>
 	</section>
 	<section id="system-list" class="hidden">
-		<nav>
-			<a href="#intro" class="aaBackButton"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-		</nav>
 		<header>
 			<h1 class="text-center">Sistemas</h1>
 		</header>
@@ -279,27 +277,11 @@
 			</ul>
 		</article>
 	</section>
-	<section id="new-system" class="hidden">
-		<nav>
-			<a href="#system-list" class="aaBackButton"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-		</nav>
-		<?php
-			global $SYSTEM;
-			echo $SYSTEM->fe_system_show_form('add');
-		?>
-	</section>
 	<section id="system-info" class="hidden">
-		<nav>
-			<a href="#system-list" class="aaBackButton"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-		</nav>
 	</section>
 	<section id="load-sdfmon" class="hidden">
-		<nav>
-			<a href="#system-list" class="aaBackButton"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-		</nav>		
 	</section>
 	<section id="report-preview" class="hidden">
-		<a href="#" class="aa-export">Exportar</a>
 		<article>
 			<header><h1>Introducción</h1></header>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum massa massa, vitae mollis dolor sodales at. Donec sapien sapien, congue eget metus id, ornare blandit justo. Aenean volutpat placerat aliquet. Etiam commodo lacus in velit accumsan, sed ornare ipsum tincidunt. Proin purus orci, molestie non bibendum eget, sollicitudin a nisi. Etiam sed sem urna. Curabitur consequat porttitor vestibulum. Suspendisse varius eu elit sed bibendum.</p>
@@ -307,7 +289,36 @@
 		</article>
 		<!-- Cada gráfico llama a una función ajax independiente y asíncrona -->
 	</section>
-	<section id="system-collab" class="hidden">Modificar colaboradores</section>
+	<section id="system-collab" class="hidden">
+		<header class="col-xs-12">
+			<h1>SID</h1>
+			<p class="lead">Descripci&oacute;n</p>
+		</header>
+			<p class="text-justify">Cuando la <em>Opci&oacute;n de Colaboraci&oacute;n</em> est&aacute; habilitada, es posible indicar los usuarios registrados que pueden ingresar informaci&oacute;n relevante para el sistema. De este modo, no solo el due&ntilde;o del sistema puede subir informaci&oacute;n, sino que los usuarios colaboradores pueden ingresar informaci&oacute;n a los DataSuppliers del sistema.</p>
+		<article class="col-xs-12 col-sm-6">
+			<h3>Agregar usuarios</h3>
+			<p class="text-justify">Ingresa el nombre de usuario que quieres buscar.<br/>Una vez que lo identifiques, debes seleccionar el usuario para que se agregue como colaborador de este sistema. </p>
+			<div class="list-group aa-add-user-table">
+				<div class="list-group-item aa-add-user-form">
+					<form class="">
+						<div class="form-group">
+							<div class="input-group">
+								<input type="text" class="form-control " id="exampleInputAmount" placeholder="nombre.apellido">
+								<div class="input-group-addon">@noviscorp.com</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</article>
+		<article class="col-xs-12 col-sm-6">
+			<h3>Usuarios Colaboradores</h3>
+			<p class="text-justify">Los siguientes usuarios son colaboradores de este sistema. Si deseas eliminarlos, sólo debes seleccionar el usuario y desaparecerá de la lista de <em>Usuarios Colaboradores</em></p>
+			<div class="aa-current-system-users list-group">
+			</div>
+		</article>
+				
+	</section>
     <?php wp_footer(); ?>
 </body>
 </html>

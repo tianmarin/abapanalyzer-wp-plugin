@@ -115,6 +115,7 @@ window.aaUploadSdfmonFile=function(event){
 		},
 		error: aaAjaxError,
 	});		
+// END aaUploadSdfmonFile
 };
 /*
 * aaCreateNewSystem
@@ -175,12 +176,107 @@ function aaCreateNewSystem(){
 		type: 'blue',
 	});
 }
-function aaAjaxError(jqXHR, textStatus, errorThrown){
+/*
+* aaCreateNewReport
+*
+* 
+*
+* @author Cristian Marin
+*/
+function aaCreateNewReport(id){
+	var systemId=id;
+	var jc = $.confirm({
+		buttons:{
+			create: {
+				text: 'Crear Reporte',
+				btnClass: 'btn-blue',
+				action: function(){
+					jc.$content.find('form').submit(function(event){
+						$(this).aaSubmitReportForm(event,jc);
+					}).trigger("submit");
+					return false;
+				}
+			},			
+			cancel: {
+				text: 'Cancelar',
+				btnClass: 'btn-default',
+				action: function(){}
+			},			
+		},
+		closeIcon: true,
+		columnClass: 'large',
+		content:function(){
+			var self = this;
+			var data = new FormData();
+			data.append('action', 'fe_report_show_form');
+			data.append('system_id', systemId);
+			return $.ajax({
+				url: ajaxUrl,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				beforeSend: function () {
+				},
+				success: function(response){
+					window.console.log(JSON.stringify(response));
+					if(undefined === response.error){
+						self.setTitle(response.title);
+						self.setContent(response.form);
+					}else{
+						self.setTitle("Error");
+						self.setContent(response.message);
+						self.buttons.create.addClass('hidden');
+					}
+				},
+				error: aaAjaxError,
+			});
+		},
+		type: 'blue',
+	});
+}
+var aaAjaxError = function(jqXHR, textStatus, errorThrown){
+	var msg = '';
+	if (jqXHR.status === 0) {
+		msg = 'Not connect.\n Verify Network.';
+	} else if (jqXHR.status === 404) {
+		msg = 'Requested page not found. [404]';
+	} else if (jqXHR.status === 500) {
+		msg = 'Internal Server Error [500].';
+	} else if (textStatus === 'parsererror') {
+		msg = 'Requested JSON parse failed.';
+	} else if (textStatus === 'timeout') {
+		msg = 'Time out error.';
+	} else if (textStatus === 'abort') {
+		msg = 'Ajax request aborted.';
+	} else {
+		msg = 'Uncaught Error.\n' + jqXHR.responseText;
+	}
 	window.console.log("ERROR: ");
 	window.console.log(jqXHR);
 	window.console.log(textStatus+" - "+errorThrown);
-	$.alert("Error. Contacte a su Adminsitrador.");
-}
+	var text="Este error de conexión con el servidor de fondo, regularmente indica que no has iniciado sesión en Wordpress.<br/>";
+	window.console.log(ajaxUrl);
+	var url = ajaxUrl.replace("admin-ajax.php", "");
+	text=text+"Intenta <strong><a href='"+url+"'>iniciar sesi&oacute;n</a></strong>. En caso que esto no funcione, por favor contacta al adminsitrador.";
+	text=text+"<code>"+msg+"</code>";
+	var title = "Error de conexión as&iacute;ncrona";
+	$.alert({
+		buttons:{
+			heyThere: {
+				text: 'OK',
+				btnClass: 'btn-danger',
+			},
+		},
+		closeIcon: true,
+		columnClass: 'large',
+		content:text,
+		title: title,
+		type:'red',
+	});
+};
 function aaEditSystem(id){
 	var systemId = id;
 	var jc = $.confirm({
@@ -209,6 +305,66 @@ function aaEditSystem(id){
 			data.append('action', 'fe_system_show_form');
 			data.append('form_type', 'edit');
 			data.append('item', systemId);
+			return $.ajax({
+				url: ajaxUrl,
+				type: 'POST',
+				data: data,
+				cache: false,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				beforeSend: function () {
+				},
+				success: function(response){
+					window.console.log(JSON.stringify(response));
+					if(undefined === response.error){
+						self.setTitle(response.title);
+						self.setContent(response.form);
+					}else{
+						self.setTitle("Error");
+						self.setContent(response.message);
+						self.buttons.create.addClass('hidden');
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					window.console.log("ERROR: ");
+					window.console.log(jqXHR);
+					window.console.log(textStatus+" - "+errorThrown);
+					self.setContent("Error. Contacte a su Adminsitrador.");
+				}
+			});
+		},
+		type: 'orange',
+	});
+}
+function aaEditReport(id){
+	var reportId = id;
+	var jc = $.confirm({
+		buttons:{
+			create: {
+				text: 'Editar Reporte',
+				btnClass: 'btn-orange',
+				action: function(){
+					jc.$content.find('form').submit(function(event){
+						$(this).aaSubmitReportForm(event,jc);
+					}).trigger("submit");
+					return false;
+				}
+			},			
+			cancel: {
+				text: 'Cancelar',
+				btnClass: 'btn-default',
+				action: function(){}
+			},			
+		},
+		closeIcon: true,
+		columnClass: 'large',
+		content:function(){
+			var self = this;
+			var data = new FormData();
+			data.append('action', 'fe_report_show_form');
+			data.append('form_type', 'edit');
+			data.append('item', reportId);
 			return $.ajax({
 				url: ajaxUrl,
 				type: 'POST',
@@ -414,7 +570,7 @@ aaLoadContent: function(){
 			break;
 		case '#system-collab':
 			$('body').addClass('on-system');
-			$(this).aaContinueLoadContent();
+			$(this).ajaxSystemCollab();
 			break;
 		default:
 		$('body').removeClass('on-system');
@@ -447,12 +603,15 @@ aaContinueLoadContent: function(){
 	}
 	var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 	active.addClass('animated fadeOutLeft');
-	active.one(animationEnd, function() {
-		window.console.log("Switch active Section");
-		$(this).aaTurnOff().removeClass('animated fadeOutLeft');
-		window.console.log($(this).attr('id')+" es el activo");
-		window.console.log(href.attr('id')+" es el nuevo");
-		href.aaTurnOn().aaAnimateCss('fadeInRight');
+	active.one(animationEnd, function(e) {
+		//Prevent child animation trigger action
+		if (e.target === this){
+			window.console.log("Switch active Section");
+			$(this).aaTurnOff().removeClass('animated fadeOutLeft');
+			window.console.log($(this).attr('id')+" es el activo");
+			window.console.log(href.attr('id')+" es el nuevo");
+			href.aaTurnOn().aaAnimateCss('fadeInRight');
+		}
 	});
 	return this;
 },
@@ -473,6 +632,7 @@ ajaxSystemList: function(){
    		success: function(response){
 //			window.console.log(JSON.stringify(response));
 			$('#system-list ul.list-group').html('');
+			var c=0;
 			if(response.elementCount>0){
 				$.each(response.data,function(i,val){
 					var systemText = $( val );
@@ -480,11 +640,188 @@ ajaxSystemList: function(){
 						event.preventDefault();
 						aaEditSystem($(this).data('system-id'));
 					});
+					var delay=(c++ *100)+'ms';
+					systemText.css('-webkit-animation-delay', delay)
+						.css('animation-delay', delay)
+						.aaAnimateCss('flipInX');
 					$('#system-list ul.list-group').append(systemText);
 				});
 			}
 			section.aaContinueLoadContent();
 		},
+		error: aaAjaxError,
+	});
+	return this;
+},
+ajaxSystemCollabSearchUsers: function(){
+	var target=$('#system-collab .aa-add-user-table');
+	var text=$(this).val();
+	var data = new FormData();
+	var href=window.location.hash.split('/');
+	var systemId=href[1];
+	data.append('action', 'fe_search_system_users');
+	data.append('system_id', systemId);
+	data.append('text', text);
+	$.ajax({
+		url: ajaxUrl,
+		type: 'POST',
+		data: data,
+		cache: false,
+		dataType: 'json',
+		processData: false,
+		contentType: false,
+		beforeSend: function () {
+		},
+   		success: function(response){
+			window.console.log(JSON.stringify(response));
+			target.find('a').remove();
+	   		if( undefined === response.error){
+				$.each(response.users, function( i, val ) {
+					var user=$(val);
+					user.click(function(event){
+						event.preventDefault();
+						$(this).ajaxAddSystemUser();
+					});
+			   		target.append(user);
+		   		});
+	   		}else{
+		   		$.alert(response.message,"Error");
+	   		}
+   		},
+		error: aaAjaxError,
+	});
+	return this;
+},
+ajaxAddSystemUser:function(){
+	var user=$(this);
+	var data = new FormData();
+	data.append('action', 'fe_add_system_users');
+	data.append('system_id', $(this).data('system-id'));
+	data.append('user_id', $(this).data('user-id'));
+	$.ajax({
+		url: ajaxUrl,
+		type: 'POST',
+		data: data,
+		cache: false,
+		dataType: 'json',
+		processData: false,
+		contentType: false,
+		beforeSend: function () {
+		},
+   		success: function(response){
+//			window.console.log(JSON.stringify(response));
+	   		if( undefined === response.error){
+		   		$('#system-collab').ajaxSystemCollabCurrentUsers();
+		   		user.remove();
+	   		}else{
+		   		$.alert(response.message,"Error");
+	   		}
+   		},
+		error: aaAjaxError,
+	});
+	return this;	
+},
+ajaxRemoveSystemUser:function(){
+	var user=$(this);
+	var data = new FormData();
+	data.append('action', 'fe_remove_system_users');
+	data.append('system_id', $(this).data('system-id'));
+	data.append('user_id', $(this).data('user-id'));
+	$.ajax({
+		url: ajaxUrl,
+		type: 'POST',
+		data: data,
+		cache: false,
+		dataType: 'json',
+		processData: false,
+		contentType: false,
+		beforeSend: function () {
+		},
+   		success: function(response){
+//			window.console.log(JSON.stringify(response));
+	   		if( undefined === response.error){
+		   		user.remove();
+		   		$('#system-collab').ajaxSystemCollabCurrentUsers();
+	   		}else{
+		   		$.alert(response.message,"Error");
+	   		}
+   		},
+		error: aaAjaxError,
+	});
+	return this;	
+},
+ajaxSystemCollab:function(){
+	//Get system info
+	var section = $(this);
+	var data = new FormData();
+	var href=window.location.hash.split('/');
+	var systemId=href[1];
+	data.append('action', 'fe_quick_system_info');
+	data.append('system_id', systemId);
+	$.ajax({
+		url: ajaxUrl,
+		type: 'POST',
+		data: data,
+		cache: false,
+		dataType: 'json',
+		processData: false,
+		contentType: false,
+		beforeSend: function () {
+		},
+   		success: function(response){
+//			window.console.log(JSON.stringify(response));
+	   		if( undefined === response.error){
+		   		section.find('header').html(response.header);
+	   		}else{
+		   		$.alert("Error");
+	   		}
+   		},
+		error: aaAjaxError,
+	});
+	section.find('form input').on("input",function(){
+		window.console.log($(this).val());
+		$(this).ajaxSystemCollabSearchUsers();
+	});
+	section.ajaxSystemCollabCurrentUsers();
+	section.aaContinueLoadContent();
+	return this;
+},
+ajaxSystemCollabCurrentUsers:function(){
+	var currentUsers = $(this).find('.aa-current-system-users');
+	var data = new FormData();
+	var href=window.location.hash.split('/');
+	var systemId=href[1];
+	data.append('action', 'fe_system_collab_get_users');
+	data.append('system_id', systemId);
+	$.ajax({
+		url: ajaxUrl,
+		type: 'POST',
+		data: data,
+		cache: false,
+		dataType: 'json',
+		processData: false,
+		contentType: false,
+		beforeSend: function () {
+		},
+   		success: function(response){
+	   		window.console.log('ajaxSystemCollabCurrentUsers');
+			window.console.log(JSON.stringify(response));
+	   		if( undefined === response.error){
+		   		currentUsers.html('');
+		   		if(undefined !== response.users && response.users.length !== 0){
+					$.each(response.users, function( i, val ) {
+						var user=$(val);
+						user.click(function(event){
+							event.preventDefault();
+							$(this).ajaxRemoveSystemUser();
+						});
+				   		currentUsers.append(user);
+			   		});
+		   		}
+	   		}else{
+		   		$.alert(response.message,"Error");
+	   		}
+   		},
 		error: aaAjaxError,
 	});
 	return this;
@@ -511,7 +848,16 @@ ajaxSystemInfo: function(){
 //			window.console.log(JSON.stringify(response));
 			$('#system-info').html('');
 			if(response.status === 'ok'){
-				$('#system-info').append(response.systemInfo);
+				var systemText = $(response.systemInfo);
+				systemText.find('a[data-function="report-edit"]').click(function(event){
+					event.preventDefault();
+					aaEditReport($(this).data('report-id'));
+				});
+				systemText.find('#new-report-button').click(function(event){
+					event.preventDefault();
+					aaCreateNewReport($(this).data('system-id'));
+				});
+				$('#system-info').append(systemText);
 				section.aaContinueLoadContent();
 			}
 		},
@@ -659,6 +1005,7 @@ ajaxReportPreview: function(){
    		success: function(response){
 //			window.console.log(JSON.stringify(response));
 			if(response.error === undefined){
+				report.html('');
 				$.each(response.sections,function(i,aaSection){
 					var reportSection=$('<article></article>');
 					
@@ -712,6 +1059,7 @@ aaBuildChart: function(chartId){
 			window.console.log(JSON.stringify(response));
 	   		if(undefined === response.error){
 				var chart						=new AmCharts.AmSerialChart();
+//				chart.baseHref					=true;
 				//chart.addClassNames			=true;
 				//chart.balloonDateFormat			="YYYY-MM-DD";
 				//chart.bezierX					=12;
@@ -850,9 +1198,10 @@ aaBuildChart: function(chartId){
 				chart.addValueAxis(valueAxis);
 
 				chart.validateData();
-				chart.invalidateSize();
 //				window.console.log(chart);
 				chart.write(chartContainer.attr('id'));
+				//chart.invalidateSize();
+				chart.handleResize();
 				chartContainer.removeClass('loading').aaAnimateAndStopCss('fadeIn');
 	   		}
 		},
@@ -918,6 +1267,64 @@ aaSubmitSystemForm: function(event,jcElement){
 	}
 	return true;
 },
+aaSubmitReportForm: function(event,jcElement){
+	var jc = jcElement;
+	event.preventDefault();
+	var valid = true;
+	//validation
+	$(this).find("input[type!='hidden']").each(function(){
+		if( $(this).val().length < 1  ){
+			valid=false;
+			$(this).parent().addClass('has-error');
+		}else{
+			$(this).parent().removeClass('has-error');
+		}
+	});
+	$(this).find("select").each(function(){
+		if( $(this).val() < 1  ){
+			valid=false;
+			$(this).parent().addClass('has-error');
+		}else{
+			$(this).parent().removeClass('has-error');
+		}
+	});
+	if(valid === true){
+		var data = new FormData();
+		//Por cada input o select append
+		data.append('action', 'fe_create_report');
+		$(this).find("input, select").each(function(){
+			data.append($(this).attr('name'),$(this).val());
+		});
+		$.ajax({
+			url: ajaxUrl,
+			type: 'POST',
+			data: data,
+			cache: false,
+			dataType: 'json',
+			processData: false,
+			contentType: false,
+			beforeSend: function () {
+			},
+			success: function(response){
+				jc.close();
+//				window.console.log(JSON.stringify(response));
+				if(undefined === response.error){
+					$('#system-info').ajaxSystemInfo();
+					$.alert(response.message);
+				}else{
+					$.alert(response.message);
+				}
+			},
+		error: aaAjaxError,
+		});
+		window.console.log("Validado");
+		return true;
+	}else{
+		window.console.log("No Validado");
+		return false;
+	}
+	return true;
+},
 
 });
 
@@ -946,6 +1353,14 @@ if ($('#intro-nav').length > 0) {
 		$(this).aaNavbarActiveSection();
 	});
 }
+$(document).on({
+	ajaxStart	: function() {
+		$('#aa-loading').addClass("aa-fe-loading");
+	},
+	ajaxStop	: function() {
+		$('#aa-loading').removeClass("aa-fe-loading");
+	}
+});
 
 /*$("body").delegate("a", "click", function(){
 	// Push this URL "state" onto the history hash.
@@ -1052,178 +1467,6 @@ AmCharts.makeChart("chartdiv", {
 		"parseDates": true
 	},
 });
-
-/*
-$("body").delegate("a", "click", function(event){
-	if( $(this).data('changescreen') !== undefined ){
-		window.console.log($(this));
-		event.preventDefault();
-	}else{
-		return true;
-	}
-});
-
-
-
-$('#aa-start h2').scrollex({
-	mode: 'middle',
-	bottom: '-20vh',
-	enter: function() {
-	// Activate section.
-		$(this).aaAnimateAndStopCss('fadeInLeft');
-	}
-});
-
-	// Scrolly.
-//	$('.scrolly').scrolly({
-//		speed: 1000
-//	});
-
-$('#intro-skip a').click(function(event){
-	event.preventDefault();
-	$('body').aaChangeLocalScreen($('#aa-start'),$('#aa-container'),'system');
-});
-
-
-$.fn.extend({
-	aaChangeAjaxScreen: function(html,script,uri,pop){
-		var container		=$(this);
-		var sourceHtml		=html;
-		var sourceScript	=script;
-		var browserNav		=uri;
-		var popState		=pop;
-		$.ajax({
-			url: aaUrl+sourceHtml,
-			cache: false,
-			dataType: "html",
-			success:function(htmlResponse){
-				window.console.log("HTML "+aaUrl+sourceHtml+" cargado");
-				//changePage();
-				container.fadeOut(200,function(){
-					$(this).html(htmlResponse);
-					$(this).fadeIn(200);
-				});
-				if(typeof browserNav !== undefined && popState === undefined){
-					history.pushState({id:browserNav,container:container.selector,html:sourceHtml}, null, '#'+browserNav);
-					window.console.log("pushState: "+browserNav);
-				}
-				if(sourceScript !== ''){
-					$.getScript(aaUrl+sourceScript)
-					.done(function() {
-						window.console.log("Script "+aaUrl+sourceScript+" cargado");
-					});
-				}
-			},
-			error:function(){
-				window.console.log("HTML perdido: "+aaUrl+html);
-				$.alert("Ha ocurrido un error. Informe al adminsitrador.");
-			}
-		});
-	},
-	aaChangeLocalScreen: function(elementOut,elementIn,uri,pop){
-		var container		=$(this);
-		var browserNav		=uri;
-		var popState		=pop;
-		elementOut=$(elementOut);
-		elementIn=$(elementIn);
-		elementOut.fadeOut(400,function(){
-			elementIn.fadeIn(400,function(){
-				if(typeof browserNav !== undefined && popState === undefined){
-					var state = {
-						uri:browserNav,
-						container:container.selector,
-						changeType:'local',
-						elOut:elementOut.selector,
-						elIn:elementIn.selector,
-					};
-					history.pushState(state, null, '#'+browserNav);
-				}
-
-			}).removeClass('hidden');
-		});
-	}
-});
-//Initializate the Browser States
-history.pushState({
-	uri:'intro',
-	container:'body',
-	changeType:'local',
-	elOut:'#aa-container',
-	elIn:'#aa-start',
-}, null, '#intro');
-
-//------------------------------------------------------------------------------
-/**
-* Realiza las cargas de páginas asociadas a los eventos del navegador
-*
-* @author Cristian Marin
-*/
-/*
-window.addEventListener('popstate', function(e) {
-	var state = e.state;
-	if( null !== (typeof state) ){
-		if(state.changeType === 'local' ){
-			$(state.container).aaChangeLocalScreen(state.elOut , state.elIn , state.uri , "pop");
-		}
-	}
-});
-//------------------------------------------------------------------------------
-/**
-* aaCreateSystem
-*
-* Solcita via AJAX la creación de un sistema.
-* Para su creación se requiere: 
-* - sid
-* - short_name
-* - Opción de Colaboración
-*
-* Si existe otro sid igual, se notifica al usuario pidiendo confirmar (todo el
-* texto debe venir del backend).
-*
-* @author Cristian Marin
-*/
-
-//------------------------------------------------------------------------------
-/**
-* aaListSystems
-*
-* Obtiene vía AJAX el listado de sistemas .
-*
-* @author Cristian Marin
-*/
-
-//------------------------------------------------------------------------------
-/**
-* aaListSystems
-*
-* Obtiene vía AJAX el listado de sistemas .
-*
-* @author Cristian Marin
-
-Get hash brom browser
-Get variable from uri
-
-#intro				&	none
-#systemList			&	none
-	list systems
-	create system
-#editSystem			&	systemId
-#system				&	systemId
-	list reports
-	system details
-	create report
-#loadSdfMon			&	systemId
-	load sdfmon file
-	remove sdfmon file
-	overwrite sdfmon file
-#report				&	reportId
-	Lshow report statistics
-#editReport			&	reportId
-#preview			&	reportId
-
-
-
-*/
 
 });
 
