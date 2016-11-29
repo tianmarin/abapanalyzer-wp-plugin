@@ -599,7 +599,7 @@ public function fe_system_show_form(
 	if(isset($_POST['action'])){
 		$response=array();
 		$response['title']="Crear nuevo Sistema";
-		$response['element']=$element;
+		$response['element']=( isset($element) && $element!=null )?$element:null;
 		$response['form']=$output;
 		$response['status']='ok';
 		echo json_encode($response);
