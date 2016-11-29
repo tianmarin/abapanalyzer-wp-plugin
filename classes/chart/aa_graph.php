@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class GRAPH_CLASS extends AA_CLASS{
+class AA_GRAPH_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -232,6 +232,5 @@ protected function sp_form_graph_color_id(){
 }
 
 global $GRAPH;
-$GRAPH =new GRAPH_CLASS();
-//add_action( 'admin_notices', array( $SYSTEM, 'db_install_error')  );
+$GRAPH =new AA_GRAPH_CLASS();
 ?>

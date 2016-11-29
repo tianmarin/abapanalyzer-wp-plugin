@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class REPORT_TYPE_CLASS extends AA_CLASS{
+class AA_REPORT_TYPE_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -130,6 +130,6 @@ protected function report_type_section(){
 }
 
 global $REPORT_TYPE;
-$REPORT_TYPE =new REPORT_TYPE_CLASS();
+$REPORT_TYPE =new AA_REPORT_TYPE_CLASS();
 
 ?>

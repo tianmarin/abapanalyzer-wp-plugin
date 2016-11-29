@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SECTION_CHART_CLASS extends AA_CLASS{
+class AA_SECTION_CHART_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -242,5 +242,5 @@ public function special_form($id=null){
 }
 
 global $SECTION_CHART;
-$SECTION_CHART =new SECTION_CHART_CLASS();
+$SECTION_CHART =new AA_SECTION_CHART_CLASS();
 ?>

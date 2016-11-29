@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class GRAPH_TYPE_CLASS extends AA_CLASS{
+class AA_GRAPH_TYPE_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -82,5 +82,5 @@ public function db_install_data(){
 }
 
 global $GRAPH_TYPE;
-$GRAPH_TYPE =new GRAPH_TYPE_CLASS();
+$GRAPH_TYPE =new AA_GRAPH_TYPE_CLASS();
 ?>

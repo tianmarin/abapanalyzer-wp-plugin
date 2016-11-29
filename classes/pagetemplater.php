@@ -1,5 +1,5 @@
 <?php
-	class PageTemplater {
+	class AA_PageTemplater {
 
 		/**
          * A Unique Identifier
@@ -23,7 +23,7 @@
         public static function get_instance() {
 
                 if( null == self::$instance ) {
-                        self::$instance = new PageTemplater();
+                        self::$instance = new AA_PageTemplater();
                 } 
 
                 return self::$instance;
@@ -133,5 +133,5 @@
 
 } 
 
-add_action( 'plugins_loaded', array( 'PageTemplater', 'get_instance' ) );
+add_action( 'plugins_loaded', array( 'AA_PageTemplater', 'get_instance' ) );
 ?>

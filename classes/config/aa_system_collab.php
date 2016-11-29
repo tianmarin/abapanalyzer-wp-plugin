@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SYSTEM_COLLAB_CLASS extends AA_CLASS{
+class AA_SYSTEM_COLLAB_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -268,5 +268,5 @@ public function fe_remove_system_users(){
 }
 
 global $SYSTEM_COLLAB;
-$SYSTEM_COLLAB =new SYSTEM_COLLAB_CLASS();
+$SYSTEM_COLLAB =new AA_SYSTEM_COLLAB_CLASS();
 ?>

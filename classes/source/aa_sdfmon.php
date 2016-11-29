@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SDFMON_CLASS extends AA_CLASS{
+class AA_SDFMON_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -570,9 +570,6 @@ protected function check_similarity($first,$second){
 }
 
 global $SDFMON;
-$SDFMON =new SDFMON_CLASS();
+$SDFMON =new AA_SDFMON_CLASS();
 
-
-
-//add_action( 'admin_notices', array( $SDFMON, 'db_install_error')  );
 ?>

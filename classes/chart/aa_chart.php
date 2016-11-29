@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class CHART_CLASS extends AA_CLASS{
+class AA_CHART_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -397,6 +397,5 @@ public function fe_build_chart(){
 }
 
 global $CHART;
-$CHART =new CHART_CLASS();
-//add_action( 'admin_notices', array( $SYSTEM, 'db_install_error')  );
+$CHART =new AA_CHART_CLASS();
 ?>

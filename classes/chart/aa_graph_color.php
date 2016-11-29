@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class GRAPH_COLOR_CLASS extends AA_CLASS{
+class AA_GRAPH_COLOR_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -83,5 +83,5 @@ public function db_install_data(){
 }
 
 global $GRAPH_COLOR;
-$GRAPH_COLOR =new GRAPH_COLOR_CLASS();
+$GRAPH_COLOR =new AA_GRAPH_COLOR_CLASS();
 ?>

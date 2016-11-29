@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class COLLAB_OPT_CLASS extends AA_CLASS{
+class AA_COLLAB_OPT_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -147,5 +147,5 @@ public function db_install_data(){
 }
 
 global $COLLAB_OPT;
-$COLLAB_OPT =new COLLAB_OPT_CLASS();
+$COLLAB_OPT =new AA_COLLAB_OPT_CLASS();
 ?>

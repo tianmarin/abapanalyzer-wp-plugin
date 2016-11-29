@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class CHART_STACK_CLASS extends AA_CLASS{
+class AA_CHART_STACK_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -75,5 +75,5 @@ public function db_install_data(){
 }
 
 global $CHART_STACK;
-$CHART_STACK =new CHART_STACK_CLASS();
+$CHART_STACK =new AA_CHART_STACK_CLASS();
 ?>

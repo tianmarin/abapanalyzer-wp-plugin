@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class ASSET_CLASS extends AA_CLASS{
+class AA_ASSET_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -333,6 +333,5 @@ public function db_install_data(){
 }
 
 global $ASSET;
-$ASSET =new ASSET_CLASS();
-//add_action( 'admin_notices', array( $SYSTEM, 'db_install_error')  );
+$ASSET =new AA_ASSET_CLASS();
 ?>

@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class CHART_GRAPH_CLASS extends AA_CLASS{
+class AA_CHART_GRAPH_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -352,5 +352,5 @@ public function special_form($id=null){
 }
 
 global $CHART_GRAPH;
-$CHART_GRAPH =new CHART_GRAPH_CLASS();
+$CHART_GRAPH =new AA_CHART_GRAPH_CLASS();
 ?>

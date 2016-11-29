@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class REPORT_TYPE_SECTION_CLASS extends AA_CLASS{
+class AA_REPORT_TYPE_SECTION_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -245,5 +245,5 @@ public function special_form($id=null){
 }
 
 global $REPORT_TYPE_SECTION;
-$REPORT_TYPE_SECTION =new REPORT_TYPE_SECTION_CLASS();
+$REPORT_TYPE_SECTION =new AA_REPORT_TYPE_SECTION_CLASS();
 ?>

@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SECTION_CLASS extends AA_CLASS{
+class AA_SECTION_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -155,6 +155,6 @@ protected function section_chart(){
 }
 
 global $SECTION;
-$SECTION =new SECTION_CLASS();
+$SECTION =new AA_SECTION_CLASS();
 
 ?>

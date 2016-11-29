@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class TIME_GROUP_CLASS extends AA_CLASS{
+class AA_TIME_GROUP_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -91,5 +91,5 @@ public function db_install_data(){
 }
 
 global $TIME_GROUP;
-$TIME_GROUP =new TIME_GROUP_CLASS();
+$TIME_GROUP =new AA_TIME_GROUP_CLASS();
 ?>

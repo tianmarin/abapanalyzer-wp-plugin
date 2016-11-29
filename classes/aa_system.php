@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SYSTEM_CLASS extends AA_CLASS{
+class AA_SYSTEM_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -650,7 +650,7 @@ public function fe_create_system(){
 }
 
 global $SYSTEM;
-$SYSTEM =new SYSTEM_CLASS();
+$SYSTEM =new AA_SYSTEM_CLASS();
 
 
 
