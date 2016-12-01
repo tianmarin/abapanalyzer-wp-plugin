@@ -97,6 +97,7 @@ public function __construct(){
 			'type'			=>'text',
 			'required'		=>true,
 			'maxchar'		=>40,
+			'in_form'		=>true,
 			'desc'			=>'T&iacute;tulo',
 			'form-help'		=>'El t&iacute;tulo será desplegado en el gráfico despues del SID.<br/>Tamaño m&aacute;ximo: 40 caracteres.',
 			'in_wp_table'	=>true,
@@ -218,7 +219,7 @@ protected function sp_wp_table_graph($value=null,$id=null){
 	$graphs=$CHART_GRAPH->get_graphs($id);
 	$response ='';
 	$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_graph',"item"=>$id)));
-	$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+	$URL=htmlspecialchars('?'.$QS);
 	$response.='<a href="'.$URL.'" class="">Modificar</a>';
 	$response.='';
 	$response.='<br/><small>('.sizeof($graphs).' gr&aacute;ficas)</small></div>';

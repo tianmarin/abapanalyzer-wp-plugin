@@ -182,7 +182,7 @@ protected function sp_wp_table_collab_opt_id($opt,$id){
 		//some
 		$response ='<div class="text-center"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>';
 		$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_collab',"item"=>$id)));
-		$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+		$URL=htmlspecialchars('?'.$QS);
 		$response.='<a href="'.$URL.'" class="">Modificar</a>';
 		$response.='';
 		$response.='<br/><small>('.sizeof($collab).' colaboradores)</small></div>';
@@ -391,7 +391,8 @@ public function fe_quick_system_info(){
 		$response['message']="No hay identificador de Systema";
 	}else{
 		$response['system']=self::get_single($system_id);
-		array_push($response['system']['user'], get_user_by('id',$system_id['owner_id']));
+		$response['system']['user']=array();
+		array_push($response['system']['user'], get_user_by('id',$response['system']['owner_id']));
 		$response['status']='ok';
 		$response['header']='<header class="col-xs-12"><h1>'.$response['system']['sid'].'</h1><p class="lead">'.$response['system']['short_name'].'</p></header>';
 	}

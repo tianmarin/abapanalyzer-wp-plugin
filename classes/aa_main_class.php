@@ -174,7 +174,7 @@ public function bluid_submenu_page(){
 					"action"		=>'add',
 					'actioncode' 	=> wp_create_nonce("add"),
 					)));
-			$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+			$URL=htmlspecialchars('?'.$QS);
 
 //			$link.='?page='.$this->menu_slug.'&action=add&actioncode='.wp_create_nonce($element['id']."add");
 			$link=$URL;
@@ -288,7 +288,9 @@ protected function update_class_row($action="edit", $postvs ){
 			switch($db_field['type']){
 				case 'id':
 					$insertArray[$key]='';
-					$whereArray=array($key => intval($postvs[$key]));
+					if( isset($postvs[$key]) ){
+						$whereArray=array($key => intval($postvs[$key]));
+					}
 					break;
 				case 'dual_id':
 					$insertArray[$key] = $whereArray[$key] = $editArray[$key] = intval($postvs[$key]);
@@ -511,16 +513,16 @@ protected function select_rows($elem_per_page = 10){
 			$nav.='<ul class="pagination">';
 				$prev=($current_page-1 > 1)?$current_page-1 : 1;
 				$QS = http_build_query(array_merge($_GET, array("pageno"=>$prev)));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$nav.='<li class="'.($current_page==1 ? 'disabled' : '').'"><a href="'.$URL.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
 				for($i=1; $i <= $total_pages ; $i++){
 					$QS = http_build_query(array_merge($_GET, array("pageno"=>$i)));
-					$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 					$nav.='<li class="'.($current_page == $i ? 'active' : '').'"><a href="'.$URL.'">'.$i.'<span class="sr-only">(current)</span></a></li>';
 				}
 				$post=($current_page+1 < $total_pages)?$current_page+1 : $total_pages;
 				$QS = http_build_query(array_merge($_GET, array("pageno"=>$post)));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$nav.='<li class="'.($total_pages==$current_page ? 'disabled' : '') .'"><a href="'.$URL.'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
 			$nav.='</ul>';
 		$nav.='</nav>';
@@ -668,7 +670,6 @@ protected function show_form(
 										'.$placeholder.'
 										'.$required.'
 										'.$value.'
-										maxlength="'.$field['maxchar'].'"
 										/>';
 						break;
 					case 'text':
@@ -680,7 +681,6 @@ protected function show_form(
 										'.$placeholder.'
 										'.$required.'
 										'.$value.'
-										maxlength="'.$field['maxchar'].'"
 										/>';
 						break;
 					case 'textarea':
@@ -785,7 +785,7 @@ protected function show_form(
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-default">Cancelar</a>';
 				$msg=($type=="add")?"Agregar":"Editar";
 				$output.='<button type="submit" class="btn btn-primary">'.$msg.'</button>';

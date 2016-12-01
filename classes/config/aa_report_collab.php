@@ -175,7 +175,7 @@ public function special_form($id=null){
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-primary">Terminar</a>';
 			$output.='</div>';
 		$output.='</div>';

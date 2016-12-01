@@ -1,5 +1,6 @@
 /*global aaServerData*/
 /*global AmCharts*/
+/*global __gaTracker*/
 jQuery(document).ready(function($){
 
 //------------------------------------------------------------------------------
@@ -8,6 +9,7 @@ jQuery(document).ready(function($){
 */
 //var aaUrl		=aaServerData.aaUrl;
 var ajaxUrl		=aaServerData.ajaxUrl;
+var userId		=aaServerData.userId;
 //------------------------------------------------------------------------------
 /*
 * aaUploadSdfmonFile
@@ -109,6 +111,7 @@ window.aaUploadSdfmonFile=function(event){
 				statusMsg.html(finished+" "+inputDay+'/'+inputMonth+'/'+inputYear+' &iexcl;Informaci&oacute;n cargada exitosamente!').delay(5000).fadeOut(1000);
 				window.console.log('OK: Carga de '+file.name);
 				$('#sdfmon-setup .sdfmon-setup-calendar').aaActivateSdfmonCalendar();
+				gaTrack('sdfmon-file-upload.html', 'Snapshot Monitoring Load File');
 			}else{
 				window.console.log('ERROR: Carga de '+file.name+'('+response.error+')');
 			}
@@ -117,6 +120,51 @@ window.aaUploadSdfmonFile=function(event){
 	});		
 // END aaUploadSdfmonFile
 };
+//http://www.marcusoft.net/2015/05/how-to-get-google-analytics-to-work-for-your-single-page-application.html
+function gaInit() {
+//	$.getScript('//www.google-analytics.com/analytics.js'); // jQuery shortcut
+//	window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments); }; ga.l = +new Date();
+/**
+* Creates a temporary global ga object and loads analy  tics.js.
+* Paramenters o, a, and m are all used internally.  They could have been declared using 'var',
+* instead they are declared as parameters to save 4 bytes ('var ').
+*
+* @param {Window}      i The global context object.
+* @param {Document}    s The DOM document object.
+* @param {string}      o Must be 'script'.
+* @param {string}      g URL of the analytics.js script. Inherits protocol from page.
+* @param {string}      r Global name of analytics object.  Defaults to 'ga'.
+* @param {DOMElement?} a Async script tag.
+* @param {DOMElement?} m First script tag in document.
+*/
+	(function(i, s, o, g, r, a, m){
+		i.GoogleAnalyticsObject = r; // Acts as a pointer to support renaming.
+		// Creates an initial ga() function.  The queued commands will be executed once analytics.js loads.
+		i[r] = i[r] || function() {
+			(i[r].q = i[r].q || []).push(arguments);
+		};
+		// Sets the time (as an integer) this tag was executed.  Used for timing hits.
+		i[r].l = 1 * new Date();
+		// Insert the script tag asynchronously.  Inserts above current tag to prevent blocking in
+		// addition to using the async attribute.
+		a = s.createElement(o);
+		m = s.getElementsByTagName(o)[0];
+		a.async = 1;
+		a.src = g;
+		m.parentNode.insertBefore(a, m);
+	})(window, document, 'script', '//www.google-analytics.com/analytics.js', '__gaTracker');
+	__gaTracker('create', 'UA-1655231-20', 'auto');
+	window.console.log("GA - Initalized");
+	return __gaTracker;
+}
+function gaTrack(path, title) {
+	var track =  { page: path, title: title};
+	var __gaTracker = window.__gaTracker || gaInit();
+	__gaTracker('set', track);
+	__gaTracker('set', 'userId', userId); // Set the user ID using signed-in user_id.
+	__gaTracker('send', 'pageview');
+	window.console.log("GA - Tracked: "+path+" | User: "+userId);
+}
 /*
 * aaCreateNewSystem
 *
@@ -125,6 +173,7 @@ window.aaUploadSdfmonFile=function(event){
 * @author Cristian Marin
 */
 function aaCreateNewSystem(){
+	gaTrack('new-system.html', 'New System');
 	var jc = $.confirm({
 		buttons:{
 			create: {
@@ -184,6 +233,7 @@ function aaCreateNewSystem(){
 * @author Cristian Marin
 */
 function aaCreateNewReport(id){
+	gaTrack('new-report.html', 'New Report');
 	var systemId=id;
 	var jc = $.confirm({
 		buttons:{
@@ -537,6 +587,7 @@ aaNavbarActiveSection: function () {
 aaLoadContent: function(){
 	if($(this).length < 1 || !$(this).parent().is('body')){
 		window.location.hash="#intro";
+		gaTrack('404.html', '404');
 		return this;
 	}
 	var href = $(this).selector;
@@ -546,32 +597,44 @@ aaLoadContent: function(){
 	switch(href){
 		case '#system-list':
 			$(this).ajaxSystemList();
+			gaTrack('system-list.html', 'System List');
 			$('body').addClass('on-system');
 			break;
 		case '#new-system':
 			$('body').addClass('on-system');
+			gaTrack('new-system.html', 'New System');
 			$(this).aaContinueLoadContent();
 			break;
 		case '#system-info':
 			$(this).ajaxSystemInfo();
+			gaTrack('system-info.html', 'System Info');
 			$('body').addClass('on-system');
 			break;
 		case '#sdfmon-setup':
 			$(this).ajaxSdfmonSetup();
+			gaTrack('sdfmon-setup.html', 'Snapshot MonitoringSetup');
 			$('body').addClass('on-system');
 			break;
 		case '#edit-report':
 			$('body').addClass('on-system');
+			gaTrack('edit-report.html', 'Edit Report');
 			$(this).aaContinueLoadContent();
 			break;
 		case '#report-preview':
 			$('body').addClass('on-system');
+			gaTrack('report-preview.html', 'Report Preview');
 			$(this).ajaxReportPreview();
 			break;
 		case '#system-collab':
 			$('body').addClass('on-system');
+			gaTrack('system-collab.html', 'System Collab');
 			$(this).ajaxSystemCollab();
 			break;
+		case '#sdfmon-instructions':
+			gaTrack('sdfmon-instructions.html', 'Snapshot Monitoring Instructions');
+			$('body').removeClass('on-system');
+			$(this).aaContinueLoadContent();
+			break;		
 		default:
 		$('body').removeClass('on-system');
 		$(this).aaContinueLoadContent();
@@ -591,6 +654,9 @@ aaContinueLoadContent: function(){
 	var href = $(this);
 	var active = $('body > .active');
 	var activeRef = '#'+active.attr('id');
+//	if( href.selector === '#intro'){
+//		gaTrack('intro.html', 'Intro');
+//	}
 	window.console.log( activeRef+' -> '+href.selector);
 	window.console.log("activos :"+active.length);
 	if( href.selector === activeRef ){
@@ -1392,6 +1458,7 @@ $(window).bind( "hashchange", function() {
 });
 if( window.location.hash === '' ){
 	window.location.hash="#intro";
+	gaTrack('intro.html', 'Intro');
 	window.console.log('default hash evaluation');
 }else{
 	$(window).trigger( "hashchange" ); // user refreshed the browser, fire the appropriate function

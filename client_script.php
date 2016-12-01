@@ -88,7 +88,8 @@ function aa_client_handle_shortcode($atts){
 		'aaServerData',
 		array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'aaUrl' => plugins_url('',__FILE__).'/'
+			'aaUrl' => plugins_url('',__FILE__).'/',
+			'userId' => wp_get_current_user()->user_login
 		)
 	);
 }

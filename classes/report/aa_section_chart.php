@@ -133,7 +133,7 @@ public function aa_get_section_charts(){
 				(".$this->tbl_name." as a RIGHT JOIN ".$CHART->tbl_name." as b ON a.chart_id=b.id)
 			WHERE ";
 		$sql.="b.id IN (".implode(',', array_map('intval', $chart_ids)).") ";
-		$sql.=" ORDER BY a.disp_order ASC LIMIT 10";
+		$sql.=" ORDER BY a.disp_order ASC";
 		$response['sql']=str_replace("\n", '', str_ireplace('	', ' ', $sql));
 		$chart_list = $wpdb->get_results( $sql);
 		if ( ! empty( $chart_list ) ) {
@@ -230,7 +230,7 @@ public function special_form($id=null){
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-primary">Terminar</a>';
 			$output.='</div>';
 		$output.='</div>';

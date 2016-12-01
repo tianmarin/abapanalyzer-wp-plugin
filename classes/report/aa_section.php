@@ -140,7 +140,7 @@ protected function sp_wp_table_chart($value=null,$id=null){
 	$charts=$SECTION_CHART->get_charts($id);
 	$response ='';
 	$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_chart',"item"=>$id)));
-	$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+	$URL=htmlspecialchars('?'.$QS);
 	$response.='<a href="'.$URL.'" class="">Modificar</a>';
 	$response.='';
 	$response.='<br/><small>('.sizeof($charts).' charts)</small></div>';

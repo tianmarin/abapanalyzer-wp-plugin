@@ -201,7 +201,7 @@ protected function sp_wp_table_collab_opt_id($opt,$id){
 		//some
 		$response ='<div class="text-center"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>';
 		$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_collab',"item"=>$id)));
-		$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+		$URL=htmlspecialchars('?'.$QS);
 		$response.='<a href="'.$URL.'" class="">Modificar</a>';
 		$response.='';
 		$response.='<br/><small>('.sizeof($collab).' colaboradores)</small></div>';
@@ -381,7 +381,6 @@ public function fe_preview_report(){
 										'.$placeholder.'
 										'.$required.'
 										'.$value.'
-										maxlength="'.$field['maxchar'].'"
 										/>';
 						break;
 					case 'text':
@@ -393,7 +392,6 @@ public function fe_preview_report(){
 										'.$placeholder.'
 										'.$required.'
 										'.$value.'
-										maxlength="'.$field['maxchar'].'"
 										/>';
 						break;
 					case 'textarea':
@@ -505,7 +503,7 @@ public function fe_preview_report(){
 	if(isset($_POST['action'])){
 		$response=array();
 		$response['title']="Crear nuevo Sistema";
-		$response['element']=$element;
+		$response['element']=( isset($element) && $element!=null )?$element:null;
 		$response['form']=$output;
 		$response['status']='ok';
 		echo json_encode($response);

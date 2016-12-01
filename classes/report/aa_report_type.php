@@ -115,7 +115,7 @@ protected function sp_wp_table_section($value=null,$id=null){
 	$sections=$REPORT_TYPE_SECTION->get_sections($id);
 	$response ='';
 	$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_section',"item"=>$id)));
-	$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+	$URL=htmlspecialchars('?'.$QS);
 	$response.='<a href="'.$URL.'" class="">Modificar</a>';
 	$response.='';
 	$response.='<br/><small>('.sizeof($sections).' secciones)</small></div>';
