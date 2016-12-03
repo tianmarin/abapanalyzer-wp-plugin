@@ -136,8 +136,8 @@ public function __construct(){
 	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_chart($value=null,$id=null){
-	global $SECTION_CHART;
-	$charts=$SECTION_CHART->get_charts($id);
+	global $AA_SECTION_CHART;
+	$charts=$AA_SECTION_CHART->get_charts($id);
 	$response ='';
 	$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_chart',"item"=>$id)));
 	$URL=htmlspecialchars('?'.$QS);
@@ -148,9 +148,9 @@ protected function sp_wp_table_chart($value=null,$id=null){
 }
 
 protected function section_chart(){
-	global $SECTION_CHART;
+	global $AA_SECTION_CHART;
 	$id=$_GET['item'];
-	return $SECTION_CHART->special_form($id);
+	return $AA_SECTION_CHART->special_form($id);
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 public function db_install_data(){
@@ -204,7 +204,7 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $SECTION;
-$SECTION =new AA_SECTION_CLASS();
+global $AA_SECTION;
+$AA_SECTION =new AA_SECTION_CLASS();
 
 ?>

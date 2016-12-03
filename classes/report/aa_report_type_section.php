@@ -77,7 +77,7 @@ public function get_sections($report_type_id=null){
 }
 public function aa_search_report_type_sections(){
 	global $wpdb;
-	global $SECTION;
+	global $AA_SECTION;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
@@ -89,7 +89,7 @@ public function aa_search_report_type_sections(){
 			b.title as title,
 			b.short_name as short_name
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$SECTION->tbl_name." as b ON a.section_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_SECTION->tbl_name." as b ON a.section_id=b.id)
 			WHERE ";
 	if(count($section_ids)!=null){
 		$sql.="b.id NOT IN (".implode(',', array_map('intval', $section_ids)).") AND ";
@@ -121,7 +121,7 @@ public function aa_search_report_type_sections(){
 }
 public function aa_get_report_type_sections(){
 	global $wpdb;
-	global $SECTION;
+	global $AA_SECTION;
 	
 	$response=array();
 	$report_type_id=$_POST['id'];
@@ -132,7 +132,7 @@ public function aa_get_report_type_sections(){
 			b.title as title,
 			b.short_name as short_name
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$SECTION->tbl_name." as b ON a.section_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_SECTION->tbl_name." as b ON a.section_id=b.id)
 			WHERE ";
 		$sql.="b.id IN (".implode(',', array_map('intval', $section_ids)).") ";
 		$sql.=" ORDER BY a.disp_order ASC LIMIT 10";
@@ -292,6 +292,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $REPORT_TYPE_SECTION;
-$REPORT_TYPE_SECTION =new AA_REPORT_TYPE_SECTION_CLASS();
+global $AA_REPORT_TYPE_SECTION;
+$AA_REPORT_TYPE_SECTION =new AA_REPORT_TYPE_SECTION_CLASS();
 ?>

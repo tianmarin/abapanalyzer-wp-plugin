@@ -86,6 +86,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $GRAPH_COLOR;
-$GRAPH_COLOR =new AA_GRAPH_COLOR_CLASS();
+global $AA_GRAPH_COLOR;
+$AA_GRAPH_COLOR =new AA_GRAPH_COLOR_CLASS();
 ?>

@@ -146,6 +146,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $COLLAB_OPT;
-$COLLAB_OPT =new AA_COLLAB_OPT_CLASS();
+global $AA_COLLAB_OPT;
+$AA_COLLAB_OPT =new AA_COLLAB_OPT_CLASS();
 ?>

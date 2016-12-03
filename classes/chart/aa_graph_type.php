@@ -85,6 +85,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $GRAPH_TYPE;
-$GRAPH_TYPE =new AA_GRAPH_TYPE_CLASS();
+global $AA_GRAPH_TYPE;
+$AA_GRAPH_TYPE =new AA_GRAPH_TYPE_CLASS();
 ?>

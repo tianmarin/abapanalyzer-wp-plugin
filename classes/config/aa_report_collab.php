@@ -61,12 +61,12 @@ public function get_users($report_id=null){
 	return $user_list;
 }
 public function aa_search_report_users(){
-	global $REPORT;
+	global $AA_REPORT;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
 	$collab=self::get_users($postvs['id']);
-	array_push($collab,	$REPORT->get_single($postvs['id'])['owner_id']);
+	array_push($collab,	$AA_REPORT->get_single($postvs['id'])['owner_id']);
 	$args = array(
 		'exclude'			=>$collab,
 		'number'			=>	10,
@@ -187,6 +187,6 @@ public function special_form($id=null){
 //END OF CLASS	
 }
 
-global $REPORT_COLLAB;
-$REPORT_COLLAB =new AA_REPORT_COLLAB_CLASS();
+global $AA_REPORT_COLLAB;
+$AA_REPORT_COLLAB =new AA_REPORT_COLLAB_CLASS();
 ?>

@@ -134,14 +134,14 @@ public function __construct(){
 //	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_source_id($id){
-	global $ASSET_SOURCE;
-	$response=$ASSET_SOURCE->get_single($id);
+	global $AA_ASSET_SOURCE;
+	$response=$AA_ASSET_SOURCE->get_single($id);
 	return 	'<i class="fa fa-external-link fa-fw" aria-hidden="true"></i> '.$response['short_name'];
 }
 protected function sp_form_source_id(){
-	global $ASSET_SOURCE;
+	global $AA_ASSET_SOURCE;
 	$response = array();
-	foreach($ASSET_SOURCE->get_all() as $key => $value){
+	foreach($AA_ASSET_SOURCE->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
@@ -354,6 +354,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $ASSET;
-$ASSET =new AA_ASSET_CLASS();
+global $AA_ASSET;
+$AA_ASSET =new AA_ASSET_CLASS();
 ?>

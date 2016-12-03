@@ -77,11 +77,11 @@ public function get_graphs($chart_id=null){
 }
 public function aa_search_chart_graphs(){
 	global $wpdb;
-	global $GRAPH;
-	global $ASSET;
-	global $GRAPH_FUNCTION;
-	global $GRAPH_TYPE;
-	global $GRAPH_COLOR;
+	global $AA_GRAPH;
+	global $AA_ASSET;
+	global $AA_GRAPH_FUNCTION;
+	global $AA_GRAPH_TYPE;
+	global $AA_GRAPH_COLOR;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
@@ -104,10 +104,10 @@ public function aa_search_chart_graphs(){
 				d.short_name as type,
 				e.hex as color
 			FROM 
-				((((".$GRAPH->tbl_name." AS a LEFT JOIN ".$ASSET->tbl_name." AS b ON a.asset_id=b.id)
-				LEFT JOIN ".$GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
-				LEFT JOIN ".$GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
-				LEFT JOIN ".$GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id) ";
+				((((".$AA_GRAPH->tbl_name." AS a LEFT JOIN ".$AA_ASSET->tbl_name." AS b ON a.asset_id=b.id)
+				LEFT JOIN ".$AA_GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
+				LEFT JOIN ".$AA_GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
+				LEFT JOIN ".$AA_GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id) ";
 	if(count($graph_cond)!=0 || count($graph_ids)!=null){
 		$sql.=" WHERE ";
 		if(count($graph_ids)!=null){
@@ -151,11 +151,11 @@ public function aa_search_chart_graphs(){
 }
 public function aa_get_chart_graphs(){
 	global $wpdb;
-	global $GRAPH;
-	global $ASSET;
-	global $GRAPH_FUNCTION;
-	global $GRAPH_TYPE;
-	global $GRAPH_COLOR;
+	global $AA_GRAPH;
+	global $AA_ASSET;
+	global $AA_GRAPH_FUNCTION;
+	global $AA_GRAPH_TYPE;
+	global $AA_GRAPH_COLOR;
 	$response=array();
 	$chart_id=$_POST['id'];
 	$graph_ids=self::get_graphs($chart_id);
@@ -169,10 +169,10 @@ public function aa_get_chart_graphs(){
 					e.hex as color,
 					f.disp_order as disp_order
 				FROM 
-					(((((".$GRAPH->tbl_name." AS a LEFT JOIN ".$ASSET->tbl_name." AS b ON a.asset_id=b.id)
-					LEFT JOIN ".$GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
-					LEFT JOIN ".$GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
-					LEFT JOIN ".$GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id)
+					(((((".$AA_GRAPH->tbl_name." AS a LEFT JOIN ".$AA_ASSET->tbl_name." AS b ON a.asset_id=b.id)
+					LEFT JOIN ".$AA_GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
+					LEFT JOIN ".$AA_GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
+					LEFT JOIN ".$AA_GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id)
 					LEFT JOIN ".$this->tbl_name." AS f ON a.id=f.graph_id)";
 		$sql.=" WHERE ";
 		$sql.="a.id IN (".implode(',', array_map('intval', $graph_ids)).") ";
@@ -270,9 +270,9 @@ public function special_form($id=null){
 				$output.='<div class="form-group">';
 					$output.='<label class="sr-only">Elemento</label>';
 					$output.='<select class="form-control"  name="'.$this->plugin_post.'[asset]">';
-						global $ASSET;
+						global $AA_ASSET;
 						$options=array();
-						foreach($ASSET->get_all() as $key => $value){
+						foreach($AA_ASSET->get_all() as $key => $value){
 							$options[$value['id']] = $value['short_name'];
 						}
 						if(count($options) == 0){
@@ -291,9 +291,9 @@ public function special_form($id=null){
 				$output.='<div class="form-group">';
 					$output.='<label class="sr-only">Funci&oacute;n</label>';
 					$output.='<select class="form-control"  name="'.$this->plugin_post.'[graph_function]">';
-						global $GRAPH_FUNCTION;
+						global $AA_GRAPH_FUNCTION;
 						$options=array();
-						foreach($GRAPH_FUNCTION->get_all() as $key => $value){
+						foreach($AA_GRAPH_FUNCTION->get_all() as $key => $value){
 							$options[$value['id']] = $value['short_name'];
 						}
 						if(count($options) == 0){
@@ -312,9 +312,9 @@ public function special_form($id=null){
 				$output.='<div class="form-group">';
 					$output.='<label class="sr-only">Tipo</label>';
 					$output.='<select class="form-control" name="'.$this->plugin_post.'[graph_type]">';
-						global $GRAPH_TYPE;
+						global $AA_GRAPH_TYPE;
 						$options=array();
-						foreach($GRAPH_TYPE->get_all() as $key => $value){
+						foreach($AA_GRAPH_TYPE->get_all() as $key => $value){
 							$options[$value['id']] = $value['short_name'];
 						}
 						if(count($options) == 0){
@@ -645,6 +645,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $CHART_GRAPH;
-$CHART_GRAPH =new AA_CHART_GRAPH_CLASS();
+global $AA_CHART_GRAPH;
+$AA_CHART_GRAPH =new AA_CHART_GRAPH_CLASS();
 ?>

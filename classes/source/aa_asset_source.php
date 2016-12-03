@@ -69,6 +69,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $ASSET_SOURCE;
-$ASSET_SOURCE =new AA_ASSET_SOURCE_CLASS();
+global $AA_ASSET_SOURCE;
+$AA_ASSET_SOURCE =new AA_ASSET_SOURCE_CLASS();
 ?>

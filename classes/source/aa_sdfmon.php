@@ -288,8 +288,8 @@ public function __construct(){
 	add_action( 'wp_ajax_fe_sdfmon_file_upload',	array( $this , 'fe_sdfmon_file_upload'	));
 }
 protected function sp_wp_table_system_id($id){
-    global $SYSTEM;
-    $response = $SYSTEM->get_single($id);
+    global $AA_SYSTEM;
+    $response = $AA_SYSTEM->get_single($id);
     return $response['sid'].' ('.$response['short_name'].')';
 }
 public function fe_sdfmon_get_dates(){
@@ -569,7 +569,7 @@ protected function check_similarity($first,$second){
 //END OF CLASS	
 }
 
-global $SDFMON;
-$SDFMON =new AA_SDFMON_CLASS();
+global $AA_SDFMON;
+$AA_SDFMON =new AA_SDFMON_CLASS();
 
 ?>

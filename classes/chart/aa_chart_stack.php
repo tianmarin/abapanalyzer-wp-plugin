@@ -77,6 +77,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $CHART_STACK;
-$CHART_STACK =new AA_CHART_STACK_CLASS();
+global $AA_CHART_STACK;
+$AA_CHART_STACK =new AA_CHART_STACK_CLASS();
 ?>

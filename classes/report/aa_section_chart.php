@@ -77,7 +77,7 @@ public function get_charts($section_id=null){
 }
 public function aa_search_section_charts(){
 	global $wpdb;
-	global $CHART;
+	global $AA_CHART;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
@@ -88,7 +88,7 @@ public function aa_search_section_charts(){
 			b.id as id,
 			b.title as title
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$CHART->tbl_name." as b ON a.chart_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_CHART->tbl_name." as b ON a.chart_id=b.id)
 			WHERE ";
 	if(count($chart_ids)!=null){
 		$sql.="b.id NOT IN (".implode(',', array_map('intval', $chart_ids)).") AND ";
@@ -120,7 +120,7 @@ public function aa_search_section_charts(){
 }
 public function aa_get_section_charts(){
 	global $wpdb;
-	global $CHART;
+	global $AA_CHART;
 	
 	$response=array();
 	$section_id=$_POST['id'];
@@ -130,7 +130,7 @@ public function aa_get_section_charts(){
 			b.id as id,
 			b.title as title
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$CHART->tbl_name." as b ON a.chart_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_CHART->tbl_name." as b ON a.chart_id=b.id)
 			WHERE ";
 		$sql.="b.id IN (".implode(',', array_map('intval', $chart_ids)).") ";
 		$sql.=" ORDER BY a.disp_order ASC";
@@ -370,6 +370,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $SECTION_CHART;
-$SECTION_CHART =new AA_SECTION_CHART_CLASS();
+global $AA_SECTION_CHART;
+$AA_SECTION_CHART =new AA_SECTION_CHART_CLASS();
 ?>

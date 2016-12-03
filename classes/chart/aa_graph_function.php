@@ -93,6 +93,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $GRAPH_FUNCTION;
-$GRAPH_FUNCTION =new AA_GRAPH_FUNCTION_CLASS();
+global $AA_GRAPH_FUNCTION;
+$AA_GRAPH_FUNCTION =new AA_GRAPH_FUNCTION_CLASS();
 ?>

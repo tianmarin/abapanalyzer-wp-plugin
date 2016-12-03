@@ -164,34 +164,34 @@ public function __construct(){
 	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_asset_id($id){
-	global $ASSET;
-	$response = $ASSET->get_single($id);
+	global $AA_ASSET;
+	$response = $AA_ASSET->get_single($id);
 	return $response['short_name'];
 }
 protected function sp_form_asset_id(){
-	global $ASSET;
+	global $AA_ASSET;
 	$response = array();
-	foreach($ASSET->get_all() as $key => $value){
+	foreach($AA_ASSET->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
 }
 protected function sp_wp_table_graph_function_id($id){
-	global $GRAPH_FUNCTION;
-	$response = $GRAPH_FUNCTION->get_single($id);
+	global $AA_GRAPH_FUNCTION;
+	$response = $AA_GRAPH_FUNCTION->get_single($id);
 	return $response['short_name'];
 }
 protected function sp_form_graph_function_id(){
-	global $GRAPH_FUNCTION;
+	global $AA_GRAPH_FUNCTION;
 	$response = array();
-	foreach($GRAPH_FUNCTION->get_all() as $key => $value){
+	foreach($AA_GRAPH_FUNCTION->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
 }
 protected function sp_wp_table_graph_type_id($id){
-	global $GRAPH_TYPE;
-	$response = $GRAPH_TYPE->get_single($id);
+	global $AA_GRAPH_TYPE;
+	$response = $AA_GRAPH_TYPE->get_single($id);
 	switch($response['code']){
 		case 'line':
 			$icon ='<i class="fa fa-line-chart fa-fw" aria-hidden="true"></i>';
@@ -209,22 +209,22 @@ protected function sp_wp_table_graph_type_id($id){
 	return $icon.' '.$response['short_name'];
 }
 protected function sp_form_graph_type_id(){
-	global $GRAPH_TYPE;
+	global $AA_GRAPH_TYPE;
 	$response = array();
-	foreach($GRAPH_TYPE->get_all() as $key => $value){
+	foreach($AA_GRAPH_TYPE->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
 }
 protected function sp_wp_table_graph_color_id($id){
-	global $GRAPH_COLOR;
-	$response = $GRAPH_COLOR->get_single($id);
+	global $AA_GRAPH_COLOR;
+	$response = $AA_GRAPH_COLOR->get_single($id);
 	return '<span style="color:#'.$response['hex'].';" >'.$response['short_name']."</span>";
 }
 protected function sp_form_graph_color_id(){
-	global $GRAPH_COLOR;
+	global $AA_GRAPH_COLOR;
 	$response = array();
-	foreach($GRAPH_COLOR->get_all() as $key => $value){
+	foreach($AA_GRAPH_COLOR->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
@@ -588,6 +588,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $GRAPH;
-$GRAPH =new AA_GRAPH_CLASS();
+global $AA_GRAPH;
+$AA_GRAPH =new AA_GRAPH_CLASS();
 ?>

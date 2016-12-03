@@ -95,6 +95,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $TIME_GROUP;
-$TIME_GROUP =new AA_TIME_GROUP_CLASS();
+global $AA_TIME_GROUP;
+$AA_TIME_GROUP =new AA_TIME_GROUP_CLASS();
 ?>

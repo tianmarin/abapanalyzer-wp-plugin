@@ -111,8 +111,8 @@ public function __construct(){
 	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_section($value=null,$id=null){
-	global $REPORT_TYPE_SECTION;
-	$sections=$REPORT_TYPE_SECTION->get_sections($id);
+	global $AA_REPORT_TYPE_SECTION;
+	$sections=$AA_REPORT_TYPE_SECTION->get_sections($id);
 	$response ='';
 	$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_section',"item"=>$id)));
 	$URL=htmlspecialchars('?'.$QS);
@@ -123,9 +123,9 @@ protected function sp_wp_table_section($value=null,$id=null){
 }
 
 protected function report_type_section(){
-	global $REPORT_TYPE_SECTION;
+	global $AA_REPORT_TYPE_SECTION;
 	$id=$_GET['item'];
-	return $REPORT_TYPE_SECTION->special_form($id);
+	return $AA_REPORT_TYPE_SECTION->special_form($id);
 }
 public function db_install_data(){
 	global $wpdb;
@@ -151,7 +151,7 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $REPORT_TYPE;
-$REPORT_TYPE =new AA_REPORT_TYPE_CLASS();
+global $AA_REPORT_TYPE;
+$AA_REPORT_TYPE =new AA_REPORT_TYPE_CLASS();
 
 ?>
