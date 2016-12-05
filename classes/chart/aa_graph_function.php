@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class GRAPH_FUNCTION_CLASS extends AA_CLASS{
+class AA_GRAPH_FUNCTION_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -50,6 +50,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 1,
 				'code'			=> 'min',
 				'short_name'	=> 'M&iacute;nimo',
 			) 
@@ -57,6 +58,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 2,
 				'code'			=> 'max',
 				'short_name'	=> 'M&aacute;ximo',
 			) 
@@ -64,6 +66,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 3,
 				'code'			=> 'avg',
 				'short_name'	=> 'Promedio',
 			) 
@@ -71,6 +74,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 4,
 				'code'			=> 'sum',
 				'short_name'	=> 'Sumatoria',
 			) 
@@ -78,6 +82,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 5,
 				'code'			=> 'p95',
 				'short_name'	=> 'Percentil 95',
 			) 
@@ -88,6 +93,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $GRAPH_FUNCTION;
-$GRAPH_FUNCTION =new GRAPH_FUNCTION_CLASS();
+global $AA_GRAPH_FUNCTION;
+$AA_GRAPH_FUNCTION =new AA_GRAPH_FUNCTION_CLASS();
 ?>

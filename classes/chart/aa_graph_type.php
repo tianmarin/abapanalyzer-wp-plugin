@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class GRAPH_TYPE_CLASS extends AA_CLASS{
+class AA_GRAPH_TYPE_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -50,6 +50,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 1,
 				'code'			=> 'line',
 				'short_name'	=> 'Lineas',
 			) 
@@ -57,6 +58,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 2,
 				'code'			=> 'column',
 				'short_name'	=> 'Columnas',
 			) 
@@ -64,6 +66,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 3,
 				'code'			=> 'step',
 				'short_name'	=> 'step',
 			) 
@@ -71,6 +74,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 4,
 				'code'			=> 'smoothedLine',
 				'short_name'	=> 'smoothedLine',
 			) 
@@ -81,6 +85,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $GRAPH_TYPE;
-$GRAPH_TYPE =new GRAPH_TYPE_CLASS();
+global $AA_GRAPH_TYPE;
+$AA_GRAPH_TYPE =new AA_GRAPH_TYPE_CLASS();
 ?>

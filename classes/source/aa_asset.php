@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class ASSET_CLASS extends AA_CLASS{
+class AA_ASSET_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -134,14 +134,14 @@ public function __construct(){
 //	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_source_id($id){
-	global $ASSET_SOURCE;
-	$response=$ASSET_SOURCE->get_single($id);
+	global $AA_ASSET_SOURCE;
+	$response=$AA_ASSET_SOURCE->get_single($id);
 	return 	'<i class="fa fa-external-link fa-fw" aria-hidden="true"></i> '.$response['short_name'];
 }
 protected function sp_form_source_id(){
-	global $ASSET_SOURCE;
+	global $AA_ASSET_SOURCE;
 	$response = array();
-	foreach($ASSET_SOURCE->get_all() as $key => $value){
+	foreach($AA_ASSET_SOURCE->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
@@ -153,6 +153,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 1,
 				'source_id'			=> 1,
 				'col_name'			=> 'act_wps',
 				'short_name'		=> 'Active WPs',
@@ -161,6 +162,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 2,
 				'source_id'			=> 1,
 				'col_name'			=> 'dia_wps',
 				'short_name'		=> 'Dialog Active WPs',
@@ -169,6 +171,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 3,
 				'source_id'			=> 1,
 				'col_name'			=> 'rfc_wps',
 				'short_name'		=> 'Free WPs for RFC',
@@ -177,6 +180,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 4,
 				'source_id'			=> 1,
 				'col_name'			=> 'cpu_usr',
 				'short_name'		=> 'User CPU',
@@ -185,6 +189,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 5,
 				'source_id'			=> 1,
 				'col_name'			=> 'cpu_sys',
 				'short_name'		=> 'System CPU',
@@ -193,6 +198,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 6,
 				'source_id'			=> 1,
 				'col_name'			=> 'cpu_idle',
 				'short_name'		=> 'Idle CPU',
@@ -201,6 +207,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 7,
 				'source_id'			=> 1,
 				'col_name'			=> 'cpu_ava',
 				'short_name'		=> 'Available CPU',
@@ -209,6 +216,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 8,
 				'source_id'			=> 1,
 				'col_name'			=> 'page_in',
 				'short_name'		=> 'Pagging In (SWAP)',
@@ -217,6 +225,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 9,
 				'source_id'			=> 1,
 				'col_name'			=> 'page_out',
 				'short_name'		=> 'Pagging Out (SWAP)',
@@ -225,6 +234,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 10,
 				'source_id'			=> 1,
 				'col_name'			=> 'free_mem',
 				'short_name'		=> 'Free Memory',
@@ -233,6 +243,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 11,
 				'source_id'			=> 1,
 				'col_name'			=> 'em_alloc',
 				'short_name'		=> 'Allocated EM',
@@ -241,6 +252,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 12,
 				'source_id'			=> 1,
 				'col_name'			=> 'em_attach',
 				'short_name'		=> 'Attached EM',
@@ -249,6 +261,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 13,
 				'source_id'			=> 1,
 				'col_name'			=> 'em_global',
 				'short_name'		=> 'Global EM',
@@ -257,6 +270,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 14,
 				'source_id'			=> 1,
 				'col_name'			=> 'heap',
 				'short_name'		=> 'Heap Memory',
@@ -265,6 +279,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 15,
 				'source_id'			=> 1,
 				'col_name'			=> 'priv_mode',
 				'short_name'		=> 'Priv Mode Wps',
@@ -273,6 +288,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 16,
 				'source_id'			=> 1,
 				'col_name'			=> 'page_mem',
 				'short_name'		=> 'Page Memory',
@@ -281,6 +297,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 17,
 				'source_id'			=> 1,
 				'col_name'			=> 'roll_mem',
 				'short_name'		=> 'Roll Memory',
@@ -289,6 +306,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 18,
 				'source_id'			=> 1,
 				'col_name'			=> 'queue_dia',
 				'short_name'		=> 'Dialog Queue',
@@ -297,6 +315,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 19,
 				'source_id'			=> 1,
 				'col_name'			=> 'queue_upd',
 				'short_name'		=> 'Update Queue',
@@ -305,6 +324,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 20,
 				'source_id'			=> 1,
 				'col_name'			=> 'queue_enq',
 				'short_name'		=> 'Enqueue Queue',
@@ -313,6 +333,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 21,
 				'source_id'			=> 1,
 				'col_name'			=> 'logins',
 				'short_name'		=> 'Logins',
@@ -321,6 +342,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'				=> 22,
 				'source_id'			=> 1,
 				'col_name'			=> 'sessions',
 				'short_name'		=> 'Sessions',
@@ -332,7 +354,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $ASSET;
-$ASSET =new ASSET_CLASS();
-//add_action( 'admin_notices', array( $SYSTEM, 'db_install_error')  );
+global $AA_ASSET;
+$AA_ASSET =new AA_ASSET_CLASS();
 ?>

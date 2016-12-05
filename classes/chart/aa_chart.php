@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class CHART_CLASS extends AA_CLASS{
+class AA_CHART_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -28,7 +28,7 @@ public function __construct(){
 	//Tabla de la clase
 	$this->tbl_name		= $wpdb->prefix.$aa_vars[$this->class_name.'_tbl_name'];
 	//Versión de DB (para registro y actualización automática)
-	$this->db_version	= '1.0';
+	$this->db_version	= '0.9';
 	//Reglas actuales de caracteres a nivel de DB.
 	//Dado que esto sólo se usa en la cración de la tabla
 	//no se guarda como variable de clase.
@@ -97,6 +97,7 @@ public function __construct(){
 			'type'			=>'text',
 			'required'		=>true,
 			'maxchar'		=>40,
+			'in_form'		=>true,
 			'desc'			=>'T&iacute;tulo',
 			'form-help'		=>'El t&iacute;tulo será desplegado en el gráfico despues del SID.<br/>Tamaño m&aacute;ximo: 40 caracteres.',
 			'in_wp_table'	=>true,
@@ -165,31 +166,32 @@ public function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action('admin_menu'							,array( $this , "register_submenu_page"		));
 	add_action( 'wp_ajax_fe_build_chart'			,array( $this , 'fe_build_chart'			));
 }
 protected function sp_wp_table_stack_id($id){
-    global $CHART_STACK;
-    $response = $CHART_STACK->get_single($id);
+    global $AA_CHART_STACK;
+    $response = $AA_CHART_STACK->get_single($id);
     return $response['short_name'];
 }
 protected function sp_form_stack_id(){
-    global $CHART_STACK;
+    global $AA_CHART_STACK;
     $response = array();
-    foreach($CHART_STACK->get_all() as $key => $value){
+    foreach($AA_CHART_STACK->get_all() as $key => $value){
         $response[$value['id']] = $value['short_name'];
     }
     return $response;
 }
 protected function sp_wp_table_time_group_id($id){
-    global $TIME_GROUP;
-    $response = $TIME_GROUP->get_single($id);
+    global $AA_TIME_GROUP;
+    $response = $AA_TIME_GROUP->get_single($id);
     return $response['short_name'];
 }
 protected function sp_form_time_group_id(){
-    global $TIME_GROUP;
+    global $AA_TIME_GROUP;
     $response = array();
-    foreach($TIME_GROUP->get_all() as $key => $value){
+    foreach($AA_TIME_GROUP->get_all() as $key => $value){
         $response[$value['id']] = $value['short_name'];
     }
     return $response;
@@ -213,20 +215,20 @@ protected function sp_wp_table_group_by_instance($val){
     return'<i class="fa fa-square-o fa-fw" aria-hidden="true"></i>';
 }
 protected function sp_wp_table_graph($value=null,$id=null){
-	global $CHART_GRAPH;
-	$graphs=$CHART_GRAPH->get_graphs($id);
+	global $AA_CHART_GRAPH;
+	$graphs=$AA_CHART_GRAPH->get_graphs($id);
 	$response ='';
 	$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_graph',"item"=>$id)));
-	$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+	$URL=htmlspecialchars('?'.$QS);
 	$response.='<a href="'.$URL.'" class="">Modificar</a>';
 	$response.='';
 	$response.='<br/><small>('.sizeof($graphs).' gr&aacute;ficas)</small></div>';
 	return $response;
 }
 protected function chart_graph(){
-	global $CHART_GRAPH;
+	global $AA_CHART_GRAPH;
 	$id=$_GET['item'];
-	return $CHART_GRAPH->special_form($id);
+	return $AA_CHART_GRAPH->special_form($id);
 }
 public function fe_build_chart(){
 	$response=array();
@@ -235,18 +237,18 @@ public function fe_build_chart(){
 	if(NULL != $chart_id){
 		$chart=self::get_single($chart_id);
 		
-		global $REPORT;
-		$report=$REPORT->get_single($report_id);
+		global $AA_REPORT;
+		$report=$AA_REPORT->get_single($report_id);
 		
-		global $CHART_GRAPH;
-		$graphs_id=$CHART_GRAPH->get_graphs($chart_id);
+		global $AA_CHART_GRAPH;
+		$graphs_id=$AA_CHART_GRAPH->get_graphs($chart_id);
 		
-		global $CHART_STACK;
-		$stack = $CHART_STACK->get_single($chart['stack_id']);
+		global $AA_CHART_STACK;
+		$stack = $AA_CHART_STACK->get_single($chart['stack_id']);
 		$chart['stackable']=$stack['code'];
 
-		global $TIME_GROUP;
-		$time_group = $TIME_GROUP->get_single($chart['time_group_id']);
+		global $AA_TIME_GROUP;
+		$time_group = $AA_TIME_GROUP->get_single($chart['time_group_id']);
 		$chart['timeGroup']=$time_group['code'];
 		
 		$chart['graphs']=array();
@@ -263,33 +265,33 @@ public function fe_build_chart(){
 			graph_type_id tinyint(1) unsigned not null,
 			graph_color_id tinyint(1) unsigned not null,
 			*/
-			global $GRAPH;
-			$graph=$GRAPH->get_single($graph_id);
+			global $AA_GRAPH;
+			$graph=$AA_GRAPH->get_single($graph_id);
 
 
-			global $ASSET;
-			$asset=$ASSET->get_single($graph['asset_id']);
+			global $AA_ASSET;
+			$asset=$AA_ASSET->get_single($graph['asset_id']);
 			$asset_source_id=$asset['source_id'];
 			$graph['asset']=$asset['col_name'];
 
-			global $GRAPH_COLOR;
-			$color=$GRAPH_COLOR->get_single($graph['graph_color_id']);
+			global $AA_GRAPH_COLOR;
+			$color=$AA_GRAPH_COLOR->get_single($graph['graph_color_id']);
 			$graph['graphColor']=$color['hex'];
 
-			global $GRAPH_TYPE;
-			$type=$GRAPH_TYPE->get_single($graph['graph_type_id']);
+			global $AA_GRAPH_TYPE;
+			$type=$AA_GRAPH_TYPE->get_single($graph['graph_type_id']);
 			$graph['graphType']=$type['code'];
 
-			global $GRAPH_FUNCTION;
-			$function=$GRAPH_FUNCTION->get_single($graph['graph_function_id']);
+			global $AA_GRAPH_FUNCTION;
+			$function=$AA_GRAPH_FUNCTION->get_single($graph['graph_function_id']);
 			$graph['graphFunction']=$function['code'];
 
 			$graph['valueField']=$graph['asset'].'-'.$graph['graphFunction'].'-'.$graph['graphType'].'-'.$graph['graphColor'];
 			$graph['valueField']='valueField_'.$graph_id;
 
-			global $SDFMON;
+			global $AA_SDFMON;
 			if( $function['code'] == 'p95' ){
-				$count="SELECT count(*) from $SDFMON->tbl_name 
+				$count="SELECT count(*) from $AA_SDFMON->tbl_name 
 						WHERE system_id=".$report['system_id']." ";
 					if($report['start_date'] != null && $report['start_date'] != '0000-00-00'){
 						$sql.=" AND date > '".$report['start_date']."' ";
@@ -313,7 +315,7 @@ public function fe_build_chart(){
 							SUM(".$graph['asset'].") as sum,
 							date as date,
 							time as time
-						FROM $SDFMON->tbl_name
+						FROM $AA_SDFMON->tbl_name
 						WHERE system_id=".$report['system_id']." ";
 				if($report['start_date'] != null && $report['start_date'] != '0000-00-00'){
 					$sql.=" AND date > '".$report['start_date']."' ";
@@ -392,11 +394,196 @@ public function fe_build_chart(){
 	echo json_encode($response);
 	die();		
 }
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 1,
+				'title'					=> 'WPs Activos por día',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 2,
+				'title'					=> 'WPs de Dialogo Activos por día',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 3,
+				'title'					=> 'DAY RFC AVAL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 4,
+				'title'					=> 'DAY DIA QUEUE',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 5,
+				'title'					=> 'DAY UPD QUEUE',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 6,
+				'title'					=> 'DAY SESSIONS',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 7,
+				'title'					=> 'DAY EM UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 8,
+				'title'					=> 'DAY HEAP UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 9,
+				'title'					=> 'DAY PAGE UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 10,
+				'title'					=> 'DAY ROLL UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 11,
+				'title'					=> 'DAY ENQ QUEUE',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 12,
+				'title'					=> 'DAY CPU UTIL',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 13,
+				'title'					=> 'WPs Activos por hora',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 14,
+				'title'					=> 'HOUR DIA ACT WPs',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 15,
+				'title'					=> 'Sesiones Activas por hora',
+				'stack_id'				=> 1,
+				'legend'				=> 1,
+				'summary_table'			=> 0,
+				'group_by_instance'		=> 0,
+				'time_group_id'			=> 2,
+			) 
+		);
+	}
+}
 
 //END OF CLASS	
 }
 
-global $CHART;
-$CHART =new CHART_CLASS();
-//add_action( 'admin_notices', array( $SYSTEM, 'db_install_error')  );
+global $AA_CHART;
+$AA_CHART =new AA_CHART_CLASS();
 ?>

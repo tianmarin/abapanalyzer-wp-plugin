@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class REPORT_TYPE_SECTION_CLASS extends AA_CLASS{
+class AA_REPORT_TYPE_SECTION_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -56,6 +56,7 @@ function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action( 'wp_ajax_aa_get_report_type_sections',		array( $this , 'aa_get_report_type_sections'		));
 	add_action( 'wp_ajax_aa_remove_report_type_sections',	array( $this , 'aa_remove_report_type_sections'		));
 	add_action( 'wp_ajax_aa_add_report_type_sections',		array( $this , 'aa_add_report_type_sections'		));
@@ -76,7 +77,7 @@ public function get_sections($report_type_id=null){
 }
 public function aa_search_report_type_sections(){
 	global $wpdb;
-	global $SECTION;
+	global $AA_SECTION;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
@@ -88,7 +89,7 @@ public function aa_search_report_type_sections(){
 			b.title as title,
 			b.short_name as short_name
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$SECTION->tbl_name." as b ON a.section_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_SECTION->tbl_name." as b ON a.section_id=b.id)
 			WHERE ";
 	if(count($section_ids)!=null){
 		$sql.="b.id NOT IN (".implode(',', array_map('intval', $section_ids)).") AND ";
@@ -120,7 +121,7 @@ public function aa_search_report_type_sections(){
 }
 public function aa_get_report_type_sections(){
 	global $wpdb;
-	global $SECTION;
+	global $AA_SECTION;
 	
 	$response=array();
 	$report_type_id=$_POST['id'];
@@ -131,7 +132,7 @@ public function aa_get_report_type_sections(){
 			b.title as title,
 			b.short_name as short_name
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$SECTION->tbl_name." as b ON a.section_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_SECTION->tbl_name." as b ON a.section_id=b.id)
 			WHERE ";
 		$sql.="b.id IN (".implode(',', array_map('intval', $section_ids)).") ";
 		$sql.=" ORDER BY a.disp_order ASC LIMIT 10";
@@ -232,7 +233,7 @@ public function special_form($id=null){
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-primary">Terminar</a>';
 			$output.='</div>';
 		$output.='</div>';
@@ -241,9 +242,56 @@ public function special_form($id=null){
 	return $output;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 1,
+				'section_id'			=> 1,
+				'disp_order'			=> 1,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 1,
+				'section_id'			=> 3,
+				'disp_order'			=> 3,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 1,
+				'section_id'			=> 4,
+				'disp_order'			=> 4,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 2,
+				'section_id'			=> 1,
+				'disp_order'			=> 1,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'report_type_id'		=> 2,
+				'section_id'			=> 3,
+				'disp_order'			=> 2,
+			) 
+		);
+	}
+}
+
 //END OF CLASS	
 }
 
-global $REPORT_TYPE_SECTION;
-$REPORT_TYPE_SECTION =new REPORT_TYPE_SECTION_CLASS();
+global $AA_REPORT_TYPE_SECTION;
+$AA_REPORT_TYPE_SECTION =new AA_REPORT_TYPE_SECTION_CLASS();
 ?>

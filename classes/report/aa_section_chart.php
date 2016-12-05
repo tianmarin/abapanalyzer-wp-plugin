@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SECTION_CHART_CLASS extends AA_CLASS{
+class AA_SECTION_CHART_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -56,6 +56,7 @@ function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action( 'wp_ajax_aa_get_section_charts',		array( $this , 'aa_get_section_charts'		));
 	add_action( 'wp_ajax_aa_remove_section_charts',		array( $this , 'aa_remove_section_charts'	));
 	add_action( 'wp_ajax_aa_add_section_charts',		array( $this , 'aa_add_section_charts'		));
@@ -76,7 +77,7 @@ public function get_charts($section_id=null){
 }
 public function aa_search_section_charts(){
 	global $wpdb;
-	global $CHART;
+	global $AA_CHART;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
@@ -87,7 +88,7 @@ public function aa_search_section_charts(){
 			b.id as id,
 			b.title as title
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$CHART->tbl_name." as b ON a.chart_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_CHART->tbl_name." as b ON a.chart_id=b.id)
 			WHERE ";
 	if(count($chart_ids)!=null){
 		$sql.="b.id NOT IN (".implode(',', array_map('intval', $chart_ids)).") AND ";
@@ -119,7 +120,7 @@ public function aa_search_section_charts(){
 }
 public function aa_get_section_charts(){
 	global $wpdb;
-	global $CHART;
+	global $AA_CHART;
 	
 	$response=array();
 	$section_id=$_POST['id'];
@@ -129,10 +130,10 @@ public function aa_get_section_charts(){
 			b.id as id,
 			b.title as title
 			FROM 
-				(".$this->tbl_name." as a RIGHT JOIN ".$CHART->tbl_name." as b ON a.chart_id=b.id)
+				(".$this->tbl_name." as a RIGHT JOIN ".$AA_CHART->tbl_name." as b ON a.chart_id=b.id)
 			WHERE ";
 		$sql.="b.id IN (".implode(',', array_map('intval', $chart_ids)).") ";
-		$sql.=" ORDER BY a.disp_order ASC LIMIT 10";
+		$sql.=" ORDER BY a.disp_order ASC";
 		$response['sql']=str_replace("\n", '', str_ireplace('	', ' ', $sql));
 		$chart_list = $wpdb->get_results( $sql);
 		if ( ! empty( $chart_list ) ) {
@@ -229,18 +230,146 @@ public function special_form($id=null){
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-primary">Terminar</a>';
 			$output.='</div>';
 		$output.='</div>';
 	$output.='</div>';
 	$output.='</form>';
 	return $output;
+}//---------------------------------------------------------------------------------------------------------------------------------------------------------
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 1,
+				'disp_order'		=> 1,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 2,
+				'disp_order'		=> 3,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 3,
+				'disp_order'		=> 5,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 4,
+				'disp_order'		=> 6,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 5,
+				'disp_order'		=> 7,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 6,
+				'disp_order'		=> 8,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 13,
+				'disp_order'		=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 14,
+				'disp_order'		=> 4,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 1,
+				'chart_id'			=> 15,
+				'disp_order'		=> 9,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 2,
+				'chart_id'			=> 7,
+				'disp_order'		=> 1,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 2,
+				'chart_id'			=> 8,
+				'disp_order'		=> 2,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 2,
+				'chart_id'			=> 9,
+				'disp_order'		=> 3,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 2,
+				'chart_id'			=> 10,
+				'disp_order'		=> 4,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 3,
+				'chart_id'			=> 11,
+				'disp_order'		=> 1,
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'section_id'		=> 4,
+				'chart_id'			=> 12,
+				'disp_order'		=> 1,
+			) 
+		);
+	}
 }
+
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //END OF CLASS	
 }
 
-global $SECTION_CHART;
-$SECTION_CHART =new SECTION_CHART_CLASS();
+global $AA_SECTION_CHART;
+$AA_SECTION_CHART =new AA_SECTION_CHART_CLASS();
 ?>

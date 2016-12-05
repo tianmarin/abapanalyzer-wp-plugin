@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class REPORT_CLASS extends AA_CLASS{
+class AA_REPORT_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -196,12 +196,12 @@ protected function sp_wp_table_collab_opt_id($opt,$id){
 		//none
 		$response ='<div class="text-center"><i class="fa fa-user-times fa-fw" aria-hidden="true"></i></div>';
 	}elseif($opt == 2){
-		global $REPORT_COLLAB;
-		$collab=$REPORT_COLLAB->get_users($id);
+		global $AA_REPORT_COLLAB;
+		$collab=$AA_REPORT_COLLAB->get_users($id);
 		//some
 		$response ='<div class="text-center"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>';
 		$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_collab',"item"=>$id)));
-		$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+		$URL=htmlspecialchars('?'.$QS);
 		$response.='<a href="'.$URL.'" class="">Modificar</a>';
 		$response.='';
 		$response.='<br/><small>('.sizeof($collab).' colaboradores)</small></div>';
@@ -224,48 +224,48 @@ public function get_reports_by_system($system_id){
 	
 }
 protected function report_collab(){
-	global $REPORT_COLLAB;
+	global $AA_REPORT_COLLAB;
 	$id=$_GET['item'];
-	return $REPORT_COLLAB->special_form($id);
+	return $AA_REPORT_COLLAB->special_form($id);
 }
 protected function sp_form_system_id(){
-	global $SYSTEM;
+	global $AA_SYSTEM;
 	$response = array();
-	foreach($SYSTEM->get_all() as $key => $value){
+	foreach($AA_SYSTEM->get_all() as $key => $value){
 		$response[$value['id']] = $value['sid'].' ('.$value['short_name'].')';
 	}
 	return $response;
-//	$this->db_fields['collab_opt_id']['options'] = $COLLAB_OPT->get_all();
+//	$this->db_fields['collab_opt_id']['options'] = $AA_COLLAB_OPT->get_all();
 }
 protected function sp_wp_table_system_id($id){
-    global $SYSTEM;
-    $response = $SYSTEM->get_single($id);
+    global $AA_SYSTEM;
+    $response = $AA_SYSTEM->get_single($id);
     return $response['sid'].' ('.$response['short_name'].')';
 }
 
 protected function sp_form_report_type_id(){
-	global $REPORT_TYPE;
+	global $AA_REPORT_TYPE;
 	$response = array();
-	foreach($REPORT_TYPE->get_all() as $key => $value){
+	foreach($AA_REPORT_TYPE->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
-//	$this->db_fields['collab_opt_id']['options'] = $COLLAB_OPT->get_all();
+//	$this->db_fields['collab_opt_id']['options'] = $AA_COLLAB_OPT->get_all();
 }
 protected function sp_wp_table_report_type_id($id){
-    global $REPORT_TYPE;
-    $response = $REPORT_TYPE->get_single($id);
+    global $AA_REPORT_TYPE;
+    $response = $AA_REPORT_TYPE->get_single($id);
     return $response['short_name'];
 }
 
 protected function sp_form_collab_opt_id(){
-	global $COLLAB_OPT;
+	global $AA_COLLAB_OPT;
 	$response = array();
-	foreach($COLLAB_OPT->get_all() as $key => $value){
+	foreach($AA_COLLAB_OPT->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
-//	$this->db_fields['collab_opt_id']['options'] = $COLLAB_OPT->get_all();
+//	$this->db_fields['collab_opt_id']['options'] = $AA_COLLAB_OPT->get_all();
 }
 /*
 * fe_preview_report
@@ -283,18 +283,18 @@ public function fe_preview_report(){
 	$report_id=$_POST['report_id'];
 	$report=self::get_single($report_id);
 	$response['report']=$report;
-	global $REPORT_TYPE_SECTION;
-	$sections=$REPORT_TYPE_SECTION->get_sections($report['report_type_id']);
+	global $AA_REPORT_TYPE_SECTION;
+	$sections=$AA_REPORT_TYPE_SECTION->get_sections($report['report_type_id']);
 	$response['sections']=array();
-	global $SECTION;
+	global $AA_SECTION;
 	foreach($sections as $section_id){
-		$section=$SECTION->get_single($section_id);
-		global $SECTION_CHART;
-		$charts=$SECTION_CHART->get_charts($section_id);
+		$section=$AA_SECTION->get_single($section_id);
+		global $AA_SECTION_CHART;
+		$charts=$AA_SECTION_CHART->get_charts($section_id);
 		$section['charts']=array();
-		global $CHART;
+		global $AA_CHART;
 		foreach($charts as $chart_id){
-			$chart=$CHART->get_single($chart_id);
+			$chart=$AA_CHART->get_single($chart_id);
 			$section['charts']['chart_'.$chart_id]=$chart;
 		}
 		$response['sections']['section_'.$section_id]=$section;
@@ -381,7 +381,6 @@ public function fe_preview_report(){
 										'.$placeholder.'
 										'.$required.'
 										'.$value.'
-										maxlength="'.$field['maxchar'].'"
 										/>';
 						break;
 					case 'text':
@@ -393,7 +392,6 @@ public function fe_preview_report(){
 										'.$placeholder.'
 										'.$required.'
 										'.$value.'
-										maxlength="'.$field['maxchar'].'"
 										/>';
 						break;
 					case 'textarea':
@@ -505,7 +503,7 @@ public function fe_preview_report(){
 	if(isset($_POST['action'])){
 		$response=array();
 		$response['title']="Crear nuevo Sistema";
-		$response['element']=$element;
+		$response['element']=( isset($element) && $element!=null )?$element:null;
 		$response['form']=$output;
 		$response['status']='ok';
 		echo json_encode($response);
@@ -555,10 +553,10 @@ public function fe_create_report(){
 //END OF CLASS	
 }
 
-global $REPORT;
-$REPORT =new REPORT_CLASS();
+global $AA_REPORT;
+$AA_REPORT =new AA_REPORT_CLASS();
 
 
 
-//add_action( 'admin_notices', array( $REPORT, 'db_install_error')  );
+//add_action( 'admin_notices', array( $AA_REPORT, 'db_install_error')  );
 ?>

@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class ASSET_SOURCE_CLASS extends AA_CLASS{
+class AA_ASSET_SOURCE_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -69,6 +69,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $ASSET_SOURCE;
-$ASSET_SOURCE =new ASSET_SOURCE_CLASS();
+global $AA_ASSET_SOURCE;
+$AA_ASSET_SOURCE =new AA_ASSET_SOURCE_CLASS();
 ?>

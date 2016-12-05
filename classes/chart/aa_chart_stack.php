@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class CHART_STACK_CLASS extends AA_CLASS{
+class AA_CHART_STACK_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -50,6 +50,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 1,
 				'code'			=> 'none',
 				'short_name'	=> 'No apilado',
 			) 
@@ -57,6 +58,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 2,
 				'code'			=> 'regular',
 				'short_name'	=> 'Apilado regular',
 			) 
@@ -64,6 +66,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 3,
 				'code'			=> '100%',
 				'short_name'	=> 'Apilado al 100%',
 			) 
@@ -74,6 +77,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $CHART_STACK;
-$CHART_STACK =new CHART_STACK_CLASS();
+global $AA_CHART_STACK;
+$AA_CHART_STACK =new AA_CHART_STACK_CLASS();
 ?>

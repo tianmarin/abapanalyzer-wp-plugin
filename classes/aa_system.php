@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SYSTEM_CLASS extends AA_CLASS{
+class AA_SYSTEM_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -177,12 +177,12 @@ protected function sp_wp_table_collab_opt_id($opt,$id){
 		//none
 		$response ='<div class="text-center"><i class="fa fa-user-times fa-fw" aria-hidden="true"></i></div>';
 	}elseif($opt == 2){
-		global $SYSTEM_COLLAB;
-		$collab=$SYSTEM_COLLAB->get_users($id);
+		global $AA_SYSTEM_COLLAB;
+		$collab=$AA_SYSTEM_COLLAB->get_users($id);
 		//some
 		$response ='<div class="text-center"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>';
 		$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_collab',"item"=>$id)));
-		$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+		$URL=htmlspecialchars('?'.$QS);
 		$response.='<a href="'.$URL.'" class="">Modificar</a>';
 		$response.='';
 		$response.='<br/><small>('.sizeof($collab).' colaboradores)</small></div>';
@@ -193,14 +193,14 @@ protected function sp_wp_table_collab_opt_id($opt,$id){
 	return $response;
 }
 protected function system_collab(){
-	global $SYSTEM_COLLAB;
+	global $AA_SYSTEM_COLLAB;
 	$id=$_GET['item'];
-	return $SYSTEM_COLLAB->special_form($id);
+	return $AA_SYSTEM_COLLAB->special_form($id);
 }
 protected function sp_form_collab_opt_id(){
-	global $COLLAB_OPT;
+	global $AA_COLLAB_OPT;
 	$response = array();
-	foreach($COLLAB_OPT->get_all() as $key => $value){
+	foreach($AA_COLLAB_OPT->get_all() as $key => $value){
 		$response[$value['id']] = $value['short_name'];
 	}
 	return $response;
@@ -218,8 +218,8 @@ public function fe_system_list(){
 					$response['data']['elem_html_'.$key].='<p><i class="fa fa-info fa-fw" aria-hidden="true"></i> '.$value['short_name'].'</p>';
 					$response['data']['elem_html_'.$key].='<p><i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i> ';
 					$response['data']['elem_html_'.$key].=get_userdata($value['owner_id'])->user_login;
-					global $SYSTEM_COLLAB;
-					$users=$SYSTEM_COLLAB->get_users($value['id']);
+					global $AA_SYSTEM_COLLAB;
+					$users=$AA_SYSTEM_COLLAB->get_users($value['id']);
 					switch($value['collab_opt_id']){
 						case 2:
 							if( get_current_user_id() == $value['owner_id']){
@@ -266,8 +266,8 @@ public function fe_system_info(){
 		$response['systemInfo'].='</p>';
 	}elseif($system['collab_opt_id'] == 2){
 		$response['systemInfo'].='<p>';
-		global $SYSTEM_COLLAB;
-		$collab=$SYSTEM_COLLAB->get_users($system['id']);
+		global $AA_SYSTEM_COLLAB;
+		$collab=$AA_SYSTEM_COLLAB->get_users($system['id']);
 		$response['systemInfo'].='Este sistema tiene '.sizeof($collab).' colaboradores.';
 		if(count($collab)>0){
 			$response['systemInfo'].='<ul>';
@@ -300,15 +300,15 @@ public function fe_system_info(){
 	$response['systemInfo'].='<h2>Reportes <small>(<a href="#" id="new-report-button" data-system-id="'.$system['id'].'">Crear nuevo</a>)</small></h2>';
 //	$response['systemInfo'].='<p class="list-group-item-text"><a href="#sdfmon-setup/'.$system['id'].'" class="btn btn-default btn-block">Crear nuevo reporte</a></p>';
 	$response['systemInfo'].='<ul class="list-group">';
-	global $REPORT;
-	$report_list=$REPORT->get_reports_by_system($system['id']);
+	global $AA_REPORT;
+	$report_list=$AA_REPORT->get_reports_by_system($system['id']);
 	foreach($report_list as $report_id){
-		$report=$REPORT->get_single($report_id);
+		$report=$AA_REPORT->get_single($report_id);
 		$response['systemInfo'].='<li class="list-group-item" href="'."#report-preview/".$report_id.'">';
 		$response['systemInfo'].='<h4 class="list-group-item-heading"><i class="fa fa-file-text-o" aria-hidden="true"></i> '.$report['short_name'].'</h4>';
 		$response['systemInfo'].='<br/>';
-		global $REPORT_TYPE;
-		$report_type=$REPORT_TYPE->get_single($report['report_type_id']);
+		global $AA_REPORT_TYPE;
+		$report_type=$AA_REPORT_TYPE->get_single($report['report_type_id']);
 		$response['systemInfo'].='<p class="list-group-item-text"><i class="fa fa-file-text" aria-hidden="true"></i> Template: <em>'.$report_type['short_name'].'</em></p>';
 		$response['systemInfo'].='<br/>';
 		$rep_start_date = date_create_from_format('Y-m-d',$report['start_date'])->format('d/m/Y');
@@ -345,8 +345,8 @@ public function fe_system_info(){
 	}elseif($system['collab_opt_id'] == 2){
 		$response['system']['collab'].='<p>';
 //		$response['system']['collab'].='<i class="fa fa-user-times fa-fw" aria-hidden="true"></i>';
-		global $SYSTEM_COLLAB;
-		$collab=$SYSTEM_COLLAB->get_users($system['id']);
+		global $AA_SYSTEM_COLLAB;
+		$collab=$AA_SYSTEM_COLLAB->get_users($system['id']);
 		$response['system']['collab'].='Este sistema tiene '.sizeof($collab).' colaboradores.';
 		$response['system']['collab'].='</p>';
 		
@@ -367,10 +367,10 @@ public function fe_system_info(){
 	$response['dataSuppliers']['sdfmon']['editText']="Modificar";
 	$response['status']='ok';
 	$response['reports']=array();
-	global $REPORT;
-	$report_list=$REPORT->get_reports_by_system($system['id']);
+	global $AA_REPORT;
+	$report_list=$AA_REPORT->get_reports_by_system($system['id']);
 	foreach($report_list as $report_id){
-		$report=$REPORT->get_single($report_id);
+		$report=$AA_REPORT->get_single($report_id);
 		$response['reports']['rep_'.$report_id]=array();
 		$response['reports']['rep_'.$report_id]['id']=$report_id;
 		$response['reports']['rep_'.$report_id]['shortName']=$report['short_name'];
@@ -391,7 +391,8 @@ public function fe_quick_system_info(){
 		$response['message']="No hay identificador de Systema";
 	}else{
 		$response['system']=self::get_single($system_id);
-		array_push($response['system']['user'], get_user_by('id',$system_id['owner_id']));
+		$response['system']['user']=array();
+		array_push($response['system']['user'], get_user_by('id',$response['system']['owner_id']));
 		$response['status']='ok';
 		$response['header']='<header class="col-xs-12"><h1>'.$response['system']['sid'].'</h1><p class="lead">'.$response['system']['short_name'].'</p></header>';
 	}
@@ -599,7 +600,7 @@ public function fe_system_show_form(
 	if(isset($_POST['action'])){
 		$response=array();
 		$response['title']="Crear nuevo Sistema";
-		$response['element']=$element;
+		$response['element']=( isset($element) && $element!=null )?$element:null;
 		$response['form']=$output;
 		$response['status']='ok';
 		echo json_encode($response);
@@ -649,10 +650,10 @@ public function fe_create_system(){
 //END OF CLASS	
 }
 
-global $SYSTEM;
-$SYSTEM =new SYSTEM_CLASS();
+global $AA_SYSTEM;
+$AA_SYSTEM =new AA_SYSTEM_CLASS();
 
 
 
-//add_action( 'admin_notices', array( $SYSTEM, 'db_install_error')  );
+//add_action( 'admin_notices', array( $AA_SYSTEM, 'db_install_error')  );
 ?>

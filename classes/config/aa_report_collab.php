@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class REPORT_COLLAB_CLASS extends AA_CLASS{
+class AA_REPORT_COLLAB_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -61,12 +61,12 @@ public function get_users($report_id=null){
 	return $user_list;
 }
 public function aa_search_report_users(){
-	global $REPORT;
+	global $AA_REPORT;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
 	$collab=self::get_users($postvs['id']);
-	array_push($collab,	$REPORT->get_single($postvs['id'])['owner_id']);
+	array_push($collab,	$AA_REPORT->get_single($postvs['id'])['owner_id']);
 	$args = array(
 		'exclude'			=>$collab,
 		'number'			=>	10,
@@ -175,7 +175,7 @@ public function special_form($id=null){
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-primary">Terminar</a>';
 			$output.='</div>';
 		$output.='</div>';
@@ -187,6 +187,6 @@ public function special_form($id=null){
 //END OF CLASS	
 }
 
-global $REPORT_COLLAB;
-$REPORT_COLLAB =new REPORT_COLLAB_CLASS();
+global $AA_REPORT_COLLAB;
+$AA_REPORT_COLLAB =new AA_REPORT_COLLAB_CLASS();
 ?>

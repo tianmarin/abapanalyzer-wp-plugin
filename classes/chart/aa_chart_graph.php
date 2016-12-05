@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class CHART_GRAPH_CLASS extends AA_CLASS{
+class AA_CHART_GRAPH_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -56,6 +56,7 @@ function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action( 'wp_ajax_aa_get_chart_graphs',		array( $this , 'aa_get_chart_graphs'		));
 	add_action( 'wp_ajax_aa_remove_chart_graphs',	array( $this , 'aa_remove_chart_graphs'		));
 	add_action( 'wp_ajax_aa_add_chart_graphs',		array( $this , 'aa_add_chart_graphs'		));
@@ -76,11 +77,11 @@ public function get_graphs($chart_id=null){
 }
 public function aa_search_chart_graphs(){
 	global $wpdb;
-	global $GRAPH;
-	global $ASSET;
-	global $GRAPH_FUNCTION;
-	global $GRAPH_TYPE;
-	global $GRAPH_COLOR;
+	global $AA_GRAPH;
+	global $AA_ASSET;
+	global $AA_GRAPH_FUNCTION;
+	global $AA_GRAPH_TYPE;
+	global $AA_GRAPH_COLOR;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
@@ -103,10 +104,10 @@ public function aa_search_chart_graphs(){
 				d.short_name as type,
 				e.hex as color
 			FROM 
-				((((".$GRAPH->tbl_name." AS a LEFT JOIN ".$ASSET->tbl_name." AS b ON a.asset_id=b.id)
-				LEFT JOIN ".$GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
-				LEFT JOIN ".$GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
-				LEFT JOIN ".$GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id) ";
+				((((".$AA_GRAPH->tbl_name." AS a LEFT JOIN ".$AA_ASSET->tbl_name." AS b ON a.asset_id=b.id)
+				LEFT JOIN ".$AA_GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
+				LEFT JOIN ".$AA_GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
+				LEFT JOIN ".$AA_GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id) ";
 	if(count($graph_cond)!=0 || count($graph_ids)!=null){
 		$sql.=" WHERE ";
 		if(count($graph_ids)!=null){
@@ -150,11 +151,11 @@ public function aa_search_chart_graphs(){
 }
 public function aa_get_chart_graphs(){
 	global $wpdb;
-	global $GRAPH;
-	global $ASSET;
-	global $GRAPH_FUNCTION;
-	global $GRAPH_TYPE;
-	global $GRAPH_COLOR;
+	global $AA_GRAPH;
+	global $AA_ASSET;
+	global $AA_GRAPH_FUNCTION;
+	global $AA_GRAPH_TYPE;
+	global $AA_GRAPH_COLOR;
 	$response=array();
 	$chart_id=$_POST['id'];
 	$graph_ids=self::get_graphs($chart_id);
@@ -168,10 +169,10 @@ public function aa_get_chart_graphs(){
 					e.hex as color,
 					f.disp_order as disp_order
 				FROM 
-					(((((".$GRAPH->tbl_name." AS a LEFT JOIN ".$ASSET->tbl_name." AS b ON a.asset_id=b.id)
-					LEFT JOIN ".$GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
-					LEFT JOIN ".$GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
-					LEFT JOIN ".$GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id)
+					(((((".$AA_GRAPH->tbl_name." AS a LEFT JOIN ".$AA_ASSET->tbl_name." AS b ON a.asset_id=b.id)
+					LEFT JOIN ".$AA_GRAPH_FUNCTION->tbl_name." AS c ON a.graph_function_id=c.id)
+					LEFT JOIN ".$AA_GRAPH_TYPE->tbl_name." AS d ON a.graph_type_id=d.id)
+					LEFT JOIN ".$AA_GRAPH_COLOR->tbl_name." AS e ON a.graph_color_id=e.id)
 					LEFT JOIN ".$this->tbl_name." AS f ON a.id=f.graph_id)";
 		$sql.=" WHERE ";
 		$sql.="a.id IN (".implode(',', array_map('intval', $graph_ids)).") ";
@@ -269,9 +270,9 @@ public function special_form($id=null){
 				$output.='<div class="form-group">';
 					$output.='<label class="sr-only">Elemento</label>';
 					$output.='<select class="form-control"  name="'.$this->plugin_post.'[asset]">';
-						global $ASSET;
+						global $AA_ASSET;
 						$options=array();
-						foreach($ASSET->get_all() as $key => $value){
+						foreach($AA_ASSET->get_all() as $key => $value){
 							$options[$value['id']] = $value['short_name'];
 						}
 						if(count($options) == 0){
@@ -290,9 +291,9 @@ public function special_form($id=null){
 				$output.='<div class="form-group">';
 					$output.='<label class="sr-only">Funci&oacute;n</label>';
 					$output.='<select class="form-control"  name="'.$this->plugin_post.'[graph_function]">';
-						global $GRAPH_FUNCTION;
+						global $AA_GRAPH_FUNCTION;
 						$options=array();
-						foreach($GRAPH_FUNCTION->get_all() as $key => $value){
+						foreach($AA_GRAPH_FUNCTION->get_all() as $key => $value){
 							$options[$value['id']] = $value['short_name'];
 						}
 						if(count($options) == 0){
@@ -311,9 +312,9 @@ public function special_form($id=null){
 				$output.='<div class="form-group">';
 					$output.='<label class="sr-only">Tipo</label>';
 					$output.='<select class="form-control" name="'.$this->plugin_post.'[graph_type]">';
-						global $GRAPH_TYPE;
+						global $AA_GRAPH_TYPE;
 						$options=array();
-						foreach($GRAPH_TYPE->get_all() as $key => $value){
+						foreach($AA_GRAPH_TYPE->get_all() as $key => $value){
 							$options[$value['id']] = $value['short_name'];
 						}
 						if(count($options) == 0){
@@ -339,7 +340,7 @@ public function special_form($id=null){
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-primary">Terminar</a>';
 			$output.='</div>';
 		$output.='</div>';
@@ -348,9 +349,302 @@ public function special_form($id=null){
 	return $output;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 1,
+				'graph_id'		=> 1,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 1,
+				'graph_id'		=> 2,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 2,
+				'graph_id'		=> 3,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 2,
+				'graph_id'		=> 4,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 3,
+				'graph_id'		=> 5,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 3,
+				'graph_id'		=> 6,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 4,
+				'graph_id'		=> 7,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 4,
+				'graph_id'		=> 8,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 5,
+				'graph_id'		=> 9,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 5,
+				'graph_id'		=> 10,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 6,
+				'graph_id'		=> 11,
+				'disp_order'	=> 3,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 6,
+				'graph_id'		=> 12,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 7,
+				'graph_id'		=> 13,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 7,
+				'graph_id'		=> 14,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 8,
+				'graph_id'		=> 15,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 8,
+				'graph_id'		=> 16,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 9,
+				'graph_id'		=> 17,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 9,
+				'graph_id'		=> 18,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 10,
+				'graph_id'		=> 19,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 10,
+				'graph_id'		=> 20,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 11,
+				'graph_id'		=> 21,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 11,
+				'graph_id'		=> 22,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 12,
+				'graph_id'		=> 23,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 12,
+				'graph_id'		=> 24,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 12,
+				'graph_id'		=> 25,
+				'disp_order'	=> 3,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 13,
+				'graph_id'		=> 1,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 13,
+				'graph_id'		=> 2,
+				'disp_order'	=> 1,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 14,
+				'graph_id'		=> 3,
+				'disp_order'	=> 4,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 14,
+				'graph_id'		=> 4,
+				'disp_order'	=> 3,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 15,
+				'graph_id'		=> 11,
+				'disp_order'	=> 2,
+			) 
+		);
+
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'chart_id'		=> 15,
+				'graph_id'		=> 12,
+				'disp_order'	=> 1,
+			) 
+		);
+
+	}
+}
+
+
+
+
+
+
+
+
 //END OF CLASS	
 }
 
-global $CHART_GRAPH;
-$CHART_GRAPH =new CHART_GRAPH_CLASS();
+global $AA_CHART_GRAPH;
+$AA_CHART_GRAPH =new AA_CHART_GRAPH_CLASS();
 ?>

@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class SYSTEM_COLLAB_CLASS extends AA_CLASS{
+class AA_SYSTEM_COLLAB_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -70,12 +70,12 @@ public function get_users($system_id=null){
 	return $user_list;
 }
 public function aa_search_system_users(){
-	global $SYSTEM;
+	global $AA_SYSTEM;
 	$response=array();
 	$response['data']=array();
 	$postvs=$_POST;
 	$collab=self::get_users($postvs['id']);
-	array_push($collab,	$SYSTEM->get_single($postvs['id'])['owner_id']);
+	array_push($collab,	$AA_SYSTEM->get_single($postvs['id'])['owner_id']);
 	$args = array(
 		'exclude'			=>$collab,
 		'number'			=>	10,
@@ -159,8 +159,8 @@ public function fe_system_collab_get_users(){
 	$system_id=$_POST['system_id'];
 	if( intval($system_id)>0 && $system_id!=null ){
 		$users=self::get_users($system_id);
-		global $SYSTEM;
-		$system=$SYSTEM->get_single($system_id);
+		global $AA_SYSTEM;
+		$system=$AA_SYSTEM->get_single($system_id);
 		$response['users']=array();
 		foreach($users as $user){
 			$response['users']['user_'.$user]='<a href="#" data-user-id="'.$user.'" data-system-id="'.$system_id.'" title="Eliminar a '.get_userdata($user)->user_email.' como colaborador del sistema: '.$system['sid'].' - '.$system['short_name'].'"><i class="fa fa-user-times fa-fw fa-pull-right"></i> '.get_userdata($user)->user_login.'</a>';
@@ -204,7 +204,7 @@ public function special_form($id=null){
 		$output.='<div class="col-sm-2 control-label"></div>';
 			$output.='<div class="col-sm-10">';
 				$QS = http_build_query(array_merge($_GET, array("action"=>'')));
-				$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+				$URL=htmlspecialchars('?'.$QS);
 				$output.='<a href="'.$URL.'" class="btn btn-primary">Terminar</a>';
 			$output.='</div>';
 		$output.='</div>';
@@ -213,12 +213,12 @@ public function special_form($id=null){
 	return $output;
 }
 public function fe_search_system_users(){
-	global $SYSTEM;
+	global $AA_SYSTEM;
 	$system_id=$_POST['system_id'];
 	$response=array();
 	$text=$_POST['text'];
 	$current_users=self::get_users($system_id);
-	array_push($current_users,	$SYSTEM->get_single($system_id)['owner_id']);
+	array_push($current_users,	$AA_SYSTEM->get_single($system_id)['owner_id']);
 	$args = array(
 		'exclude'			=>$current_users,
 		'number'			=>	10,
@@ -267,6 +267,6 @@ public function fe_remove_system_users(){
 //END OF CLASS	
 }
 
-global $SYSTEM_COLLAB;
-$SYSTEM_COLLAB =new SYSTEM_COLLAB_CLASS();
+global $AA_SYSTEM_COLLAB;
+$AA_SYSTEM_COLLAB =new AA_SYSTEM_COLLAB_CLASS();
 ?>

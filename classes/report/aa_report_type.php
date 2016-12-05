@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class REPORT_TYPE_CLASS extends AA_CLASS{
+class AA_REPORT_TYPE_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -107,14 +107,15 @@ public function __construct(){
 		),
 	);
 	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install') );
+	register_activation_hook(WP_PLUGIN_DIR."/abap_analyzer/"."index.php", array( $this, 'db_install_data') );
 	add_action('admin_menu', array( $this , "register_submenu_page" ) );
 }
 protected function sp_wp_table_section($value=null,$id=null){
-	global $REPORT_TYPE_SECTION;
-	$sections=$REPORT_TYPE_SECTION->get_sections($id);
+	global $AA_REPORT_TYPE_SECTION;
+	$sections=$AA_REPORT_TYPE_SECTION->get_sections($id);
 	$response ='';
 	$QS = http_build_query(array_merge($_GET, array("action"=>$this->class_name.'_section',"item"=>$id)));
-	$URL=htmlspecialchars("$_SERVER[PHP_SELF]?$QS");
+	$URL=htmlspecialchars('?'.$QS);
 	$response.='<a href="'.$URL.'" class="">Modificar</a>';
 	$response.='';
 	$response.='<br/><small>('.sizeof($sections).' secciones)</small></div>';
@@ -122,14 +123,35 @@ protected function sp_wp_table_section($value=null,$id=null){
 }
 
 protected function report_type_section(){
-	global $REPORT_TYPE_SECTION;
+	global $AA_REPORT_TYPE_SECTION;
 	$id=$_GET['item'];
-	return $REPORT_TYPE_SECTION->special_form($id);
+	return $AA_REPORT_TYPE_SECTION->special_form($id);
 }
+public function db_install_data(){
+	global $wpdb;
+	$count =intval($wpdb->get_var( "SELECT COUNT(*) FROM ".$this->tbl_name));
+	if($count == 0){
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 1,
+				'short_name'			=> 'Estilo 1',
+			) 
+		);
+		$wpdb->insert(
+			$this->tbl_name,
+			array(
+				'id'					=> 2,
+				'short_name'			=> 'Estilo 2',
+			) 
+		);
+	}
+}
+
 //END OF CLASS	
 }
 
-global $REPORT_TYPE;
-$REPORT_TYPE =new REPORT_TYPE_CLASS();
+global $AA_REPORT_TYPE;
+$AA_REPORT_TYPE =new AA_REPORT_TYPE_CLASS();
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class TIME_GROUP_CLASS extends AA_CLASS{
+class AA_TIME_GROUP_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -52,6 +52,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 1,
 				'code'			=> 'hourly',
 				'short_name'	=> 'Horas',
 			) 
@@ -59,6 +60,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 2,
 				'code'			=> 'daily',
 				'short_name'	=> 'Dias',
 			) 
@@ -66,6 +68,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 3,
 				'code'			=> 'weekly',
 				'short_name'	=> 'Semanal',
 			) 
@@ -73,6 +76,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 4,
 				'code'			=> 'monthly',
 				'short_name'	=> 'Mensual',
 			) 
@@ -80,6 +84,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 5,
 				'code'			=> 'quarter',
 				'short_name'	=> 'Trimestral',
 			) 
@@ -90,6 +95,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $TIME_GROUP;
-$TIME_GROUP =new TIME_GROUP_CLASS();
+global $AA_TIME_GROUP;
+$AA_TIME_GROUP =new AA_TIME_GROUP_CLASS();
 ?>

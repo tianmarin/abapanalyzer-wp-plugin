@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') or die("No script kiddies please!");
 
-class GRAPH_COLOR_CLASS extends AA_CLASS{
+class AA_GRAPH_COLOR_CLASS extends AA_CLASS{
 
 /**
 * Esta función es llamada apenas se crea la clase.
@@ -51,6 +51,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 1,
 				'hex'			=> '63A0D7',
 				'short_name'	=> 'azul',
 			) 
@@ -58,6 +59,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 2,
 				'hex'			=> 'E38844',
 				'short_name'	=> 'naranja',
 			) 
@@ -65,6 +67,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 3,
 				'hex'			=> 'FF0000',
 				'short_name'	=> 'Red',
 			) 
@@ -72,6 +75,7 @@ public function db_install_data(){
 		$wpdb->insert(
 			$this->tbl_name,
 			array(
+				'id'			=> 4,
 				'hex'			=> '52A65C',
 				'short_name'	=> 'verde',
 			) 
@@ -82,6 +86,6 @@ public function db_install_data(){
 //END OF CLASS	
 }
 
-global $GRAPH_COLOR;
-$GRAPH_COLOR =new GRAPH_COLOR_CLASS();
+global $AA_GRAPH_COLOR;
+$AA_GRAPH_COLOR =new AA_GRAPH_COLOR_CLASS();
 ?>
